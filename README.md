@@ -1,4 +1,4 @@
 yii2-user
 =========
 
-Yii2 user authentication module
+Yii 2 user authentication module
