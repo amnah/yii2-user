@@ -11,7 +11,8 @@
 		}
 	],
 	"require": {
-		"yiisoft/yii2": "*"
+		"yiisoft/yii2": "*",
+        "yiisoft/yii2-swiftmailer": "dev-master"
 	},
 	"autoload": {
 		"psr-0": { "amnah\\yii2\\user\\": "" }
