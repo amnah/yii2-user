@@ -17,8 +17,8 @@ class DefaultController extends Controller {
      * Displays index
      */
     public function actionIndex() {
-		return $this->render('index');
-	}
+        return $this->render('index');
+    }
 
     /**
      * Displays login page
@@ -33,7 +33,8 @@ class DefaultController extends Controller {
         $model = new LoginForm();
         if ($model->load($_POST) && $model->login()) {
             return $this->goBack();
-        } else {
+        }
+        else {
             return $this->render('login', [
                 'model' => $model,
             ]);

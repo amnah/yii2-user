@@ -55,14 +55,14 @@ class Module extends \yii\base\Module {
      * @inheritdoc
      */
     public function init() {
-		parent::init();
+        parent::init();
 
         // changes user component
         Yii::$app->setComponent("user", null);
         Yii::$app->setComponent("user", [
             "class" => "amnah\yii2\components\User",
         ]);
-	}
+    }
 
     /**
      * Modifies function to handle routes in the default controller
