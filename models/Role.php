@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "role".
+ * Role model
  *
  * @property string $id
  * @property string $name
@@ -19,12 +19,12 @@ use yii\db\ActiveRecord;
 class Role extends ActiveRecord {
 
     /**
-     * @var int admin user role
+     * @var int Admin user role
      */
     const ADMIN = 1;
 
     /**
-     * @var int default user role
+     * @var int Default user role
      */
     const USER = 2;
 

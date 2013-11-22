@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
 		'id' => 'login-form',
 		'options' => ['class' => 'form-horizontal'],
 		'fieldConfig' => [
-			'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-			'labelOptions' => ['class' => 'col-lg-1 control-label'],
+			'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
+			'labelOptions' => ['class' => 'col-lg-2 control-label'],
 		],
 
 	]); ?>
@@ -30,18 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?= $form->field($model, 'password')->passwordInput() ?>
 
 	<?= $form->field($model, 'rememberMe', [
-		'template' => "{label}<div class=\"col-lg-offset-1 col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+		'template' => "{label}<div class=\"col-lg-offset-2 col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
 	])->checkbox() ?>
 
 	<div class="form-group">
-		<div class="col-lg-offset-1 col-lg-11">
+		<div class="col-lg-offset-2 col-lg-10">
 			<?= Html::submitButton('Login', ['class' => 'btn btn-primary']) ?>
 		</div>
 	</div>
 
 	<?php ActiveForm::end(); ?>
 
-	<div class="col-lg-offset-1" style="color:#999;">
+	<div class="col-lg-offset-2" style="color:#999;">
 		You may login with <strong>neo/neo</strong>.<br>
 		To modify the username/password, log in first and then go <?= HTML::a("update your profile", ["/user/profile"]) ?>.
 	</div>

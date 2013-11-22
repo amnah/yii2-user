@@ -2,8 +2,11 @@
 
 namespace amnah\yii2\user\models;
 
+use Yii;
+use yii\db\ActiveRecord;
+
 /**
- * Userkey module
+ * Userkey model
  *
  * @property string $id
  * @property string $user_id
@@ -15,7 +18,22 @@ namespace amnah\yii2\user\models;
  *
  * @property User $user
  */
-class Userkey extends \yii\db\ActiveRecord {
+class Userkey extends ActiveRecord {
+
+    /**
+     * @var int Key for email activations
+     */
+    const TYPE_EMAIL_ACTIVATION = 0;
+
+    /**
+     * @var int Key for email changes
+     */
+    const TYPE_EMAIL_CONFIRM = 1;
+
+    /**
+     * @var int Key for password resets
+     */
+    const TYPE_PASSWORD_RESET = 2;
 
     /**
      * @inheritdoc
@@ -56,5 +74,19 @@ class Userkey extends \yii\db\ActiveRecord {
      */
     public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors() {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\AutoTimestamp',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
+                ],
+            ],
+        ];
     }
 }

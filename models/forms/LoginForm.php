@@ -46,19 +46,49 @@ class LoginForm extends Model {
      */
     public function rules() {
         return [
-            [['username', 'password'], 'required'],
-            ['password', 'validateUserAndPassword'],
-            ['rememberMe', 'boolean'],
+            [["username", "password"], "required"],
+            ["username", "validateUser"],
+            ["password", "validatePassword", "skipOnError" => true],
+            ["rememberMe", "boolean"],
         ];
     }
 
     /**
-     * Validate user and password
+     * Validate user
      */
-    public function validateUserAndPassword() {
+    public function validateUser() {
+
+        // check for valid user
         $user = $this->getUser();
-        if (!$user || !$user->validatePassword($this->password)) {
-            $this->addError('password', 'Invalid credentials');
+        if (!$user) {
+            // calculate error message
+            if ($this->loginEmail and $this->loginUsername) {
+                $errorAttribute = "Email/username";
+            }
+            elseif ($this->loginEmail) {
+                $errorAttribute = "Email";
+            }
+            else {
+                $errorAttribute = "Username";
+            }
+            $this->addError("username", "$errorAttribute not found");
+        }
+    }
+
+    /**
+     * Validate password
+     */
+    public function validatePassword() {
+
+        // skip if there are already errors
+        if ($this->hasErrors()) {
+            return;
+        }
+
+        // check password
+        $user = $this->getUser();
+        if (!$user->validatePassword($this->password)) {
+            $this->addError("password", "Password incorrect");
         }
     }
 
@@ -87,5 +117,26 @@ class LoginForm extends Model {
 
         // return stored user
         return $this->_user;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels() {
+
+        // calculate attribute label for "username"
+        if ($this->loginEmail and $this->loginUsername) {
+            $attribute = "Email/username";
+        }
+        elseif ($this->loginEmail) {
+            $attribute = "Email";
+        }
+        else {
+            $attribute = "Username";
+        }
+
+        return [
+            "username" => $attribute,
+        ];
     }
 }
