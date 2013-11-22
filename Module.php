@@ -3,6 +3,7 @@
 namespace amnah\yii2\user;
 
 use Yii;
+use yii\base\InvalidConfigException;
 
 /**
  * User module
@@ -16,38 +17,43 @@ class Module extends \yii\base\Module {
      */
     public $controllerNamespace = "amnah\yii2\user\controllers";
 
-    /*
-     * @var bool flag for whether or not to use user.email. if set to false, users will have [null] emails
-     */
-    public $useEmail = true;
-
     /**
-     * @var bool flag for whether or not to use user.username. if set to false, users will have [null] usernames
-     */
-    public $useUsername = true;
-
-    /**
-     * @var bool flag for whether or not to require user.email
+     * @var bool If true, users are required to enter an email
      */
     public $requireEmail = false;
 
     /**
-     * @var bool flag for whether or not to require user.username
+     * @var bool If true, users are required to enter a username
      */
     public $requireUsername = true;
 
+    /*
+     * @var bool If true, users can enter an email. This is automatically set to true if $requireEmail = true
+     */
+    public $useEmail = true;
+
     /**
-     * @var bool flag for whether or not users can login using their email. both email and username can be allowed
+     * @var bool If true, users can enter a username. This is automatically set to true if $requireUsername = true
+     */
+    public $useUsername = true;
+
+    /**
+     * @var bool If true, users can log in by entering their email
      */
     public $loginEmail = true;
 
     /**
-     * @var bool flag for whether or not users can login using their username. both email and username can be allowed
+     * @var bool If true, users can log in by entering their username
      */
     public $loginUsername = true;
 
     /**
-     * @var bool flag for whether or not users have to confirm their email addresses (registering or updating)
+     * @var int Login duration
+     */
+    public $loginDuration = 2592000;
+
+    /**
+     * @var bool If true, users will have to confirm their email address after registering or updating their profile
      */
     public $emailConfirmation = true;
 
@@ -57,15 +63,29 @@ class Module extends \yii\base\Module {
     public function init() {
         parent::init();
 
-        // changes user component
-        Yii::$app->setComponent("user", null);
-        Yii::$app->setComponent("user", [
-            "class" => "amnah\yii2\components\User",
-        ]);
+        // get class name
+        $className = get_called_class();
+
+        // check required fields
+        if (!$this->requireEmail and !$this->requireUsername) {
+            throw new InvalidConfigException("{$className}: \$requireEmail and/or \$requireUsername must be true");
+        }
+        // check login fields
+        if (!$this->loginEmail and !$this->loginUsername) {
+            throw new InvalidConfigException("{$className}: \$loginEmail and/or \$loginUsername must be true");
+        }
+
+        // set use fields based on required fields
+        if ($this->requireEmail) {
+            $this->useEmail = true;
+        }
+        if ($this->requireUsername) {
+            $this->useUsername = true;
+        }
     }
 
     /**
-     * Modifies function to handle routes in the default controller
+     * Modify createController() to handle routes in the default controller
      *
      * This is a temporary hack until they add in url management via modules
      * @link https://github.com/yiisoft/yii2/issues/810
@@ -76,7 +96,8 @@ class Module extends \yii\base\Module {
     public function createController($route) {
 
         /**
-         * handles routes
+         * handle routes
+         *
          * "user" and "user/default" work like normal
          * "user/xxx" gets changed to "user/default/xxx"
          */

@@ -22,14 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
 			'labelOptions' => ['class' => 'col-lg-1 control-label'],
 		],
+
 	]); ?>
 
-	<?= $form->field($model, 'login') ?>
+	<?= $form->field($model, 'username') ?>
 
 	<?= $form->field($model, 'password')->passwordInput() ?>
 
 	<?= $form->field($model, 'rememberMe', [
-		'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+		'template' => "{label}<div class=\"col-lg-offset-1 col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
 	])->checkbox() ?>
 
 	<div class="form-group">
@@ -41,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php ActiveForm::end(); ?>
 
 	<div class="col-lg-offset-1" style="color:#999;">
-		You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-		To modify the username/password, please check out the code <code>app\models\User::$users</code>.
+		You may login with <strong>neo/neo</strong>.<br>
+		To modify the username/password, log in first and then go <?= HTML::a("update your profile", ["/user/profile"]) ?>.
 	</div>
 </div>

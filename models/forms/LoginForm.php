@@ -9,64 +9,83 @@ use amnah\yii2\user\models\User;
 /**
  * LoginForm is the model behind the login form.
  */
-class LoginForm extends Model
-{
-    public $login;
+class LoginForm extends Model {
+
+    /**
+     * @var string Username and/or email
+     */
+    public $username;
+
+    /**
+     * @var string
+     */
     public $password;
+
+    /**
+     * @var bool If true, users will be logged in for $loginDuration
+     */
     public $rememberMe = true;
 
+    /**
+     * @var bool If true, users can log in by entering their email
+     */
+    public $loginEmail = true;
+
+    /**
+     * @var bool If true, users can log in by entering their username
+     */
+    public $loginUsername = true;
+
+    /**
+     * @var User
+     */
     protected $_user = false;
 
     /**
      * @return array the validation rules.
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            // login and password are both required
-            [['login', 'password'], 'required'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
-            // rememberMe must be a boolean value
+            [['username', 'password'], 'required'],
+            ['password', 'validateUserAndPassword'],
             ['rememberMe', 'boolean'],
         ];
     }
 
     /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
+     * Validate user and password
      */
-    public function validatePassword()
-    {
+    public function validateUserAndPassword() {
         $user = $this->getUser();
         if (!$user || !$user->validatePassword($this->password)) {
-            $this->addError('password', 'Incorrect credentials.');
+            $this->addError('password', 'Invalid credentials');
         }
     }
 
     /**
-     * Logs in a user using the provided login and password.
-     * @return boolean whether the user is logged in successfully
-     */
-    public function login()
-    {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Finds user by [[login]]
+     * Get user based on email and/or username
      *
      * @return User|null
      */
-    private function getUser()
-    {
+    public function getUser() {
+
+        // check if we need to get user
         if ($this->_user === false) {
-            $this->_user = User::findBylogin($this->login);
+
+            // build query based on email and/or username login properties
+            $user = User::find();
+            if ($this->loginEmail) {
+                $user->orWhere(["email" => $this->username]);
+            }
+            if ($this->loginUsername) {
+                $user->orWhere(["username" => $this->username]);
+            }
+
+            // get and store user
+            $this->_user = $user->one();
         }
+
+        // return stored user
         return $this->_user;
     }
 }

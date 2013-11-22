@@ -8,20 +8,18 @@ use amnah\yii2\user\models\forms\LoginForm;
 
 /**
  * Default controller for User module
- *
- * @author amnah <amnah.dev@gmail.com>
  */
 class DefaultController extends Controller {
 
     /**
-     * Displays index
+     * Display index
      */
     public function actionIndex() {
         return $this->render('index');
     }
 
     /**
-     * Displays login page
+     * Display login page and log user in
      */
     public function actionLogin() {
 
@@ -30,10 +28,18 @@ class DefaultController extends Controller {
             $this->goHome();
         }
 
-        $model = new LoginForm();
-        if ($model->load($_POST) && $model->login()) {
+        // set up login form model
+        $model = new LoginForm([
+            "loginUsername" => $this->module->loginUsername,
+            "loginEmail" => $this->module->loginEmail,
+        ]);
+
+        // validate data
+        if ($model->load($_POST) && $model->validate()) {
+            Yii::$app->user->login($model->getUser(), $model->rememberMe ? $this->module->loginDuration : 0);
             return $this->goBack();
         }
+        // render view
         else {
             return $this->render('login', [
                 'model' => $model,
@@ -42,14 +48,14 @@ class DefaultController extends Controller {
     }
 
     /**
-     * Displays register page
+     * Display register page
      */
     public function actionRegister() {
 
     }
 
     /**
-     * Logs user out and redirect home
+     * Log user out and redirect home
      */
     public function actionLogout() {
         Yii::$app->getUser()->logout();
