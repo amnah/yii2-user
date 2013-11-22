@@ -6,8 +6,6 @@ use Yii;
 
 /**
  * User component
- *
- * @author amnah <amnah.dev@gmail.com>
  */
 class User extends \yii\web\User {
 

@@ -7,123 +7,134 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * This is the model class for table "user".
+ * User model
  *
- * @property string $id
- * @property string $role_id
+ * @property int $id
+ * @property int $role_id
  * @property string $email
+ * @property string $new_email
  * @property string $username
  * @property string $password
- * @property integer $status
- * @property string $token
- * @property string $ban_time
- * @property string $ban_reason
+ * @property int $status
+ * @property string $auth_key
  * @property string $create_time
  * @property string $update_time
+ * @property string $ban_time
+ * @property string $ban_reason
  */
 class User extends ActiveRecord implements IdentityInterface {
 
     /**
-     * Id
-     * @var int
-     */
-    public $id;
-
-    /**
-     * AuthKey
-     * @var string
-     */
-    public $authKey;
-
-    /**
-     * Inactive status
+     * @var int Inactive status
      */
     const STATUS_INACTIVE = 0;
 
     /**
-     * Active status
+     * @var int Active status
      */
     const STATUS_ACTIVE = 1;
 
     /**
-     * Unconfirmed status
+     * @var int Unconfirmed email status
      */
-    const STATUS_UNCONFIRMED = 2;
+    const STATUS_UNCONFIRMED_EMAIL = 2;
 
     /**
-     * Banned status
+     * @var int Banned status
      */
-    const STATUS_BANNED = -1;
+    const STATUS_BANNED = 10;
 
     /**
-     * New password (for registration and changing password)
-     * @var string
+     * @var string New password - for registration and changing password
      */
     public $newPassword;
 
     /**
-     * Captcha code
-     * @var string
+     * @inheritdoc
      */
-    public $recaptcha;
+    public static function tableName() {
+        return Yii::$app->db->tablePrefix . 'user';
+    }
 
-
-	/**
-	 * @inheritdoc
-	 */
-	public static function tableName() {
-		return Yii::$app->db->tablePrefix . 'user';
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function rules() {
-		return [
+    /**
+     * @inheritdoc
+     */
+    public function rules() {
+        return [
             // general email and username rules
             [['email', 'username'], 'string', 'max' => 255],
             [['email', 'username'], 'unique'],
             [['email', 'username'], 'filter', 'filter' => 'trim'],
             [['email'], 'email'],
-            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => "{attribute} can contain only letters, numbers, and '_'." ],
+            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => "{attribute} can contain only letters, numbers, and '_'."],
 
             // password rules
             [['password', 'newPassword'], 'length', 'min' => 3],
+            [['password', 'newPassword'], 'filter', 'filter' => 'trim'],
             [['newPassword'], 'required', 'on' => ['register', 'reset']],
 
             // recaptcha rules
 //            array('recaptcha', 'required', 'on'=> 'register'),
 //            array('recaptcha', 'YiiRecaptcha\RecaptchaValidator', 'privateKey' => Yii::app()->params['recaptcha']['private'], 'on'=> 'register'),
 
+            // admin crud rules
 //			[['role_id'], 'required'],
 //			[['role_id', 'status'], 'integer'],
 //			[['ban_time', 'create_time', 'update_time'], 'safe'],
-            [['ban_reason'], 'string', 'max' => 255],
-		];
-	}
+//			[['ban_reason'], 'string', 'max' => 255],
+        ];
+    }
 
+    /**
+     * @inheritdoc
+     */
     public function scenarios() {
 
     }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels() {
-		return [
-			'id' => 'ID',
-			'role_id' => 'Role ID',
-			'email' => 'Email',
-			'username' => 'Username',
-			'password' => 'Password',
-			'status' => 'Status',
-			'token' => 'Token',
-			'ban_time' => 'Ban Time',
-			'ban_reason' => 'Ban Reason',
-			'create_time' => 'Create Time',
-			'update_time' => 'Update Time',
-		];
-	}
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels() {
+        return [
+            'id' => 'ID',
+            'role_id' => 'Role ID',
+            'email' => 'Email',
+            'new_email' => 'New Email',
+            'username' => 'Username',
+            'password' => 'Password',
+            'status' => 'Status',
+            'auth_key' => 'Auth Key',
+            'ban_time' => 'Ban Time',
+            'ban_reason' => 'Ban Reason',
+            'create_time' => 'Create Time',
+            'update_time' => 'Update Time',
+
+            // attributes in model
+            'newPassword' => ($this->isNewRecord) ? 'Password' : 'New Password',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveRelation
+     */
+    public function getUserkeys() {
+        return $this->hasMany(Userkey::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveRelation
+     */
+    public function getProfiles() {
+        return $this->hasMany(Profile::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveRelation
+     */
+    public function getRole() {
+        return $this->hasOne(Role::className(), ['id' => 'role_id']);
+    }
 
     /**
      * @inheritdoc
@@ -140,53 +151,48 @@ class User extends ActiveRecord implements IdentityInterface {
         ];
     }
 
-
     /**
-     * Find an identity by the given ID.
-     *
-     * @param int $id the ID to be looked for
-     * @return IdentityInterface|null the identity object that matches the given ID.
+     * @inheritdoc
      */
     public static function findIdentity($id) {
         return static::find($id);
     }
 
     /**
-     * Get id of user
-     * @return int current user ID
+     * @inheritdoc
      */
     public function getId() {
         return $this->id;
     }
 
     /**
-     * Get authKey of user
-     * @return string
+     * @inheritdoc
      */
     public function getAuthKey() {
-        return $this->authKey;
+        return $this->auth_key;
     }
 
     /**
-     * Validate authKey
-     * @param string $authKey
-     * @return bool
+     * @inheritdoc
      */
     public function validateAuthKey($authKey) {
-        return $this->authKey === $authKey;
+        return $this->auth_key === $authKey;
     }
 
     /**
      * Encrypt newPassword into password
+     *
      * @return $this
      */
     public function encryptNewPassword() {
-        $this->password = password_hash($this->newPassword, PASSWORD_BCRYPT, array("cost" => 10));
+        $this->password = password_hash($this->newPassword, PASSWORD_BCRYPT, ["cost" => 10]);
+
         return $this;
     }
 
     /**
      * Validate password
+     *
      * @param string $password
      * @return bool
      */
