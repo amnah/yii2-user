@@ -10,7 +10,7 @@ use yii\db\ActiveRecord;
  *
  * @property string $id
  * @property string $user_id
- * @property integer $type
+ * @property int $type
  * @property string $key
  * @property string $create_time
  * @property string $consume_time

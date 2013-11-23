@@ -8,8 +8,8 @@ use yii\db\ActiveRecord;
 /**
  * Profile model
  *
- * @property string $id
- * @property string $user_id
+ * @property int $id
+ * @property int $user_id
  * @property string $create_time
  * @property string $update_time
  * @property string $first_name

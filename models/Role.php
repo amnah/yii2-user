@@ -8,11 +8,11 @@ use yii\db\ActiveRecord;
 /**
  * Role model
  *
- * @property string $id
+ * @property int $id
  * @property string $name
  * @property string $create_time
  * @property string $update_time
- * @property integer $can_admin
+ * @property int $can_admin
  *
  * @property User[] $users
  */
