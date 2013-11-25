@@ -20,12 +20,12 @@ class Module extends \yii\base\Module {
     /**
      * @var bool If true, users are required to enter an email
      */
-    public $requireEmail = false;
+    public $requireEmail = true;
 
     /**
      * @var bool If true, users are required to enter a username
      */
-    public $requireUsername = true;
+    public $requireUsername = false;
 
     /*
      * @var bool If true, users can enter an email. This is automatically set to true if $requireEmail = true
@@ -53,7 +53,8 @@ class Module extends \yii\base\Module {
     public $loginDuration = 2592000;
 
     /**
-     * @var bool If true, users will have to confirm their email address after registering or updating their profile
+     * @var bool If true, users will have to confirm their email address after registering or updating their profile.
+     *           This is the same as email activation
      */
     public $emailConfirmation = true;
 
@@ -63,7 +64,20 @@ class Module extends \yii\base\Module {
     public function init() {
         parent::init();
 
-        // get class name
+        // set alias
+        $this->setAliases([
+            '@user' => __DIR__,
+        ]);
+
+        // set use fields based on required fields
+        if ($this->requireEmail) {
+            $this->useEmail = true;
+        }
+        if ($this->requireUsername) {
+            $this->useUsername = true;
+        }
+
+        // get class name for error messages
         $className = get_called_class();
 
         // check required fields
@@ -74,13 +88,9 @@ class Module extends \yii\base\Module {
         if (!$this->loginEmail and !$this->loginUsername) {
             throw new InvalidConfigException("{$className}: \$loginEmail and/or \$loginUsername must be true");
         }
-
-        // set use fields based on required fields
-        if ($this->requireEmail) {
-            $this->useEmail = true;
-        }
-        if ($this->requireUsername) {
-            $this->useUsername = true;
+        // check email fields if emailConfirmation is true
+        if ($this->emailConfirmation and !$this->useEmail) {
+            throw new InvalidConfigException("{$className}: \$useEmail must be true if \$emailConfirmation is true");
         }
     }
 
