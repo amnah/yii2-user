@@ -4,7 +4,8 @@ namespace amnah\yii2\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-
+use yii\db\Expression;
+use yii\helpers\Security;
 /**
  * Userkey model
  *
@@ -21,19 +22,19 @@ use yii\db\ActiveRecord;
 class Userkey extends ActiveRecord {
 
     /**
-     * @var int Key for email activations
+     * @var int Key for email activations (=registering)
      */
-    const TYPE_EMAIL_ACTIVATION = 0;
+    const TYPE_EMAIL_ACTIVATE = 1;
 
     /**
-     * @var int Key for email changes
+     * @var int Key for email changes (=updating account page)
      */
-    const TYPE_EMAIL_CONFIRM = 1;
+    const TYPE_EMAIL_CHANGE = 2;
 
     /**
      * @var int Key for password resets
      */
-    const TYPE_PASSWORD_RESET = 2;
+    const TYPE_PASSWORD_RESET = 3;
 
     /**
      * @inheritdoc
@@ -86,7 +87,91 @@ class Userkey extends ActiveRecord {
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
                 ],
+                'timestamp' => function() { date("Y-m-d H:i:s"); },
             ],
         ];
+    }
+
+    /**
+     * Generate and return a new userkey
+     *
+     * @param bool $ensureOne
+     * @param int $userId
+     * @param int $type
+     * @param string $expireTime
+     * @return static
+     */
+    public static function generate($ensureOne, $userId, $type, $expireTime = null) {
+
+        // attempt to find existing record
+        // otherwise create new record
+        if ($ensureOne and !($model = static::findForResend($userId))) {
+            $model = new static();
+        }
+
+        // set/update data
+        $model->user_id = $userId;
+        $model->type = $type;
+        $model->create_time = date("Y-m-d H:i:s");
+        $model->expire_time = $expireTime;
+        $model->key = Security::generateRandomKey();
+        $model->save();
+
+        return $model;
+    }
+
+    /**
+     * Find a userkey object for resending/cancelling
+     *
+     * @param $userId
+     * @return static
+     */
+    public static function findForResend($userId) {
+        return static::find()
+            ->where([
+                "user_id" => $userId,
+                "type" => static::TYPE_EMAIL_CHANGE,
+                "consume_time" => null,
+            ])
+            ->andWhere("([[expire_time]] >= NOW() or [[expire_time]] is NULL)")
+            ->one();
+    }
+
+    /**
+     * Find a userkey object for confirming
+     *
+     * @param string $key
+     * @return static
+     */
+    public static function findForConfirm($key) {
+        return static::find()
+            ->where([
+                "key" => $key,
+                "consume_time" => null,
+            ])
+            ->andWhere("([[expire_time]] >= NOW() or [[expire_time]] is NULL)")
+            ->one();
+    }
+
+    /**
+     * Consume userkey record
+     *
+     * @return static
+     */
+    public function consume() {
+        $this->consume_time = date("Y-m-d H:i:s");
+        $this->save(false);
+        return $this;
+    }
+
+    /**
+     * Expire userkey record
+     *
+     * @return static
+     */
+    public function expire() {
+        $this->expire_time = date("Y-m-d H:i:s");
+        $this->save(false);
+        return $this;
     }
 }

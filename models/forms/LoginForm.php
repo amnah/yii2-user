@@ -4,6 +4,7 @@ namespace amnah\yii2\user\models\forms;
 
 use Yii;
 use yii\base\Model;
+use amnah\yii2\user\Module;
 use amnah\yii2\user\models\User;
 
 /**
@@ -17,7 +18,7 @@ class LoginForm extends Model {
     public $username;
 
     /**
-     * @var string
+     * @var string Password
      */
     public $password;
 
@@ -25,16 +26,6 @@ class LoginForm extends Model {
      * @var bool If true, users will be logged in for $loginDuration
      */
     public $rememberMe = true;
-
-    /**
-     * @var bool If true, users can log in by entering their email
-     */
-    public $loginEmail = true;
-
-    /**
-     * @var bool If true, users can log in by entering their username
-     */
-    public $loginUsername = true;
 
     /**
      * @var User
@@ -62,10 +53,10 @@ class LoginForm extends Model {
         $user = $this->getUser();
         if (!$user) {
             // calculate error message
-            if ($this->loginEmail and $this->loginUsername) {
+            if ($this->getUserModule()->loginEmail and $this->getUserModule()->loginUsername) {
                 $errorAttribute = "Email/username";
             }
-            elseif ($this->loginEmail) {
+            elseif ($this->getUserModule()->loginEmail) {
                 $errorAttribute = "Email";
             }
             else {
@@ -86,8 +77,9 @@ class LoginForm extends Model {
         }
 
         // check password
+        /** @var User $user */
         $user = $this->getUser();
-        if (!$user->validatePassword($this->password)) {
+        if (!$user->verifyPassword($this->password)) {
             $this->addError("password", "Password incorrect");
         }
     }
@@ -104,10 +96,10 @@ class LoginForm extends Model {
 
             // build query based on email and/or username login properties
             $user = User::find();
-            if ($this->loginEmail) {
+            if ($this->getUserModule()->loginEmail) {
                 $user->orWhere(["email" => $this->username]);
             }
-            if ($this->loginUsername) {
+            if ($this->getUserModule()->loginUsername) {
                 $user->orWhere(["username" => $this->username]);
             }
 
@@ -125,18 +117,19 @@ class LoginForm extends Model {
     public function attributeLabels() {
 
         // calculate attribute label for "username"
-        if ($this->loginEmail and $this->loginUsername) {
-            $attribute = "Email/username";
-        }
-        elseif ($this->loginEmail) {
-            $attribute = "Email";
-        }
-        else {
-            $attribute = "Username";
-        }
-
+        $attribute = $this->getUserModule()->requireEmail ? "Email" : "Username";
         return [
             "username" => $attribute,
         ];
+    }
+
+    /**
+     * Get user module. This is used for accessing the module properties
+     *
+     * @param string $moduleId
+     * @return Module
+     */
+    public function getUserModule($moduleId = "user") {
+        return Yii::$app->getModule($moduleId);
     }
 }

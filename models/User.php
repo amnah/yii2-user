@@ -3,9 +3,11 @@
 namespace amnah\yii2\user\models;
 
 use Yii;
+use yii\base\InvalidParamException;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\web\IdentityInterface;
-
+use amnah\yii2\user\Module;
 /**
  * User model
  *
@@ -21,6 +23,10 @@ use yii\web\IdentityInterface;
  * @property string $update_time
  * @property string $ban_time
  * @property string $ban_reason
+ *
+ * @property Profile $profile
+ * @property Role $role
+ * @property Userkey[] $userkeys
  */
 class User extends ActiveRecord implements IdentityInterface {
 
@@ -50,6 +56,11 @@ class User extends ActiveRecord implements IdentityInterface {
     public $newPassword;
 
     /**
+     * @var string Current password - for account page updates
+     */
+    public $currentPassword;
+
+    /**
      * @inheritdoc
      */
     public static function tableName() {
@@ -60,7 +71,8 @@ class User extends ActiveRecord implements IdentityInterface {
      * @inheritdoc
      */
     public function rules() {
-        return [
+        // set initial rules
+        $rules = [
             // general email and username rules
             [['email', 'username'], 'string', 'max' => 255],
             [['email', 'username'], 'unique'],
@@ -69,13 +81,13 @@ class User extends ActiveRecord implements IdentityInterface {
             [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => "{attribute} can contain only letters, numbers, and '_'."],
 
             // password rules
-            [['password', 'newPassword'], 'length', 'min' => 3],
+            [['password', 'newPassword'], 'string', 'min' => 3],
             [['password', 'newPassword'], 'filter', 'filter' => 'trim'],
-            [['newPassword'], 'required', 'on' => ['register', 'reset']],
+            [['newPassword'], 'required', 'on' => ['register']],
 
-            // recaptcha rules
-//            array('recaptcha', 'required', 'on'=> 'register'),
-//            array('recaptcha', 'YiiRecaptcha\RecaptchaValidator', 'privateKey' => Yii::app()->params['recaptcha']['private'], 'on'=> 'register'),
+            // account page
+            [['currentPassword'], 'required', 'on' => ['account']],
+            [['currentPassword'], "validateCurrentPassword", "on" => ["account"]],
 
             // admin crud rules
 //			[['role_id'], 'required'],
@@ -83,13 +95,28 @@ class User extends ActiveRecord implements IdentityInterface {
 //			[['ban_time', 'create_time', 'update_time'], 'safe'],
 //			[['ban_reason'], 'string', 'max' => 255],
         ];
+
+        // add required rules for email/username depending on module properties
+        $requireFields = ["requireEmail", "requireUsername"];
+        foreach ($requireFields as $requireField) {
+            if ($this->getUserModule()->$requireField) {
+                $attribute = strtolower(substr($requireField, 7));
+                $rules[] = [$attribute, "required"];
+            }
+        }
+
+        return $rules;
     }
 
     /**
-     * @inheritdoc
+     * Validate password
      */
-    public function scenarios() {
+    public function validateCurrentPassword() {
 
+        // check password
+        if (!$this->verifyPassword($this->currentPassword)) {
+            $this->addError("currentPassword", "Current password incorrect");
+        }
     }
 
     /**
@@ -125,8 +152,17 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * @return \yii\db\ActiveRelation
      */
+    /*
     public function getProfiles() {
         return $this->hasMany(Profile::className(), ['user_id' => 'id']);
+    }
+    */
+
+    /**
+     * @return \yii\db\ActiveRelation
+     */
+    public function getProfile() {
+        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
     /**
@@ -143,11 +179,9 @@ class User extends ActiveRecord implements IdentityInterface {
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\AutoTimestamp',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time', 'update_time'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
-                ],
+                'timestamp' => function() { date("Y-m-d H:i:s"); },
             ],
+
         ];
     }
 
@@ -180,12 +214,66 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
+     * Get user module. This is used for accessing the module properties
+     *
+     * @param string $moduleId
+     * @return Module
+     */
+    public function getUserModule($moduleId = "user") {
+        return Yii::$app->getModule($moduleId);
+    }
+
+    /**
+     * Get a clean display name for the user
+     *
+     * @var string $default
+     * @return string|int
+     */
+    public function getDisplayName($default = "") {
+
+        // define possible names
+        $possibleNames = [
+            "email",
+            "username",
+            "id",
+        ];
+
+        // go through each and return if valid
+        foreach ($possibleNames as $possibleName) {
+            if (!empty($this->$possibleName)) {
+                return $this->$possibleName;
+            }
+        }
+
+        return $default;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert) {
+
+        // hash new password if set
+        if ($this->newPassword) {
+            $this->encryptNewPassword();
+        }
+
+        // ensure username and email are null so they won't get set
+        $nullAttributes = ["email", "username"];
+        foreach ($nullAttributes as $nullAttribute) {
+            $this->$nullAttribute = $this->$nullAttribute ? $this->$nullAttribute : null;
+        }
+
+        return parent::beforeSave($insert);
+    }
+
+    /**
      * Encrypt newPassword into password
      *
      * @return $this
      */
     public function encryptNewPassword() {
-        $this->password = password_hash($this->newPassword, PASSWORD_BCRYPT, ["cost" => 10]);
+        $this->password = password_hash($this->newPassword, PASSWORD_BCRYPT, ["cost" => 12]);
 
         return $this;
     }
@@ -196,7 +284,75 @@ class User extends ActiveRecord implements IdentityInterface {
      * @param string $password
      * @return bool
      */
-    public function validatePassword($password) {
+    public function verifyPassword($password) {
         return password_verify($password, $this->password);
+    }
+
+    /**
+     * Register a new user
+     *
+     * @param int $roleId
+     * @return static
+     */
+    public function register($roleId) {
+
+        // set default attributes for registration
+        $attributes = [ "status" => static::STATUS_ACTIVE, "role_id" => $roleId ];
+
+        // determine if we need to change status based on module properties
+        if ($this->getUserModule()->emailConfirmation and $this->getUserModule()->requireEmail) {
+            $attributes["status"] = User::STATUS_INACTIVE;
+        }
+        elseif ($this->getUserModule()->emailConfirmation and $this->getUserModule()->useEmail) {
+            $attributes["status"] = User::STATUS_UNCONFIRMED_EMAIL;
+        }
+
+        // set attributes
+        $this->setAttributes($attributes, false);
+
+        // save and return
+        // note: we assume that we have already validated (both $user and $profile)
+        $this->save(false);
+        return $this;
+    }
+
+    /**
+     * Prep for new email
+     *
+     * @return $this
+     */
+    public function prepNewEMail() {
+
+        // change status
+        $this->status = static::STATUS_UNCONFIRMED_EMAIL;
+
+        // set new_email attributes
+        $this->new_email = $this->email;
+
+        // restore old attribute temporarily
+        $this->email = $this->getOldAttribute("email");
+
+        return $this;
+    }
+
+    /**
+     * Confirm user email
+     *
+     * @return $this
+     */
+    public function confirm() {
+
+        // update status
+        $this->status = static::STATUS_ACTIVE;
+
+        // update new_email if set
+        if ($this->new_email) {
+            $this->email = $this->new_email;
+            $this->new_email = null;
+        }
+
+        // save and return
+        $this->save();
+        return $this;
     }
 }

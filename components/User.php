@@ -52,28 +52,12 @@ class User extends \yii\web\User {
     }
 
     /**
-     * Get a clean display name for the user
+     * Get user's display name
      *
      * @param string $default
      * @return string
      */
     public function getDisplayName($default = "") {
-
-        // define possible names
-        $possibleNames = [
-            "email",
-            "username",
-            "id",
-        ];
-
-        // go through each and check
-        foreach ($possibleNames as $possibleName) {
-            if (!empty($this->$possibleName)) {
-                return $this->$possibleName;
-            }
-        }
-
-        // return default
-        return $default;
+        return $this->getIdentity()->getDisplayName($default);
     }
 }

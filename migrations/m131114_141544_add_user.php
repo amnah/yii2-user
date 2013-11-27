@@ -16,7 +16,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
         try {
             // create tables in specific order
             $this->createTable("{$tablePrefix}role", [
-                'id' => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",
+                "id" => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",
                 "name" => "varchar(255) NOT NULL",
                 "create_time" => "timestamp NULL DEFAULT NULL",
                 "update_time" => "timestamp NULL DEFAULT NULL",
@@ -50,8 +50,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
                 "user_id" => "int UNSIGNED NOT NULL",
                 "create_time" => "timestamp NULL DEFAULT NULL",
                 "update_time" => "timestamp NULL DEFAULT NULL",
-                "first_name" => "varchar(255) NOT NULL DEFAULT ''",
-                "last_name" => "varchar(255) NOT NULL DEFAULT ''",
+                "full_name" => "varchar(255) NOT NULL DEFAULT ''",
             ]);
 
             // add indices for performance optimization
@@ -65,21 +64,21 @@ class m131114_141544_add_user extends \yii\db\Migration {
             // insert role data
             $columns = ["name", "can_admin", "create_time"];
             $this->batchInsert("{$tablePrefix}role", $columns, [
-                ["Admin", 1, new Expression('NOW()')],
-                ["User", 0, new Expression('NOW()')],
-                ["Guest", 0, new Expression('NOW()')],
+                ["Admin", 1, date("Y-m-d H:i:s")],
+                ["User", 0, date("Y-m-d H:i:s")],
+                ["Guest", 0, date("Y-m-d H:i:s")],
             ]);
 
             // insert user data
             $columns = ["id", "role_id", "email", "username", "password", "status", "create_time"];
             $this->batchInsert("{$tablePrefix}user", $columns, [
-                [1, Role::ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, new Expression('NOW()')],
+                [1, Role::ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s")],
             ]);
 
             // insert profile data
-            $columns = ["id", "user_id", "first_name", "create_time"];
+            $columns = ["id", "user_id", "full_name", "create_time"];
             $this->batchInsert("{$tablePrefix}profile", $columns, [
-                [1, 1, "neo", new Expression('NOW()')],
+                [1, 1, "the one", date("Y-m-d H:i:s")],
             ]);
 
             // commit transaction
@@ -96,7 +95,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
 
     public function down() {
 
-        // get class name for error message and table prefix because functions don't automatically prepend it
+        // get class name for error message and table prefix because functions don"t automatically prepend it
         $class = get_called_class();
         $tablePrefix = $this->db->tablePrefix;
 

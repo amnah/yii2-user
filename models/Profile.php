@@ -4,6 +4,7 @@ namespace amnah\yii2\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * Profile model
@@ -12,8 +13,7 @@ use yii\db\ActiveRecord;
  * @property int $user_id
  * @property string $create_time
  * @property string $update_time
- * @property string $first_name
- * @property string $last_name
+ * @property string $full_name
  *
  * @property User $user
  */
@@ -31,10 +31,10 @@ class Profile extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['user_id'], 'required'],
-            [['user_id'], 'integer'],
-            [['create_time', 'update_time'], 'safe'],
-            [['first_name', 'last_name'], 'string', 'max' => 255]
+//            [['user_id'], 'required'],
+//            [['user_id'], 'integer'],
+//            [['create_time', 'update_time'], 'safe'],
+            [['full_name'], 'string', 'max' => 255]
         ];
     }
 
@@ -47,8 +47,7 @@ class Profile extends ActiveRecord {
             'user_id' => 'User ID',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
+            'full_name' => 'Full Name',
         ];
     }
 
@@ -66,11 +65,21 @@ class Profile extends ActiveRecord {
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\AutoTimestamp',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time', 'update_time'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
-                ],
+                'timestamp' => function() { date("Y-m-d H:i:s"); },
             ],
         ];
+    }
+
+    /**
+     * Register a new profile for user
+     *
+     * @param int $userId
+     * @return static
+     */
+    public function register($userId) {
+
+        $this->user_id = $userId;
+        $this->save(false);
+        return $this;
     }
 }
