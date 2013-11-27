@@ -18,6 +18,17 @@ class Module extends \yii\base\Module {
     public $controllerNamespace = "amnah\yii2\user\controllers";
 
     /**
+     * @var string Alias for module
+     */
+    public $alias = "@user";
+
+    /**
+     * @var bool If true, users will have to confirm their email address after registering or updating their profile.
+     *           This is the same as email activation
+     */
+    public $emailConfirmation = true;
+
+    /**
      * @var bool If true, users are required to enter an email
      */
     public $requireEmail = true;
@@ -53,12 +64,6 @@ class Module extends \yii\base\Module {
     public $loginDuration = 2592000;
 
     /**
-     * @var bool If true, users will have to confirm their email address after registering or updating their profile.
-     *           This is the same as email activation
-     */
-    public $emailConfirmation = true;
-
-    /**
      * @inheritdoc
      */
     public function init() {
@@ -66,7 +71,7 @@ class Module extends \yii\base\Module {
 
         // set alias
         $this->setAliases([
-            '@user' => __DIR__,
+            $this->alias => __DIR__,
         ]);
 
         // set use fields based on required fields
