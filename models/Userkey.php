@@ -95,13 +95,13 @@ class Userkey extends ActiveRecord {
     /**
      * Generate and return a new userkey
      *
-     * @param bool $ensureOne
      * @param int $userId
      * @param int $type
      * @param string $expireTime
+     * @param bool $ensureOne
      * @return static
      */
-    public static function generate($ensureOne, $userId, $type, $expireTime = null) {
+    public static function generate($userId, $type, $expireTime = null, $ensureOne = true) {
 
         // attempt to find existing record
         // otherwise create new record

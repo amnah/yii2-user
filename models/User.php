@@ -317,22 +317,26 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
-     * Prep for new email
+     * Check and prepare for email change
      *
-     * @return $this
+     * @return bool
      */
-    public function prepNewEMail() {
+    public function checkAndPrepareEmailChange() {
 
-        // change status
-        $this->status = static::STATUS_UNCONFIRMED_EMAIL;
+        // check for change in email
+        if ($this->email != $this->getOldAttribute("email")) {
 
-        // set new_email attributes
-        $this->new_email = $this->email;
+            // change status
+            $this->status = static::STATUS_UNCONFIRMED_EMAIL;
 
-        // restore old attribute temporarily
-        $this->email = $this->getOldAttribute("email");
+            // set new_email attribute and restore old one
+            $this->new_email = $this->email;
+            $this->email = $this->getOldAttribute("email");
 
-        return $this;
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -112,8 +112,22 @@ class DefaultController extends Controller {
                 $user->register(Role::USER);
                 $profile->register($user->id);
 
-                // process email confirmation. if no email is needed, log user in automatically
-                if (!$this->_processEmailConfirmation($user, $profile)) {
+                // determine userkey type to see if we need to send email
+                $userkeyType = null;
+                if ($user->status == User::STATUS_INACTIVE) {
+                    $userkeyType = Userkey::TYPE_EMAIL_ACTIVATE;
+                }
+                elseif ($user->status == User::STATUS_UNCONFIRMED_EMAIL) {
+                    $userkeyType = Userkey::TYPE_EMAIL_CHANGE;
+                }
+
+                // generate userkey and send email
+                if ($userkeyType !== null) {
+                    $userkey = Userkey::generate($user->id, $userkeyType);
+                    $numSent = $this->_sendEmailConfirmation($user, $profile, $userkey);
+                }
+                // log user in automatically
+                else {
                     Yii::$app->user->switchIdentity($user,Yii::$app->getModule("user")->loginDuration);
                 }
 
@@ -127,35 +141,6 @@ class DefaultController extends Controller {
             'user' => $user,
             'profile' => $profile,
         ]);
-    }
-
-    /**
-     * Process email confirmation (if needed)
-     *
-     * @param User $user
-     * @param Profile $profile
-     * @return int
-     */
-    protected function _processEmailConfirmation($user, $profile) {
-
-        // determine userkey type
-        $userkeyType = null;
-        if ($user->status == User::STATUS_INACTIVE) {
-            $userkeyType = Userkey::TYPE_EMAIL_ACTIVATE;
-        }
-        elseif ($user->status == User::STATUS_INACTIVE) {
-            $userkeyType = Userkey::TYPE_EMAIL_CHANGE;
-
-        }
-
-        // generate userkey and send email
-        if ($userkeyType !== null) {
-            $ensureOne = true;
-            $userkey = Userkey::generate($ensureOne, $user->id, $userkeyType);
-            return $this->_sendEmailConfirmation($user, $profile, $userkey);
-        }
-
-        return 0;
     }
 
     /**
@@ -230,13 +215,13 @@ class DefaultController extends Controller {
             // validate for normal request
             if ($user->validate()) {
 
-                // check if we have a new email
-                if ($this->_checkNewEmail($user, $user->profile) > 0) {
-                    // prep new email by moving it to user.new_email and changing status
-                    $user->prepNewEmail();
+                // generate userkey and send email if user changed his email
+                if ($user->checkAndPrepareEmailChange()) {
+                    $userkey = Userkey::generate($user->id, Userkey::TYPE_EMAIL_CHANGE);
+                    $numSent = $this->_sendEmailConfirmation($user, $user->profile, $userkey);
                 }
 
-                // save - pass false in so that we don't have to validate again
+                // save - no need to validate again
                 $user->save(false);
                 Yii::$app->session->setFlash("Account-success", true);
                 $this->refresh();
@@ -250,67 +235,8 @@ class DefaultController extends Controller {
     }
 
     /**
-     * Check and process new email address
-     *
-     * @param User $user
-     * @param Profile $profile
-     * @return int
+     * Profile
      */
-    protected function _checkNewEmail($user, $profile) {
-
-        // do nothing if email hasn't changed
-        if ($user->email == $user->getOldAttribute("email")) {
-            return 0;
-        }
-
-        // generate userkey and send email
-        $ensureOne = true;
-        $userkey = Userkey::generate($ensureOne, $user->id, Userkey::TYPE_EMAIL_CHANGE);
-        return $this->_sendEmailConfirmation($user, $profile, $userkey);
-    }
-
-    /**
-     * Resend email change confirmation
-     */
-    public function actionResend() {
-
-        // attempt to find userkey and get user/profile to send confirmation email
-        if ($userkey = Userkey::findForResend(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE)) {
-            $user = Yii::$app->user->identity;
-            $profile = $user->profile;
-            $this->_sendEmailConfirmation($user, $profile, $userkey);
-
-            // set flash message
-            Yii::$app->session->setFlash("Resend-success", true);
-        }
-
-        // go to account page
-        return $this->redirect(["/user/account"]);
-    }
-
-    /**
-     * Cancel email change
-     */
-    public function actionCancel() {
-        // attempt to find userkey
-        if ($userkey = Userkey::findForResend(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE)) {
-
-            // remove user.new_email
-            $user = Yii::$app->user->identity;
-            $user->new_email = null;
-            $user->save(false);
-
-            // delete userkey
-            $userkey->expire();
-
-            // set flash message
-            Yii::$app->session->setFlash("Cancel-success", true);
-        }
-
-        // go to account page
-        return $this->redirect(["/user/account"]);
-    }
-
     public function actionProfile() {
 
         // set up profile and attempt to load data from $_POST
@@ -340,6 +266,48 @@ class DefaultController extends Controller {
         return $this->render("profile", [
             'profile' => $profile,
         ]);
+    }
+
+    /**
+     * Resend email change confirmation
+     */
+    public function actionResend() {
+
+        // attempt to find userkey and get user/profile to send confirmation email
+        if ($userkey = Userkey::findForResend(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE)) {
+            $user = Yii::$app->user->identity;
+            $profile = $user->profile;
+            $this->_sendEmailConfirmation($user, $profile, $userkey);
+
+            // set flash message
+            Yii::$app->session->setFlash("Resend-success", true);
+        }
+
+        // go to account page
+        return $this->redirect(["/user/account"]);
+    }
+
+    /**
+     * Cancel email change
+     */
+    public function actionCancel() {
+
+        // attempt to find userkey
+        if ($userkey = Userkey::findForResend(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE)) {
+
+            // remove user.new_email
+            /** @var User $user */
+            $user = Yii::$app->user->identity;
+            $user->new_email = null;
+            $user->save(false);
+
+            // delete userkey and set flash message
+            $userkey->expire();
+            Yii::$app->session->setFlash("Cancel-success", true);
+        }
+
+        // go to account page
+        return $this->redirect(["/user/account"]);
     }
 
     /**

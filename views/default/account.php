@@ -44,17 +44,24 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($user, 'email') ?>
     <?php endif; ?>
 
-    <?php if ($user->new_email): ?>
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+
+            <?php if ($user->new_email): ?>
+
                 <p class="small">Pending email confirmation: [ <?= $user->new_email ?> ]</p>
                 <p class="small">
                     <?= Html::a("resend", ["/user/resend"]) ?> or <?= Html::a("cancel", ["/user/cancel"]) ?>
                 </p>
 
-            </div>
+            <?php else: ?>
+
+                <p class="small">Changing your email requires email confirmation</p>
+
+            <?php endif; ?>
+
         </div>
-    <?php endif; ?>
+    </div>
 
     <?php if ($user->getUserModule()->useUsername): ?>
         <?= $form->field($user, 'username') ?>
