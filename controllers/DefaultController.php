@@ -108,28 +108,10 @@ class DefaultController extends Controller {
             // validate for normal request
             if ($user->validate() and $profile->validate()) {
 
-                // register user and profile
+                // perform registration
                 $user->register(Role::USER);
                 $profile->register($user->id);
-
-                // determine userkey type to see if we need to send email
-                $userkeyType = null;
-                if ($user->status == User::STATUS_INACTIVE) {
-                    $userkeyType = Userkey::TYPE_EMAIL_ACTIVATE;
-                }
-                elseif ($user->status == User::STATUS_UNCONFIRMED_EMAIL) {
-                    $userkeyType = Userkey::TYPE_EMAIL_CHANGE;
-                }
-
-                // generate userkey and send email
-                if ($userkeyType !== null) {
-                    $userkey = Userkey::generate($user->id, $userkeyType);
-                    $numSent = $this->_sendEmailConfirmation($user, $profile, $userkey);
-                }
-                // log user in automatically
-                else {
-                    Yii::$app->user->switchIdentity($user,Yii::$app->getModule("user")->loginDuration);
-                }
+                $this->_calcEmailOrLogin($user, $profile);
 
                 // set flash
                 Yii::$app->session->setFlash("Register-success", $user->getDisplayName());
@@ -141,6 +123,34 @@ class DefaultController extends Controller {
             'user' => $user,
             'profile' => $profile,
         ]);
+    }
+
+    /**
+     * Calculate whether we need to send confirmation email or log user in
+     *
+     * @param User $user
+     * @param Profile $profile
+     */
+    protected function _calcEmailOrLogin($user, $profile) {
+
+        // determine userkey type to see if we need to send email
+        $userkeyType = null;
+        if ($user->status == User::STATUS_INACTIVE) {
+            $userkeyType = Userkey::TYPE_EMAIL_ACTIVATE;
+        }
+        elseif ($user->status == User::STATUS_UNCONFIRMED_EMAIL) {
+            $userkeyType = Userkey::TYPE_EMAIL_CHANGE;
+        }
+
+        // generate userkey and send email
+        if ($userkeyType !== null) {
+            $userkey = Userkey::generate($user->id, $userkeyType);
+            $numSent = $this->_sendEmailConfirmation($user, $profile, $userkey);
+        }
+        // log user in automatically
+        else {
+            Yii::$app->user->switchIdentity($user, Yii::$app->getModule("user")->loginDuration);
+        }
     }
 
     /**
@@ -221,7 +231,7 @@ class DefaultController extends Controller {
                     $numSent = $this->_sendEmailConfirmation($user, $user->profile, $userkey);
                 }
 
-                // save - no need to validate again
+                // save, set flash, and refresh page
                 $user->save(false);
                 Yii::$app->session->setFlash("Account-success", true);
                 $this->refresh();
@@ -253,7 +263,7 @@ class DefaultController extends Controller {
             // validate for normal request
             if ($profile->validate()) {
 
-                // do things as needed
+                // call something here if needed
 
                 // save - pass false in so that we don't have to validate again
                 $profile->save(false);
@@ -313,7 +323,7 @@ class DefaultController extends Controller {
     /**
      * Forgot password
      */
-    public function forgot() {
+    public function actionForgot() {
 
     }
 }
