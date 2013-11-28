@@ -64,6 +64,11 @@ class Module extends \yii\base\Module {
     public $loginDuration = 2592000;
 
     /**
+     * @var string Email view path
+     */
+    public $emailViewPath = "@user/views/_email";
+
+    /**
      * @inheritdoc
      */
     public function init() {
