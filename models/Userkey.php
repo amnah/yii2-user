@@ -105,7 +105,8 @@ class Userkey extends ActiveRecord {
 
         // attempt to find existing record
         // otherwise create new record
-        if ($ensureOne and !($model = static::findForResend($userId))) {
+        $model = static::findActiveByUser($userId, $type);
+        if ($ensureOne and !$model) {
             $model = new static();
         }
 
@@ -121,16 +122,17 @@ class Userkey extends ActiveRecord {
     }
 
     /**
-     * Find a userkey object for resending/cancelling
+     * Find an active userkey
      *
-     * @param $userId
+     * @param int $userId
+     * @param int $type
      * @return static
      */
-    public static function findForResend($userId) {
+    public static function findActiveByUser($userId, $type) {
         return static::find()
             ->where([
                 "user_id" => $userId,
-                "type" => static::TYPE_EMAIL_CHANGE,
+                "type" => $type,
                 "consume_time" => null,
             ])
             ->andWhere("([[expire_time]] >= NOW() or [[expire_time]] is NULL)")
@@ -141,12 +143,15 @@ class Userkey extends ActiveRecord {
      * Find a userkey object for confirming
      *
      * @param string $key
+     * @param int|string $type
      * @return static
      */
-    public static function findForConfirm($key) {
+    public static function findActiveByKey($key, $type) {
+
         return static::find()
             ->where([
                 "key" => $key,
+                "type" => $type,
                 "consume_time" => null,
             ])
             ->andWhere("([[expire_time]] >= NOW() or [[expire_time]] is NULL)")

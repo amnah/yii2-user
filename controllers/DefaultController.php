@@ -13,6 +13,8 @@ use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\Role;
 use amnah\yii2\user\models\Userkey;
 use amnah\yii2\user\models\forms\LoginForm;
+use amnah\yii2\user\models\forms\ForgotForm;
+use amnah\yii2\user\models\forms\ResetForm;
 
 
 /**
@@ -44,7 +46,7 @@ class DefaultController extends Controller {
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['login', 'register', 'forgot'],
+                        'actions' => ['login', 'register', 'forgot', 'reset'],
                         'allow' => true,
                         'roles' => ['?', '*'],
                     ],
@@ -166,11 +168,11 @@ class DefaultController extends Controller {
         // modify view path to module views
         /** @var Mailer $mailer */
         $mailer = Yii::$app->mail;
-        $mailer->viewPath = Yii::$app->getModule("user")->alias . "/views/_email";
+        $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
 
         // send email
         $subject = Yii::$app->id . " - Email confirmation";
-        return  $mailer->compose('confirmEmail', compact("user", "profile", "userkey", "subject"))
+        return  $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userkey"))
             ->setTo($user->email)
             ->setSubject($subject)
             ->send();
@@ -179,11 +181,11 @@ class DefaultController extends Controller {
     /**
      * Confirm email
      */
-    public function actionConfirm($key) {
+    public function actionConfirm($key = "") {
 
         // search for userkey
-        $success = false;
-        if ($userkey = Userkey::findForConfirm($key)) {
+        $userkey = Userkey::findActiveByKey($key, [Userkey::TYPE_EMAIL_ACTIVATE, Userkey::TYPE_EMAIL_CHANGE]);
+        if ($userkey) {
 
             // confirm user
             /** @var User $user */
@@ -193,14 +195,14 @@ class DefaultController extends Controller {
             // consume userkey
             $userkey->consume();
 
-            // set success
-            $success = true;
+            // set flash and refresh
+            Yii::$app->session->setFlash("Confirm-success", true);
+            $this->refresh();
         }
 
         // render view
         return $this->render("confirm", [
             "userkey" => $userkey,
-            "success" => $success,
         ]);
 
     }
@@ -284,7 +286,9 @@ class DefaultController extends Controller {
     public function actionResend() {
 
         // attempt to find userkey and get user/profile to send confirmation email
-        if ($userkey = Userkey::findForResend(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE)) {
+        $userkey = Userkey::findActiveByUser(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE);
+        if ($userkey) {
+            /** @var User $user */
             $user = Yii::$app->user->identity;
             $profile = $user->profile;
             $this->_sendEmailConfirmation($user, $profile, $userkey);
@@ -303,7 +307,8 @@ class DefaultController extends Controller {
     public function actionCancel() {
 
         // attempt to find userkey
-        if ($userkey = Userkey::findForResend(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE)) {
+        $userkey = Userkey::findActiveByUser(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE);
+        if ($userkey) {
 
             // remove user.new_email
             /** @var User $user */
@@ -325,5 +330,47 @@ class DefaultController extends Controller {
      */
     public function actionForgot() {
 
+        // attempt to load $_POST data, validate, and send email
+        $model = new ForgotForm();
+        if ($model->load($_POST) && $model->sendForgotEmail()) {
+
+            // set flash and refresh page
+            Yii::$app->session->setFlash('Forgot-success');
+            return $this->refresh();
+        }
+
+        // render view
+        return $this->render('forgot', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Reset password
+     */
+    public function actionReset($key) {
+
+        // check for valid userkey
+        $userkey = Userkey::findActiveByKey($key, Userkey::TYPE_PASSWORD_RESET);
+        if (!$userkey) {
+
+            // render view with invalid flag
+            // using setFlash()/refresh() would cause an infinite loop
+            return $this->render('reset', ["invalidKey" => true]);
+        }
+
+        // attempt to load $_POST data, validate, and reset user password
+        $model = new ResetForm(["userkey" => $userkey]);
+        if ($model->load($_POST) && $model->resetPassword()) {
+
+            // set flash and refresh page
+            Yii::$app->session->setFlash('Reset-success');
+            return $this->refresh();
+        }
+
+        // render view
+        return $this->render('reset', [
+            'model' => $model,
+        ]);
     }
 }
