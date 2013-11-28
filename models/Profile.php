@@ -4,7 +4,6 @@ namespace amnah\yii2\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\db\Expression;
 
 /**
  * Profile model

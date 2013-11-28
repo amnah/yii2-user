@@ -3,11 +3,9 @@
 namespace amnah\yii2\user\models;
 
 use Yii;
-use yii\base\InvalidParamException;
 use yii\db\ActiveRecord;
-use yii\db\Expression;
 use yii\web\IdentityInterface;
-use amnah\yii2\user\Module;
+
 /**
  * User model
  *

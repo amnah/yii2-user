@@ -4,8 +4,8 @@ namespace amnah\yii2\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\db\Expression;
 use yii\helpers\Security;
+
 /**
  * Userkey model
  *
@@ -98,15 +98,14 @@ class Userkey extends ActiveRecord {
      * @param int $userId
      * @param int $type
      * @param string $expireTime
-     * @param bool $ensureOne
      * @return static
      */
-    public static function generate($userId, $type, $expireTime = null, $ensureOne = true) {
+    public static function generate($userId, $type, $expireTime = null) {
 
         // attempt to find existing record
         // otherwise create new record
         $model = static::findActiveByUser($userId, $type);
-        if ($ensureOne and !$model) {
+        if (!$model) {
             $model = new static();
         }
 
