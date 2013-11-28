@@ -105,6 +105,16 @@ class ResetForm extends Model {
     }
 
     /**
+     * @inheritdoc
+     */
+    public function attributeLabels() {
+        return [
+            "newPassword" => "New Password",
+            "newPasswordConfirm" => "Confirm New Password",
+        ];
+    }
+
+    /**
      * Get user based on email
      *
      * @return User|null

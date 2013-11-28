@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php /*
                     <?= $form->field($model, 'email') ?>
                     */ ?>
+
                     <?= $form->field($model, 'newPassword')->passwordInput() ?>
                     <?= $form->field($model, 'newPasswordConfirm')->passwordInput() ?>
                     <div class="form-group">
