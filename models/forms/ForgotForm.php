@@ -21,7 +21,7 @@ class ForgotForm extends Model {
     /**
      * @var User
      */
-    protected $_user;
+    protected $_user = false;
 
     /**
      * @return array the validation rules.
@@ -41,13 +41,31 @@ class ForgotForm extends Model {
     public function validateEmail() {
 
         // check for valid user
-        $user = User::find(["email" => $this->email]);
+        $user = $this->getUser();
         if (!$user) {
             $this->addError("email", "Email not found");
         }
         else {
             $this->_user = $user;
         }
+    }
+
+    /**
+     * Get user based on email
+     *
+     * @return User|null
+     */
+    public function getUser() {
+
+        // check if we need to get user
+        if ($this->_user === false) {
+
+            // get user
+            $this->_user = User::find(["email" => $this->email]);
+        }
+
+        // return stored user
+        return $this->_user;
     }
 
     /**
@@ -61,7 +79,7 @@ class ForgotForm extends Model {
         if ($this->validate()) {
 
             // generate a userkey
-            $user = $this->_user;
+            $user = $this->getUser();
             $userkey = Userkey::generate($user->id, Userkey::TYPE_PASSWORD_RESET);
 
             // modify view path to module views

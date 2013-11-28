@@ -35,7 +35,7 @@ class ResetForm extends Model {
     /**
      * @var User
      */
-    protected $_user;
+    protected $_user = false;
 
     /**
      * @return array the validation rules.
@@ -44,10 +44,10 @@ class ResetForm extends Model {
 
         // set initial rules
         $rules = [
-            [["email"], "required"],
-            [["email"], "email"],
-            [["email"], "validateUserkeyEmail"],
-            [["email"], "filter", "filter" => "trim"],
+//            [["email"], "required"],
+//            [["email"], "email"],
+//            [["email"], "validateUserkeyEmail"],
+//            [["email"], "filter", "filter" => "trim"],
             [["newPassword", "newPasswordConfirm"], "required"],
             [["newPasswordConfirm"], "compare", "compareAttribute" => "newPassword", "message" => "Passwords do not match"]
         ];
@@ -93,22 +93,33 @@ class ResetForm extends Model {
     }
 
     /**
-     * Validate email belongs to userkey
+     * Validate proper email
      */
     public function validateUserkeyEmail() {
 
-        // get user based on userkey
-        $userkey = $this->userkey;
-        $user = User::find($userkey->user_id);
-
         // compare user's email
+        $user = $this->getUser();
         if (!$user or ($user->email !== $this->email)) {
             $this->addError("email", "Incorrect email");
         }
-        // store user object
-        else {
-            $this->_user = $user;
+    }
+
+    /**
+     * Get user based on email
+     *
+     * @return User|null
+     */
+    public function getUser() {
+
+        // check if we need to get user
+        if ($this->_user === false) {
+
+            // get user
+            $this->_user = User::find($this->userkey->user_id);
         }
+
+        // return stored user
+        return $this->_user;
     }
 
     /**
@@ -122,7 +133,7 @@ class ResetForm extends Model {
         if ($this->validate()) {
 
             // update password
-            $user = $this->_user;
+            $user = $this->getUser();
             $user->newPassword = $this->newPassword;
             $user->save(false);
 
