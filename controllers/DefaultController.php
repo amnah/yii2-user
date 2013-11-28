@@ -67,12 +67,9 @@ class DefaultController extends Controller {
      */
     public function actionLogin() {
 
-        // load data from $_POST and validate
+        // load data from $_POST and attempt login
         $model = new LoginForm();
-        if ($model->load($_POST) && $model->validate()) {
-
-            // log in and go back
-            Yii::$app->user->login($model->getUser(), $model->rememberMe ?Yii::$app->getModule("user")->loginDuration : 0);
+        if ($model->load($_POST) && $model->login(Yii::$app->getModule("user")->loginDuration)) {
             return $this->goBack();
         }
 
@@ -87,7 +84,7 @@ class DefaultController extends Controller {
      */
     public function actionLogout() {
         Yii::$app->user->logout();
-        $this->goHome();
+        return $this->goHome();
     }
 
     /**
@@ -151,7 +148,7 @@ class DefaultController extends Controller {
         }
         // log user in automatically
         else {
-            Yii::$app->user->switchIdentity($user, Yii::$app->getModule("user")->loginDuration);
+            Yii::$app->user->login($user, Yii::$app->getModule("user")->loginDuration);
         }
     }
 

@@ -122,4 +122,19 @@ class LoginForm extends Model {
             "username" => $attribute,
         ];
     }
+
+    /**
+     * Validate and log user in
+     *
+     * @param int $loginDuration
+     * @return bool
+     */
+    public function login($loginDuration) {
+
+        if ($this->validate()) {
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? $loginDuration : 0);
+        }
+
+        return false;
+    }
 }
