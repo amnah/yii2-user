@@ -71,6 +71,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @inheritdoc
      */
     public function rules() {
+
         // set initial rules
         $rules = [
             // general email and username rules
@@ -81,8 +82,8 @@ class User extends ActiveRecord implements IdentityInterface {
             [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => "{attribute} can contain only letters, numbers, and '_'."],
 
             // password rules
-            [['password', 'newPassword'], 'string', 'min' => 3],
-            [['password', 'newPassword'], 'filter', 'filter' => 'trim'],
+            [['newPassword'], 'string', 'min' => 3],
+            [['newPassword'], 'filter', 'filter' => 'trim'],
             [['newPassword'], 'required', 'on' => ['register']],
 
             // account page
@@ -99,7 +100,7 @@ class User extends ActiveRecord implements IdentityInterface {
         // add required rules for email/username depending on module properties
         $requireFields = ["requireEmail", "requireUsername"];
         foreach ($requireFields as $requireField) {
-            if ($this->getUserModule()->$requireField) {
+            if (Yii::$app->getModule("user")->$requireField) {
                 $attribute = strtolower(substr($requireField, 7));
                 $rules[] = [$attribute, "required"];
             }
@@ -214,16 +215,6 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
-     * Get user module. This is used for accessing the module properties
-     *
-     * @param string $moduleId
-     * @return Module
-     */
-    public function getUserModule($moduleId = "user") {
-        return Yii::$app->getModule($moduleId);
-    }
-
-    /**
      * Get a clean display name for the user
      *
      * @var string $default
@@ -300,10 +291,10 @@ class User extends ActiveRecord implements IdentityInterface {
         $attributes = [ "status" => static::STATUS_ACTIVE, "role_id" => $roleId ];
 
         // determine if we need to change status based on module properties
-        if ($this->getUserModule()->emailConfirmation and $this->getUserModule()->requireEmail) {
+        if (Yii::$app->getModule("user")->emailConfirmation and Yii::$app->getModule("user")->requireEmail) {
             $attributes["status"] = User::STATUS_INACTIVE;
         }
-        elseif ($this->getUserModule()->emailConfirmation and $this->getUserModule()->useEmail) {
+        elseif (Yii::$app->getModule("user")->emailConfirmation and Yii::$app->getModule("user")->useEmail) {
             $attributes["status"] = User::STATUS_UNCONFIRMED_EMAIL;
         }
 

@@ -53,10 +53,10 @@ class LoginForm extends Model {
         $user = $this->getUser();
         if (!$user) {
             // calculate error message
-            if ($this->getUserModule()->loginEmail and $this->getUserModule()->loginUsername) {
+            if (Yii::$app->getModule("user")->loginEmail and Yii::$app->getModule("user")->loginUsername) {
                 $errorAttribute = "Email/username";
             }
-            elseif ($this->getUserModule()->loginEmail) {
+            elseif (Yii::$app->getModule("user")->loginEmail) {
                 $errorAttribute = "Email";
             }
             else {
@@ -96,10 +96,10 @@ class LoginForm extends Model {
 
             // build query based on email and/or username login properties
             $user = User::find();
-            if ($this->getUserModule()->loginEmail) {
+            if (Yii::$app->getModule("user")->loginEmail) {
                 $user->orWhere(["email" => $this->username]);
             }
-            if ($this->getUserModule()->loginUsername) {
+            if (Yii::$app->getModule("user")->loginUsername) {
                 $user->orWhere(["username" => $this->username]);
             }
 
@@ -117,19 +117,9 @@ class LoginForm extends Model {
     public function attributeLabels() {
 
         // calculate attribute label for "username"
-        $attribute = $this->getUserModule()->requireEmail ? "Email" : "Username";
+        $attribute = Yii::$app->getModule("user")->requireEmail ? "Email" : "Username";
         return [
             "username" => $attribute,
         ];
-    }
-
-    /**
-     * Get user module. This is used for accessing the module properties
-     *
-     * @param string $moduleId
-     * @return Module
-     */
-    public function getUserModule($moduleId = "user") {
-        return Yii::$app->getModule($moduleId);
     }
 }

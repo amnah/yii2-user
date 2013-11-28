@@ -3,11 +3,12 @@
 use amnah\yii2\user\models\User;
 use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\Userkey;
+
 /**
+ * @var string $subject
  * @var User $user
  * @var Profile $profile
  * @var Userkey $userkey
- * @var string $subject
  */
 ?>
 

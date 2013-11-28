@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($user, 'currentPassword')->passwordInput() ?>
 
-    <?php if ($user->getUserModule()->useEmail): ?>
+    <?php if (Yii::$app->getModule("user")->useEmail): ?>
         <?= $form->field($user, 'email') ?>
     <?php endif; ?>
 
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <?php if ($user->getUserModule()->useUsername): ?>
+    <?php if (Yii::$app->getModule("user")->useUsername): ?>
         <?= $form->field($user, 'username') ?>
     <?php endif; ?>
 
