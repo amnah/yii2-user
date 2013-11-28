@@ -7,6 +7,7 @@ use yii\captcha\Captcha;
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
  * @var amnah\yii2\user\models\forms\ResetForm $model
+ * @var bool $success
  * @var bool $invalidKey
  */
 $this->title = 'Reset';
@@ -15,11 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-reset">
 	<h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if (!empty($invalidKey)): ?>
-
-        <div class="alert alert-danger">Invalid key</div>
-
-    <?php elseif (Yii::$app->session->getFlash('Reset-success')): ?>
+    <?php if (!empty($success)): ?>
 
         <div class="alert alert-success">
 
@@ -28,6 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <p><?= Html::a("Log in here", ["/user/login"]) ?></p>
 
         </div>
+
+    <?php elseif (!empty($invalidKey)): ?>
+
+        <div class="alert alert-danger">Invalid key</div>
 
 	<?php else: ?>
 

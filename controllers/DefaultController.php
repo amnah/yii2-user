@@ -350,13 +350,15 @@ class DefaultController extends Controller {
      */
     public function actionReset($key) {
 
-        // check for valid userkey
+        // check for success or invalid userkey
         $userkey = Userkey::findActiveByKey($key, Userkey::TYPE_PASSWORD_RESET);
-        if (!$userkey) {
+        $success = Yii::$app->session->getFlash('Reset-success');
+        $invalidKey = !$userkey;
+        if ($success or $invalidKey) {
 
             // render view with invalid flag
             // using setFlash()/refresh() would cause an infinite loop
-            return $this->render('reset', ["invalidKey" => true]);
+            return $this->render('reset', compact("success", "invalidKey"));
         }
 
         // attempt to load $_POST data, validate, and reset user password
