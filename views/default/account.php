@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a("resend", ["/user/resend"]) ?> or <?= Html::a("cancel", ["/user/cancel"]) ?>
                 </p>
 
-            <?php else: ?>
+            <?php elseif (Yii::$app->getModule("user")->emailConfirmation): ?>
 
                 <p class="small">Changing your email requires email confirmation</p>
 

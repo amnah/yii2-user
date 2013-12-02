@@ -121,7 +121,7 @@ class Module extends \yii\base\Module {
          * "user" and "user/default" work like normal
          * "user/xxx" gets changed to "user/default/xxx"
          */
-        return (empty($route) or $route == $this->defaultRoute)
+        return (empty($route) or $route == $this->defaultRoute or strpos($route, "admin") === 0)
             ? parent::createController($route)
             : parent::createController("{$this->defaultRoute}/{$route}");
     }
