@@ -4,8 +4,8 @@ namespace amnah\yii2\user\models\forms;
 
 use Yii;
 use yii\base\Model;
-use amnah\yii2\user\Module;
 use amnah\yii2\user\models\User;
+use amnah\yii2\user\models\Userkey;
 
 /**
  * LoginForm is the model behind the login form.
@@ -39,7 +39,8 @@ class LoginForm extends Model {
         return [
             [["username", "password"], "required"],
             ["username", "validateUser"],
-            ["password", "validatePassword", "skipOnError" => true],
+            ["username", "validateUserStatus"],
+            ["password", "validatePassword"],
             ["rememberMe", "boolean"],
         ];
     }
@@ -63,6 +64,27 @@ class LoginForm extends Model {
                 $errorAttribute = "Username";
             }
             $this->addError("username", "$errorAttribute not found");
+        }
+    }
+
+    /**
+     * Validate user status
+     */
+    public function validateUserStatus() {
+
+        // check for valid user
+        $user = $this->getUser();
+
+        // check for ban status
+        if ($user->status == User::STATUS_BANNED) {
+            $this->addError("username", "User is banned - {$user->ban_reason}");
+        }
+        // check for inactive status
+        if ($user->status == User::STATUS_INACTIVE) {
+            // TODO do we need to generate? or does Userkey::findActiveByUser() work
+            $userkey = Userkey::generate($user->id, Userkey::TYPE_EMAIL_ACTIVATE);
+            $user->sendEmailConfirmation($userkey);
+            $this->addError("username", "Email confirmation resent");
         }
     }
 
