@@ -200,7 +200,7 @@ class DefaultController extends Controller {
             if ($user->validate()) {
 
                 // generate userkey and send email if user changed his email
-                if (Yii::$app->getModule("user")->emailConfirmation and $user->checkAndPrepareEmailChange()) {
+                if (Yii::$app->getModule("user")->emailChangeConfirmation and $user->checkAndPrepareEmailChange()) {
                     $userkey = Userkey::generate($user->id, Userkey::TYPE_EMAIL_CHANGE);
                     $numSent = $user->sendEmailConfirmation($userkey);
                 }

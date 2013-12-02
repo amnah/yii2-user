@@ -23,10 +23,16 @@ class Module extends \yii\base\Module {
     public $alias = "@user";
 
     /**
-     * @var bool If true, users will have to confirm their email address after registering or updating their profile.
+     * @var bool If true, users will have to confirm their email address after registering
      *           This is the same as email activation
      */
     public $emailConfirmation = true;
+
+    /**
+     * @var bool If true, users will have to confirm their email address after updating email (account page)
+     *           This is the same as email activation
+     */
+    public $emailChangeConfirmation = true;
 
     /**
      * @var bool If true, users are required to enter an email
