@@ -7,7 +7,6 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\web\AccessControl;
 use yii\widgets\ActiveForm;
-use yii\swiftmailer\Mailer;
 use amnah\yii2\user\models\User;
 use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\Role;
@@ -110,7 +109,7 @@ class DefaultController extends Controller {
                 // perform registration
                 $user->register(Role::USER);
                 $profile->register($user->id);
-                $this->_calcEmailOrLogin($user, $profile);
+                $this->_calcEmailOrLogin($user);
 
                 // set flash
                 Yii::$app->session->setFlash("Register-success", $user->getDisplayName());
@@ -128,9 +127,8 @@ class DefaultController extends Controller {
      * Calculate whether we need to send confirmation email or log user in
      *
      * @param User $user
-     * @param Profile $profile
      */
-    protected function _calcEmailOrLogin($user, $profile) {
+    protected function _calcEmailOrLogin($user) {
 
         // determine userkey type to see if we need to send email
         $userkeyType = null;
@@ -144,35 +142,12 @@ class DefaultController extends Controller {
         // generate userkey and send email
         if ($userkeyType !== null) {
             $userkey = Userkey::generate($user->id, $userkeyType);
-            $numSent = $this->_sendEmailConfirmation($user, $profile, $userkey);
+            $numSent = $user->sendEmailConfirmation($userkey);
         }
         // log user in automatically
         else {
             Yii::$app->user->login($user, Yii::$app->getModule("user")->loginDuration);
         }
-    }
-
-    /**
-     * Send email confirmation to user
-     *
-     * @param User $user
-     * @param Profile $profile
-     * @param Userkey $userkey
-     * @return int
-     */
-    protected function _sendEmailConfirmation($user, $profile, $userkey) {
-
-        // modify view path to module views
-        /** @var Mailer $mailer */
-        $mailer = Yii::$app->mail;
-        $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
-
-        // send email
-        $subject = Yii::$app->id . " - Email confirmation";
-        return  $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userkey"))
-            ->setTo($user->email)
-            ->setSubject($subject)
-            ->send();
     }
 
     /**
@@ -225,9 +200,9 @@ class DefaultController extends Controller {
             if ($user->validate()) {
 
                 // generate userkey and send email if user changed his email
-                if ($user->checkAndPrepareEmailChange()) {
+                if (Yii::$app->getModule("user")->emailConfirmation and $user->checkAndPrepareEmailChange()) {
                     $userkey = Userkey::generate($user->id, Userkey::TYPE_EMAIL_CHANGE);
-                    $numSent = $this->_sendEmailConfirmation($user, $user->profile, $userkey);
+                    $numSent = $user->sendEmailConfirmation($userkey);
                 }
 
                 // save, set flash, and refresh page
@@ -287,8 +262,7 @@ class DefaultController extends Controller {
         if ($userkey) {
             /** @var User $user */
             $user = Yii::$app->user->identity;
-            $profile = $user->profile;
-            $this->_sendEmailConfirmation($user, $profile, $userkey);
+            $user->sendEmailConfirmation($userkey);
 
             // set flash message
             Yii::$app->session->setFlash("Resend-success", true);

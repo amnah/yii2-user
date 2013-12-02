@@ -5,6 +5,7 @@ namespace amnah\yii2\user\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\swiftmailer\Mailer;
 
 /**
  * User model
@@ -86,13 +87,13 @@ class User extends ActiveRecord implements IdentityInterface {
 
             // account page
             [['currentPassword'], 'required', 'on' => ['account']],
-            [['currentPassword'], "validateCurrentPassword", "on" => ["account"]],
+            [['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
 
             // admin crud rules
-//			[['role_id'], 'required'],
-//			[['role_id', 'status'], 'integer'],
-//			[['ban_time', 'create_time', 'update_time'], 'safe'],
-//			[['ban_reason'], 'string', 'max' => 255],
+			[['role_id', 'status'], 'required', 'on' => ['admin']],
+			[['role_id', 'status'], 'integer', 'on' => ['admin']],
+			[['ban_time'], 'integer', 'on' => ['admin']],
+			[['ban_reason'], 'string', 'max' => 255, 'on' => 'admin'],
         ];
 
         // add required rules for email/username depending on module properties
@@ -237,6 +238,30 @@ class User extends ActiveRecord implements IdentityInterface {
         return $default;
     }
 
+
+    /**
+     * Send email confirmation to user
+     *
+     * @param Userkey $userkey
+     * @return int
+     */
+    public function sendEmailConfirmation($userkey) {
+
+        // modify view path to module views
+        /** @var Mailer $mailer */
+        $mailer = Yii::$app->mail;
+        $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
+
+        // send email
+        $user = $this;
+        $profile = $user->profile;
+        $subject = Yii::$app->id . " - Email confirmation";
+        return  $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userkey"))
+            ->setTo($user->email)
+            ->setSubject($subject)
+            ->send();
+    }
+
     /**
      * @inheritdoc
      */
@@ -247,10 +272,15 @@ class User extends ActiveRecord implements IdentityInterface {
             $this->encryptNewPassword();
         }
 
-        // ensure username and email are null so they won't get set
-        $nullAttributes = ["email", "username"];
+        // ensure fields are null so they won't get set as empty string
+        $nullAttributes = ["email", "username", "ban_time", "ban_reason"];
         foreach ($nullAttributes as $nullAttribute) {
             $this->$nullAttribute = $this->$nullAttribute ? $this->$nullAttribute : null;
+        }
+
+        // convert ban_time checkbox to date
+        if ($this->ban_time) {
+            $this->ban_time = date("Y-m-d H:i:s");
         }
 
         return parent::beforeSave($insert);
