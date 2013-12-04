@@ -20,16 +20,16 @@ Yii2 User - User authentication module
     * Adds custom fields for users, e.g., *full_name*
 * Password recovery
 * Admin crud via GridView (coming soon)
-    
+
 ## Installation
 
 1. Install [Yii2](https://github.com/yiisoft/yii2/tree/master/apps/basic) using your preferred method
-2. Install package via composer
-    * Run ```php composer.phar require amnah/yii2-user "dev-master"``` 
+2. Install package via [composer](http://getcomposer.org/download/)
+    * Run ```php composer.phar require amnah/yii2-user "dev-master"```
     * OR add to composer.json require section ```"amnah/yii2-user": "dev-master"```
 3. Update config file *config/web.php*
 
-```php 
+```php
   return [
       'components' => [
           'user' => [

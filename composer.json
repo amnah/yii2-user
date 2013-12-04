@@ -1,21 +1,24 @@
 {
-	"name": "amnah/yii2-user",
-	"description": "Yii 2 user authentication module",
-	"keywords": ["yii", "yii2", "user", "auth", "authentication"],
-	"type": "yii2-extension",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "amnah",
-			"email": "amnah.dev@gmail.com"
-		}
-	],
-	"require": {
-		"yiisoft/yii2": "*",
-        "yiisoft/yii2-swiftmailer": "dev-master"
-	},
-	"autoload": {
-		"psr-0": { "amnah\\yii2\\user\\": "" }
-	},
-	"target-dir": "amnah/yii2/user"
+    "name": "amnah/yii2-user",
+    "description": "Yii 2 user authentication module",
+    "keywords": ["yii", "yii2", "user", "auth", "authentication"],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "amnah",
+            "email": "amnah.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-swiftmailer": "dev-master",
+        "ircmaxell/password-compat": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "amnah\\yii2\\user\\": ""
+        }
+    },
+    "target-dir": "amnah/yii2/user"
 }
