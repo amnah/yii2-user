@@ -15,7 +15,7 @@ $this->title = $success ? "Confirmed" : "Error";
 
         <div class="alert alert-success">
 
-            <p>Your email has been confirmed</p>
+            <p>Your email [ <?= $success ?> ] has been confirmed</p>
 
             <?php if (Yii::$app->user->isLoggedIn): ?>
 
