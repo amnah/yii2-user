@@ -223,8 +223,8 @@ class User extends ActiveRecord implements IdentityInterface {
 
         // define possible names
         $possibleNames = [
-            "email",
             "username",
+            "email",
             "id",
         ];
 
@@ -319,10 +319,14 @@ class User extends ActiveRecord implements IdentityInterface {
         $attributes = [ "status" => static::STATUS_ACTIVE, "role_id" => $roleId ];
 
         // determine if we need to change status based on module properties
-        if (Yii::$app->getModule("user")->emailConfirmation and Yii::$app->getModule("user")->requireEmail) {
+        $emailConfirmation = Yii::$app->getModule("user")->emailConfirmation;
+
+        // set inactive if email is required
+        if (Yii::$app->getModule("user")->requireEmail and $emailConfirmation) {
             $attributes["status"] = User::STATUS_INACTIVE;
         }
-        elseif (Yii::$app->getModule("user")->emailConfirmation and Yii::$app->getModule("user")->useEmail) {
+        // set unconfirmed if email is set but NOT required
+        elseif (Yii::$app->getModule("user")->useEmail and $this->email and $emailConfirmation) {
             $attributes["status"] = User::STATUS_UNCONFIRMED_EMAIL;
         }
 

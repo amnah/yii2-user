@@ -40,6 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($user, 'currentPassword')->passwordInput() ?>
 
+    <hr/>
+
     <?php if (Yii::$app->getModule("user")->useEmail): ?>
         <?= $form->field($user, 'email') ?>
     <?php endif; ?>

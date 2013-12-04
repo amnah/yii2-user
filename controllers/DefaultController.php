@@ -168,7 +168,7 @@ class DefaultController extends Controller {
             $userkey->consume();
 
             // set flash and refresh
-            Yii::$app->session->setFlash("Confirm-success", true);
+            Yii::$app->session->setFlash("Confirm-success", $user->email);
             $this->refresh();
         }
 

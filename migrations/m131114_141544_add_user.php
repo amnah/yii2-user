@@ -2,7 +2,6 @@
 
 use amnah\yii2\user\models\Role;
 use amnah\yii2\user\models\User;
-use yii\db\Expression;
 
 class m131114_141544_add_user extends \yii\db\Migration {
 
