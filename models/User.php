@@ -179,7 +179,7 @@ class User extends ActiveRecord implements IdentityInterface {
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\AutoTimestamp',
-                'timestamp' => function() { date("Y-m-d H:i:s"); },
+                'timestamp' => function() { return date("Y-m-d H:i:s"); },
             ],
 
         ];

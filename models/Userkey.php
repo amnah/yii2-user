@@ -87,7 +87,7 @@ class Userkey extends ActiveRecord {
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
                 ],
-                'timestamp' => function() { date("Y-m-d H:i:s"); },
+                'timestamp' => function() { return date("Y-m-d H:i:s"); },
             ],
         ];
     }
