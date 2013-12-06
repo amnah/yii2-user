@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use amnah\yii2\grid\RelatedDataColumn;
 
 /**
  * @var yii\web\View $this
@@ -34,6 +35,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'role_id',
             'status',
             'create_time',
+            [
+                'class' => RelatedDataColumn::className(),
+                'attribute' => 'full_name',
+                'related' => 'profile',
+                'label' => 'Full Name',
+            ],
 //            'new_email:email',
 //            'password',
 //            'auth_key',

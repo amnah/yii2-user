@@ -2,8 +2,10 @@
 
 namespace amnah\yii2\user\models\search;
 
+use amnah\yii2\user\models\Profile;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 use amnah\yii2\user\models\User;
 
 /**
@@ -23,12 +25,13 @@ class UserSearch extends Model
 	public $update_time;
 	public $ban_time;
 	public $ban_reason;
+    public $full_name;
 
 	public function rules()
 	{
 		return [
 			[['id', 'role_id', 'status'], 'integer'],
-			[['email', 'new_email', 'username', 'password', 'auth_key', 'create_time', 'update_time', 'ban_time', 'ban_reason'], 'safe'],
+			[['email', 'new_email', 'username', 'password', 'auth_key', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'full_name'], 'safe'],
 		];
 	}
 
@@ -42,7 +45,7 @@ class UserSearch extends Model
 			'role_id' => 'Role ID',
 			'email' => 'Email',
 			'new_email' => 'New Email',
-			'username' => 'Username',
+			'username' => 'Usernadsadame',
 			'password' => 'Password',
 			'status' => 'Status',
 			'auth_key' => 'Auth Key',
@@ -50,15 +53,25 @@ class UserSearch extends Model
 			'update_time' => 'Update Time',
 			'ban_time' => 'Ban Time',
 			'ban_reason' => 'Ban Reason',
+			'full_name' => 'Full Name',
 		];
 	}
 
 	public function search($params)
 	{
 		$query = User::find();
+        $userTable = User::tableName();
+        $profileTable = Profile::tableName();
+        $query->innerJoin($profileTable, "$userTable.id=$profileTable.user_id");
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,
 		]);
+
+        $dataProvider->sort->attributes["full_name"] = [
+            'asc' => ["full_name" => SORT_ASC],
+            'desc' => ["full_name" => SORT_DESC],
+            'label' => $this->getAttributeLabel("full_name"),
+        ];
 
 		if (!($this->load($params) && $this->validate())) {
 			return $dataProvider;
@@ -76,6 +89,8 @@ class UserSearch extends Model
 		$this->addCondition($query, 'update_time', true);
 		$this->addCondition($query, 'ban_time', true);
 		$this->addCondition($query, 'ban_reason', true);
+		$this->addCondition($query, 'full_name', true);
+
 		return $dataProvider;
 	}
 
@@ -85,6 +100,8 @@ class UserSearch extends Model
 		if (trim($value) === '') {
 			return;
 		}
+
+        /** @var ActiveQuery $query */
 		if ($partialMatch) {
 			$value = '%' . strtr($value, ['%'=>'\%', '_'=>'\_', '\\'=>'\\\\']) . '%';
 			$query->andWhere(['like', $attribute, $value]);
