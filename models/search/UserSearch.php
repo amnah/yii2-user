@@ -59,19 +59,24 @@ class UserSearch extends Model
 
 	public function search($params)
 	{
-		$query = User::find();
+        // set up query with eager innerJoin on profile data
+        $query = User::find();
         $userTable = User::tableName();
         $profileTable = Profile::tableName();
         $query->innerJoin($profileTable, "$userTable.id=$profileTable.user_id");
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
-		]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
-        $dataProvider->sort->attributes["full_name"] = [
-            'asc' => ["full_name" => SORT_ASC],
-            'desc' => ["full_name" => SORT_DESC],
-            'label' => $this->getAttributeLabel("full_name"),
-        ];
+        // add extra sort attributes
+        $addSortAttributes = ["full_name"];
+        foreach ($addSortAttributes as $addSortAttribute) {
+            $dataProvider->sort->attributes[$addSortAttribute] = [
+                'asc' => [$addSortAttribute => SORT_ASC],
+                'desc' => [$addSortAttribute => SORT_DESC],
+                'label' => $this->getAttributeLabel($addSortAttribute),
+            ];
+        }
 
 		if (!($this->load($params) && $this->validate())) {
 			return $dataProvider;

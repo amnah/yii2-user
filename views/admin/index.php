@@ -10,8 +10,8 @@ use amnah\yii2\grid\RelatedDataColumn;
  * @var amnah\yii2\user\models\search\UserSearch $searchModel
  */
 
-$this->title = 'Users';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Admin';
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 ?>
 <div class="user-index">
 
