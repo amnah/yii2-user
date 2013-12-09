@@ -19,15 +19,16 @@ Yii2 User - User authentication module
 * Profile page
     * Adds custom fields for users, e.g., *full_name*
 * Password recovery
-* Admin crud via GridView (coming soon)
+* Admin crud via GridView
 
 ## Installation
 
-1. Install [Yii2](https://github.com/yiisoft/yii2/tree/master/apps/basic) using your preferred method
-2. Install package via [composer](http://getcomposer.org/download/)
+* Install [Yii2](https://github.com/yiisoft/yii2/tree/master/apps/basic) using your preferred method
+* Install package via [composer](http://getcomposer.org/download/)
     * Run ```php composer.phar require amnah/yii2-user "dev-master"```
     * OR add to composer.json require section ```"amnah/yii2-user": "dev-master"```
-3. Update config file *config/web.php*
+* Update config file *config/web.php*
+    * **NOTE: You will also need to add the db component to *config/console.php* for the migration**
 
 ```php
   return [
@@ -52,9 +53,8 @@ Yii2 User - User authentication module
       ],
   ];
 ```
-
-4. Run migration file
+* Run migration file
     * ```php yii migrate --migrationPath=@vendor/amnah/yii2-user/amnah/yii2/user/migrations```
-5. Go to your application in your browser
+* Go to your application in your browser
     * ```http://localhost/pathtoapp/web/user```
-6. Log in as admin using ```neo/neo``` (change it!)
+* Log in as admin using ```neo/neo``` (change it!)
