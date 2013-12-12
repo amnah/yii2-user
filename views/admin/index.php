@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\helpers\Inflector;
 use amnah\yii2\user\models\User;
 use amnah\yii2\user\models\Role;
 use amnah\yii2\grid\RelatedDataColumn;
@@ -49,7 +48,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                 'filter' => User::statusDropdown(),
                 'value' => function($model, $index, $dataColumn) {
                         $statusDropdown = User::statusDropdown();
-                        return Inflector::humanize(strtolower($statusDropdown[$model->status]));
+                        return $statusDropdown[$model->status];
                     },
             ],
             'create_time',

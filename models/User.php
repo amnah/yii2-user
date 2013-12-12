@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\swiftmailer\Mailer;
+use yii\helpers\Inflector;
 use ReflectionClass;
 
 /**
@@ -234,7 +235,6 @@ class User extends ActiveRecord implements IdentityInterface {
         return $default;
     }
 
-
     /**
      * Send email confirmation to user
      *
@@ -252,7 +252,7 @@ class User extends ActiveRecord implements IdentityInterface {
         $user = $this;
         $profile = $user->profile;
         $subject = Yii::$app->id . " - Email confirmation";
-        return  $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userkey"))
+        return $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userkey"))
             ->setTo($user->email)
             ->setSubject($subject)
             ->send();
@@ -397,9 +397,11 @@ class User extends ActiveRecord implements IdentityInterface {
             // check for status constants (e.g., STATUS_ACTIVE)
             foreach ($constants as $constantName => $constantValue) {
 
-                // add to dropdown
+                // add prettified name to dropdown
                 if (strpos($constantName, "STATUS_") === 0) {
-                    $dropdown[$constantValue] = str_replace("STATUS_", "", $constantName);
+                    $prettyName = str_replace("STATUS_", "", $constantName);
+                    $prettyName = Inflector::humanize(strtolower($prettyName));
+                    $dropdown[$constantValue] = $prettyName;
                 }
             }
         }

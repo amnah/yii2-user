@@ -139,8 +139,8 @@ class CopyController extends Controller {
      */
     protected function save($path, $content) {
 
-        $newDirMode = 0777;
-        $newFileMode = 0666;
+        $newDirMode = 0755;
+        $newFileMode = 0644;
 
         $dir = dirname($path);
         if (!is_dir($dir)) {

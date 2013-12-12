@@ -30,7 +30,6 @@ class Module extends \yii\base\Module {
 
     /**
      * @var bool If true, users will have to confirm their email address after updating email (account page)
-     *           This is the same as email activation
      */
     public $emailChangeConfirmation = true;
 
@@ -104,9 +103,12 @@ class Module extends \yii\base\Module {
         if (!$this->loginEmail and !$this->loginUsername) {
             throw new InvalidConfigException("{$className}: \$loginEmail and/or \$loginUsername must be true");
         }
-        // check email fields if emailConfirmation is true
-        if ($this->emailConfirmation and !$this->useEmail) {
+        // check email fields with emailConfirmation/emailChangeConfirmation is true
+        if (!$this->useEmail and $this->emailConfirmation) {
             throw new InvalidConfigException("{$className}: \$useEmail must be true if \$emailConfirmation is true");
+        }
+        if (!$this->useEmail and $this->emailChangeConfirmation) {
+            throw new InvalidConfigException("{$className}: \$useEmail must be true if \$emailChangeConfirmation is true");
         }
     }
 

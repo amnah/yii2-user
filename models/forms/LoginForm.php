@@ -81,7 +81,6 @@ class LoginForm extends Model {
         }
         // check for inactive status
         if ($user->status == User::STATUS_INACTIVE) {
-            // TODO do we need to generate? or does Userkey::findActiveByUser() work
             $userkey = Userkey::generate($user->id, Userkey::TYPE_EMAIL_ACTIVATE);
             $user->sendEmailConfirmation($userkey);
             $this->addError("username", "Email confirmation resent");
