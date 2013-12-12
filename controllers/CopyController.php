@@ -12,6 +12,21 @@ use yii\console\Controller;
 class CopyController extends Controller {
 
     /**
+     * @var string From path
+     */
+    public $from = "@vendor/amnah/yii2-user/amnah/yii2/user";
+
+    /**
+     * @var string To path
+     */
+    public $to = "@app/modules/user";
+
+    /**
+     * @var string New namespace of module
+     */
+    public $namespace = "app\\modules\\user";
+
+    /**
      * @inheritdoc
      */
     public function beforeAction($action) {
@@ -25,20 +40,24 @@ class CopyController extends Controller {
     }
 
     /**
+     * @inheritdoc
+     */
+    public function globalOptions() {
+        return array_merge(parent::globalOptions(), [
+            'from', 'to', 'namespace',
+        ]);
+    }
+
+    /**
      * Index
      */
-    public function actionIndex($from = "", $to = "", $namespace = "") {
-
-        // set default values if needed
-        $from = trim($from) ?: "@vendor/amnah/yii2-user/amnah/yii2/user";
-        $to = trim($to) ?: "@app/modules/user";
-        $namespace = trim($namespace) ?: "app\\modules\\user";
+    public function actionIndex() {
 
         // define confirm message
         $confirmMsg  = "Please confirm:\r\n";
-        $confirmMsg .= "    From        [ $from ]\r\n";
-        $confirmMsg .= "    To          [ $to ]\r\n";
-        $confirmMsg .= "    Namespace   [ $namespace ]\r\n";
+        $confirmMsg .= "    From        [ $this->from ]\r\n";
+        $confirmMsg .= "    To          [ $this->to ]\r\n";
+        $confirmMsg .= "    Namespace   [ $this->namespace ]\r\n";
         $confirmMsg .= "(yes|no):";
 
         // confirm copy
@@ -50,17 +69,16 @@ class CopyController extends Controller {
         // process copy
         if (strncasecmp($confirm, "y", 1) === 0) {
             // handle aliases and copy files
-            $fromPath = Yii::getAlias($from);
-            $toPath = Yii::getAlias($to);
-            $this->copyFiles($fromPath, $toPath, $namespace);
+            $fromPath = Yii::getAlias($this->from);
+            $toPath = Yii::getAlias($this->to);
+            $this->copyFiles($fromPath, $toPath, $this->namespace);
         }
         // display cancellation + usage
         else {
             echo "--- Copy cancelled --- \r\n";
             echo "You can specify the paths using:\r\n";
-            echo "    php yii user/copy [from] [to] [namespace]\r\n";
-            echo "Example:\r\n";
-            echo "    php yii user/copy @vendor/amnah/yii2-user/amnah/yii2/user @app/modules/user app\\\\modules\\\\user";
+            echo "    php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user";
+            echo " --to=@app/modules/user --namespace=app\\\\modules\\\\user";
         }
     }
 
