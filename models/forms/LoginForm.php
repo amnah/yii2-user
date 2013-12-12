@@ -76,7 +76,7 @@ class LoginForm extends Model {
         $user = $this->getUser();
 
         // check for ban status
-        if ($user->status == User::STATUS_BANNED) {
+        if ($user->ban_time) {
             $this->addError("username", "User is banned - {$user->ban_reason}");
         }
         // check for inactive status
