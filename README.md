@@ -48,7 +48,7 @@ Yii2 User - User authentication module
       'modules' => [
           'user' => [
               'class' => 'amnah\yii2\user\Module',
-              ... params here ...
+              // ... params here ...
           ],
       ],
   ];
@@ -106,7 +106,7 @@ After that, you'll need to update your config:
 'modules' => [
     'user' => [
         'class' => 'app\modules\user\Module',
-        ... params here ...
+        // ... params here ...
     ],
 ],
 ```
