@@ -9,7 +9,7 @@ Yii2 User - User authentication module
 
 ## Features
 
-* Quick setup (works out of the box)
+* Quick setup (works out of the box so you can see what it does)
 * Registration using email and/or username
 * Login using email and/or username
 * Email confirmation (+resend functionality)
@@ -17,9 +17,9 @@ Yii2 User - User authentication module
     * Updates email, username, and password
     * Requires current password
 * Profile page
-    * Adds custom fields for users, e.g., *full_name*
+    * Lists custom fields for users, e.g., *full_name*
 * Password recovery
-* Admin crud via GridView
+* Admin crud via GridView (with some examples to display custom data)
 
 ## Installation
 
@@ -60,7 +60,7 @@ Yii2 User - User authentication module
     * ```http://localhost/pathtoapp/web/user```
 * Log in as admin using ```neo/neo``` (change it!)
 
-## FAQs
+## Development
 
 ### How do I check user permissions?
 
@@ -68,7 +68,7 @@ This package contains a very simple permissions system. Every user has a role, a
 in the form of database columns. It should follow the format: ```can_{permission name}```.
 
 For example, the ```role``` table has a column named ```can_admin``` by default. To check if the user can
-perform admin actions:
+perform admin actions
 
 ```
 if (!Yii::$app->user->can("admin")) {
@@ -84,23 +84,28 @@ developers will have a better base to start with ...**
 
 ### How can I extend this package?
 
-Unfortunately you can't. The classes are all intertwined, so you have no choice but to copy the
-files somewhere and then modify them as desired. Until someone figures out a better way to architect
-this, I've created a helper command to copy the files for you.
+Unfortunately you can't. The classes are all intertwined, so you have no choice but to either fork the
+package or to copy the files somewhere and then modify them as desired. Until someone figures out a better
+way to architect this, I've created a helper command to copy the files for you.
+
+* Add the module to your *config/console.php* to gain access to the command **note: this is CONSOLE config**
 
 ```
-php yii user/copy [from] [to] [namespace]
+'modules' => [
+    'user' => [
+        'class' => 'amnah\yii2\user\Module',
+    ],
+],
 ```
 
-For a [basic](https://github.com/yiisoft/yii2-app-basic) app, you can call the default command:
+* Use the ```php yii user/copy``` command. For a [basic]
+(https://github.com/yiisoft/yii2-app-basic) app, you can call the default command without any options
 
 ```
-php yii user/copy
-   (which will automatically fill in the defaults below)
-php yii user/copy @vendor/amnah/yii2-user/amnah/yii2/user @app/modules/user app\\modules\\user
+php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user --to=@app/modules/user --namespace=app\\modules\\user
 ```
 
-After that, you'll need to update your config:
+* Update *config/web.php* to point to your new package **note: this is WEB config**
 
 ```
 'modules' => [
@@ -110,6 +115,9 @@ After that, you'll need to update your config:
     ],
 ],
 ```
+
+**Alternatively,** you can do this manually. Just copy/paste the files wherever you'd like,
+but you'll need to change the namespaces in the files. Replace ```amnah\yii2\user``` with ```your\namespace```
 
 ### Todo
 * Convert permissions to RBAC ???

@@ -47,9 +47,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                 'label' => 'Status',
                 'filter' => User::statusDropdown(),
                 'value' => function($model, $index, $dataColumn) {
-                        $statusDropdown = User::statusDropdown();
-                        return $statusDropdown[$model->status];
-                    },
+                    $statusDropdown = User::statusDropdown();
+                    return $statusDropdown[$model->status];
+                },
             ],
             'create_time',
             [
