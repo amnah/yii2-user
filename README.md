@@ -31,27 +31,25 @@ Yii2 User - User authentication module
     * **NOTE: You will also need to add the db component to *config/console.php* for the migration**
 
 ```php
-  return [
-      'components' => [
-          'user' => [
-              'class' => 'amnah\yii2\user\components\User',
-          ],
-          'db' => [
-              'class' => '\yii\db\Connection',
-              'dsn' => 'mysql:host=localhost;dbname=dbname',
-              'username' => '',
-              'password' => '',
-              'charset' => 'utf8',
-              'tablePrefix' => 'tbl_',
-          ]
-      ],
-      'modules' => [
-          'user' => [
-              'class' => 'amnah\yii2\user\Module',
-              // ... params here ...
-          ],
-      ],
-  ];
+return [
+    'components' => [
+        'user' => [
+            'class' => 'amnah\yii2\user\components\User',
+        ],
+        'db' => [
+            // set up db info here
+        ],
+        'mail' => [
+            // set up mail for email confirmation
+        ]
+    ],
+    'modules' => [
+        'user' => [
+            'class' => 'amnah\yii2\user\Module',
+            // set custom module properties here ...
+        ],
+    ],
+];
 ```
 
 * Run migration file
