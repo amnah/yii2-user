@@ -60,4 +60,32 @@ class User extends \yii\web\User {
     public function getDisplayName($default = "") {
         return $this->getIdentity()->getDisplayName($default);
     }
+
+    /**
+     * Check if user can do $permission
+     *
+     * @param string $permission
+     * @param bool $user
+     * @return bool
+     */
+    public function can($permission, $user = false) {
+
+        // get current user if not specified
+        $user = ($user !== false) ? $user : $this->getIdentity();
+
+        // check role attribute
+        $roleAttribute = "can_{$permission}";
+        return ($user and $user->role->$roleAttribute);
+    }
+
+    /**
+     * Check if user cant do $permission
+     *
+     * @param string $permission
+     * @param bool $user
+     * @return bool
+     */
+    public function cant($permission, $user = false) {
+        return !$this->can($permission, $user);
+    }
 }
