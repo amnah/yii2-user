@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\swiftmailer\Mailer;
+use ReflectionClass;
 
 /**
  * User model
@@ -43,11 +44,6 @@ class User extends ActiveRecord implements IdentityInterface {
      * @var int Unconfirmed email status
      */
     const STATUS_UNCONFIRMED_EMAIL = 2;
-
-    /**
-     * @var int Banned status
-     */
-    const STATUS_BANNED = 10;
 
     /**
      * @var string New password - for registration and changing password
@@ -382,4 +378,33 @@ class User extends ActiveRecord implements IdentityInterface {
         $this->save();
         return $this;
     }
+
+    /**
+     * Get list of statuses for creating dropdowns
+     *
+     * @return array
+     */
+    public static function statusDropdown() {
+
+        // get data if needed
+        static $dropdown;
+        if ($dropdown === null) {
+
+            // create a reflection class to get constants
+            $refl = new ReflectionClass(get_called_class());
+            $constants = $refl->getConstants();
+
+            // check for status constants (e.g., STATUS_ACTIVE)
+            foreach ($constants as $constantName => $constantValue) {
+
+                // add to dropdown
+                if (strpos($constantName, "STATUS_") === 0) {
+                    $dropdown[$constantValue] = str_replace("STATUS_", "", $constantName);
+                }
+            }
+        }
+
+        return $dropdown;
+    }
+
 }

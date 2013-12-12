@@ -60,6 +60,8 @@ class m131114_141544_add_user extends \yii\db\Migration {
             $this->addForeignKey("userkey_user_id", Userkey::tableName(), "user_id", User::tableName(), "id");
 
             // insert role data
+            // note: i create a guest role because i like to give guest users the ability to use the site
+            //       without registering. you can delete it if you want
             $columns = ["name", "can_admin", "create_time"];
             $this->batchInsert(Role::tableName(), $columns, [
                 ["Admin", 1, date("Y-m-d H:i:s")],
@@ -70,7 +72,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
             // insert user data
             $columns = ["id", "role_id", "email", "username", "password", "status", "create_time"];
             $this->batchInsert(User::tableName(), $columns, [
-                [1, Role::ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s")],
+                [1, Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s")],
             ]);
 
             // insert profile data

@@ -2,16 +2,18 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Inflector;
+use amnah\yii2\user\models\User;
+use amnah\yii2\user\models\Role;
 use amnah\yii2\grid\RelatedDataColumn;
-
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var amnah\yii2\user\models\search\UserSearch $searchModel
  */
 
-$this->title = 'Admin';
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->title = 'Users';
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admin']];
 ?>
 <div class="user-index">
 
@@ -32,8 +34,24 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 			'id',
             'email:email',
             'username',
-            'role_id',
-            'status',
+            [
+                'attribute' => 'role_id',
+                'label' => 'Role',
+                'filter' => Role::dropdown(),
+                'value' => function($model, $index, $dataColumn) {
+                    $roleDropdown = Role::dropdown();
+                    return $roleDropdown[$model->role_id];
+                },
+            ],
+            [
+                'attribute' => 'status',
+                'label' => 'Status',
+                'filter' => User::statusDropdown(),
+                'value' => function($model, $index, $dataColumn) {
+                        $statusDropdown = User::statusDropdown();
+                        return Inflector::humanize(strtolower($statusDropdown[$model->status]));
+                    },
+            ],
             'create_time',
             [
                 'class' => RelatedDataColumn::className(),

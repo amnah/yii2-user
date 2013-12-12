@@ -107,7 +107,7 @@ class DefaultController extends Controller {
             if ($user->validate() and $profile->validate()) {
 
                 // perform registration
-                $user->register(Role::USER);
+                $user->register(Role::ROLE_USER);
                 $profile->register($user->id);
                 $this->_calcEmailOrLogin($user);
 

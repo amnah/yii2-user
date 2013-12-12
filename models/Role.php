@@ -4,6 +4,7 @@ namespace amnah\yii2\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use ReflectionClass;
 
 /**
  * Role model
@@ -21,12 +22,17 @@ class Role extends ActiveRecord {
     /**
      * @var int Admin user role
      */
-    const ADMIN = 1;
+    const ROLE_ADMIN = 1;
 
     /**
      * @var int Default user role
      */
-    const USER = 2;
+    const ROLE_USER = 2;
+
+    /**
+     * @var int Guest user role
+     */
+    const ROLE_GUEST = 3;
 
     /**
      * @inheritdoc
@@ -74,12 +80,29 @@ class Role extends ActiveRecord {
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\AutoTimestamp',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time', 'update_time'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
-                ],
                 'timestamp' => function() { return date("Y-m-d H:i:s"); },
             ],
         ];
+    }
+
+    /**
+     * Get list of roles for creating dropdowns
+     *
+     * @return array
+     */
+    public static function dropdown() {
+
+        // get data if needed
+        static $dropdown;
+        if ($dropdown === null) {
+
+            // get all records from database and generate
+            $models = static::find()->all();
+            foreach ($models as $model) {
+                $dropdown[$model->id] = $model->name;
+            }
+        }
+
+        return $dropdown;
     }
 }
