@@ -76,10 +76,11 @@ if (!Yii::$app->user->can("admin")) {
 }
 ```
 
-Add more database columns for permissions as needed. If you need something more powerful, look into setteing
+Add more database columns for permissions as needed. If you need something more powerful, look into setting
 up [RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/authorization.md).
 
-**Note: I may decide to switch out my current permissions implementation to a basic RBAC implementation**
+**Note: I may decide to switch out my current permissions implementation to a basic RBAC implementation so
+developers will have a better base to start with ...**
 
 ### How can I extend this package?
 
@@ -99,7 +100,7 @@ php yii user/copy
 php yii user/copy @vendor/amnah/yii2-user/amnah/yii2/user @app/modules/user app\\modules\\user
 ```
 
-After that, you'll need to change your config:
+After that, you'll need to update your config:
 
 ```
 'modules' => [
@@ -110,9 +111,7 @@ After that, you'll need to change your config:
 ],
 ```
 
-
-
-
 ### Todo
-* Convert permissions to proper rbac???
+* Convert permissions to RBAC ???
+* Add functionality for user groups (possibly as another package)
 * Have a request? Submit an [issue](https://github.com/amnah/yii2-user/issues)
