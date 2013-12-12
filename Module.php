@@ -117,18 +117,24 @@ class Module extends \yii\base\Module {
      * @link https://github.com/yiisoft/yii2/issues/810
      * @link http://www.yiiframework.com/forum/index.php/topic/21884-module-and-url-management/
      *
+     * "user" and "user/default" work like normal
+     * "user/xxx" gets changed to "user/default/xxx"
+     *
      * @inheritdoc
      */
     public function createController($route) {
 
-        /**
-         * handle routes
-         *
-         * "user" and "user/default" work like normal
-         * "user/xxx" gets changed to "user/default/xxx"
-         */
+        // check valid routes
         $validRoutes = [$this->defaultRoute, "admin", "copy"];
-        return (empty($route) or in_array($route, $validRoutes))
+        $isValid = false;
+        foreach ($validRoutes as $validRoute) {
+            if (strpos($route, $validRoute) === 0) {
+                $isValid = true;
+                break;
+            }
+        }
+
+        return (empty($route) or $isValid)
             ? parent::createController($route)
             : parent::createController("{$this->defaultRoute}/{$route}");
     }
