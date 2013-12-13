@@ -12,7 +12,6 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "yiisoft/yii2-swiftmailer": "dev-master",
 
         "amnah/yii2-extend": "dev-master",
         "ircmaxell/password-compat": "dev-master"
