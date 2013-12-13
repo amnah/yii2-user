@@ -300,7 +300,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return bool
      */
     public function verifyPassword($password) {
-        return password_verify($password, $this->password);
+        return Security::validatePassword($password, $this->password);
     }
 
     /**

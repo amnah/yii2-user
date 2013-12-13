@@ -5,7 +5,9 @@ Yii2 User - User authentication module
 
 **STILL IN DEVELOPMENT. EXPECT CHANGES AND B0RKS**
 
-[DEMO coming soon](http://yii2user.amnahdev.com)
+## Demo
+
+[See here](http://yii2user.amnahdev.com/user)
 
 ## Features
 
