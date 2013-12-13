@@ -147,6 +147,7 @@ class Module extends \yii\base\Module {
     public function getActions() {
 
         return [
+            "User" => ["/{$this->id}"],
             "Login" => ["/{$this->id}/login"],
             "Logout" => ["/{$this->id}/logout"],
             "Register" => ["/{$this->id}/register"],

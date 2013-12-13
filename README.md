@@ -59,6 +59,21 @@ return [
 * Go to your application in your browser
     * ```http://localhost/pathtoapp/web/user```
 * Log in as admin using ```neo/neo``` (change it!)
+* *Optional* - Update the nav links in your main layout *app/views/layouts/main.php*
+
+```
+<?php
+'items' => [
+    ['label' => 'Home', 'url' => ['/site/index']],
+    ['label' => 'About', 'url' => ['/site/about']],
+    ['label' => 'Contact', 'url' => ['/site/contact']],
+    ['label' => 'User', 'url' => ['/user']],
+    Yii::$app->user->isGuest ?
+        ['label' => 'Login', 'url' => ['/user/login']] :
+        ['label' => 'Logout (' . Yii::$app->user->displayName . ')' , 'url' => ['/user/logout']],
+],
+```
+
 
 ## Development
 
