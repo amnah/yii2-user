@@ -25,13 +25,14 @@ class UserSearch extends Model
 	public $update_time;
 	public $ban_time;
 	public $ban_reason;
-    public $full_name;
+//    public $full_name;
 
 	public function rules()
 	{
 		return [
 			[['id', 'role_id', 'status'], 'integer'],
-			[['email', 'new_email', 'username', 'password', 'auth_key', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'full_name'], 'safe'],
+			[['email', 'new_email', 'username', 'password', 'auth_key', 'create_time', 'update_time', 'ban_time', 'ban_reason'], 'safe'],
+//			[['email', 'new_email', 'username', 'password', 'auth_key', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'full_name'], 'safe'],
 		];
 	}
 
@@ -45,7 +46,7 @@ class UserSearch extends Model
 			'role_id' => 'Role ID',
 			'email' => 'Email',
 			'new_email' => 'New Email',
-			'username' => 'Usernadsadame',
+			'username' => 'Username',
 			'password' => 'Password',
 			'status' => 'Status',
 			'auth_key' => 'Auth Key',
@@ -53,7 +54,7 @@ class UserSearch extends Model
 			'update_time' => 'Update Time',
 			'ban_time' => 'Ban Time',
 			'ban_reason' => 'Ban Reason',
-			'full_name' => 'Full Name',
+//			'full_name' => 'Full Name',
 		];
 	}
 
@@ -61,13 +62,16 @@ class UserSearch extends Model
 	{
         // set up query with eager innerJoin on profile data
         $query = User::find();
+        /*
         $userTable = User::tableName();
         $profileTable = Profile::tableName();
         $query->innerJoin($profileTable, "$userTable.id=$profileTable.user_id");
+        */
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
+        /*
         // add extra sort attributes
         $addSortAttributes = ["full_name"];
         foreach ($addSortAttributes as $addSortAttribute) {
@@ -77,6 +81,7 @@ class UserSearch extends Model
                 'label' => $this->getAttributeLabel($addSortAttribute),
             ];
         }
+        */
 
 		if (!($this->load($params) && $this->validate())) {
 			return $dataProvider;
@@ -94,7 +99,7 @@ class UserSearch extends Model
 		$this->addCondition($query, 'update_time', true);
 		$this->addCondition($query, 'ban_time', true);
 		$this->addCondition($query, 'ban_reason', true);
-		$this->addCondition($query, 'full_name', true);
+//		$this->addCondition($query, 'full_name', true);
 
 		return $dataProvider;
 	}

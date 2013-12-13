@@ -7,8 +7,8 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\swiftmailer\Mailer;
 use yii\helpers\Inflector;
+use yii\helpers\Security;
 use ReflectionClass;
-
 /**
  * User model
  *
@@ -288,7 +288,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return $this
      */
     public function encryptNewPassword() {
-        $this->password = password_hash($this->newPassword, PASSWORD_BCRYPT, ["cost" => 12]);
+        $this->password = Security::generatePasswordHash($this->newPassword);
 
         return $this;
     }

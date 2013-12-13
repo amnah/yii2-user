@@ -4,7 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use amnah\yii2\user\models\User;
 use amnah\yii2\user\models\Role;
-use amnah\yii2\grid\RelatedDataColumn;
+//use amnah\yii2\grid\RelatedDataColumn;
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -52,18 +53,21 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                 },
             ],
             'create_time',
+
+            /*
             [
                 'class' => RelatedDataColumn::className(),
                 'attribute' => 'full_name',
                 'related' => 'profile',
                 'label' => 'Full Name',
             ],
-//            'new_email:email',
-//            'password',
-//            'auth_key',
-//            'update_time',
-//            'ban_time',
-//            'ban_reason',
+            'new_email:email',
+            'password',
+            'auth_key',
+            'update_time',
+            'ban_time',
+            'ban_reason',
+            */
 
 			['class' => 'yii\grid\ActionColumn'],
 		],

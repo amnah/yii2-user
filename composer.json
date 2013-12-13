@@ -11,10 +11,7 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "*",
-
-        "amnah/yii2-extend": "*",
-        "ircmaxell/password-compat": "*"
+        "yiisoft/yii2": "*"
     },
     "autoload": {
         "psr-0": {
