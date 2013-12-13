@@ -116,7 +116,12 @@ class AdminController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
+
+        // delete profile first to handle foreign key constraint
+        $user = $this->findModel($id);
+        $profile = $user->profile;
+        $profile->delete();
+        $user->delete();
 
         return $this->redirect(['index']);
     }
