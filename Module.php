@@ -140,4 +140,38 @@ class Module extends \yii\base\Module {
             ? parent::createController($route)
             : parent::createController("{$this->defaultRoute}/{$route}");
     }
+
+    /**
+     * Get a list of actions for this module. Used for debugging/initial installations
+     */
+    public function getActions() {
+
+        return [
+            "Login" => ["/{$this->id}/login"],
+            "Logout" => ["/{$this->id}/logout"],
+            "Register" => ["/{$this->id}/register"],
+            "Account" => ["/{$this->id}/login"],
+            "Profile" => ["/{$this->id}/profile"],
+            "Forgot password" => ["/{$this->id}/forgot"],
+            "Admin" => ["/{$this->id}/admin"],
+
+            "Resend" => [
+                "url" => ["/{$this->id}/resend"],
+                "description" => "Resend email change confirmation (NOT FOR REGISTRATION/EMAIL ACTIVATION)",
+            ],
+            "Cancel" => [
+                "url" => ["/{$this->id}/cancel"],
+                "description" => "Cancel email change confirmation. This and resend appear on the 'Account' page",
+            ],
+
+            "Confirm" => [
+                "url" => ["/{$this->id}/confirm?key=xxxxxxxxx"],
+                "description" => "Confirm email address. Automatically generated with key",
+            ],
+            "Reset" => [
+                "url" => ["/{$this->id}/reset?key=xxxxxxxxxx"],
+                "description" => "Reset password. Automatically generated with key from 'Forgot password' page",
+            ],
+        ];
+    }
 }

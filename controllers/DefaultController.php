@@ -58,7 +58,20 @@ class DefaultController extends Controller {
      * Display index
      */
     public function actionIndex() {
-        return $this->render('index');
+
+        // display debug page if YII_DEBUG is set
+        if (defined('YII_DEBUG')) {
+            $actions = Yii::$app->getModule("user")->getActions();
+            return $this->render('index', ["actions" => $actions]);
+        }
+        // redirect to login page if user is guest
+        elseif (Yii::$app->user->isGuest) {
+            return $this->redirect(["/user/login"]);
+        }
+        // redirect to account page if user is logged in
+        else {
+            return $this->redirect(["/user/account"]);
+        }
     }
 
     /**

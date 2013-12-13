@@ -118,6 +118,7 @@ php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user --to=@app/modul
 but you'll need to change the namespaces in the files. Replace ```amnah\yii2\user``` with ```your\namespace```
 
 ### Todo
+* Userkey expiration functionality
 * Convert permissions to RBAC ???
 * Add functionality for user groups (possibly as another package)
 * Have a request? Submit an [issue](https://github.com/amnah/yii2-user/issues)
