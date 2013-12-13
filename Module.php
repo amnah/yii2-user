@@ -151,7 +151,7 @@ class Module extends \yii\base\Module {
             "Login" => ["/{$this->id}/login"],
             "Logout" => ["/{$this->id}/logout"],
             "Register" => ["/{$this->id}/register"],
-            "Account" => ["/{$this->id}/login"],
+            "Account" => ["/{$this->id}/account"],
             "Profile" => ["/{$this->id}/profile"],
             "Forgot password" => ["/{$this->id}/forgot"],
             "Admin" => ["/{$this->id}/admin"],
@@ -162,7 +162,7 @@ class Module extends \yii\base\Module {
             ],
             "Cancel" => [
                 "url" => ["/{$this->id}/cancel"],
-                "description" => "Cancel email change confirmation. This and resend appear on the 'Account' page",
+                "description" => "Cancel email change confirmation. <br/>This and resend appear on the 'Account' page",
             ],
 
             "Confirm" => [

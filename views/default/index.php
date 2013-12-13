@@ -9,6 +9,10 @@ use yii\helpers\Html;
 <div class="user-default-index">
 	<h1>Actions in this module</h1>
 
+    <p>
+        <em><strong>Note:</strong> some actions may be unavailable depending on if you are logged in/out, or as an
+        admin/regular user</em>
+    </p>
     <table class="table table-bordered">
         <tr>
             <th>Link</th>
