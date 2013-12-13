@@ -21,7 +21,7 @@ Yii2 User - User authentication module
 * Profile page
     * Lists custom fields for users, e.g., *full_name*
 * Password recovery
-* Admin crud via GridView (with some examples to display custom data)
+* Admin crud via GridView
 
 ## Installation
 
@@ -68,9 +68,9 @@ return [
     ['label' => 'About', 'url' => ['/site/about']],
     ['label' => 'Contact', 'url' => ['/site/contact']],
     ['label' => 'User', 'url' => ['/user']],
-    Yii::$app->user->isGuest ?
-        ['label' => 'Login', 'url' => ['/user/login']] :
-        ['label' => 'Logout (' . Yii::$app->user->displayName . ')' , 'url' => ['/user/logout']],
+        Yii::$app->user->isGuest ?
+            ['label' => 'Login', 'url' => ['/user/login']] :
+            ['label' => 'Logout (' . Yii::$app->user->displayName . ')' , 'url' => ['/user/logout']],
 ],
 ```
 

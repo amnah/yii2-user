@@ -4,6 +4,7 @@ use yii\helpers\Html;
 /**
  * @var array $actions
  */
+$this->title = "User";
 ?>
 
 <div class="user-default-index">
