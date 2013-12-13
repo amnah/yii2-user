@@ -13,8 +13,8 @@
     "require": {
         "yiisoft/yii2": "*",
 
-        "amnah/yii2-extend": "dev-master",
-        "ircmaxell/password-compat": "dev-master"
+        "amnah/yii2-extend": "*",
+        "ircmaxell/password-compat": "*"
     },
     "autoload": {
         "psr-0": {
