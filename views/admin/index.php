@@ -50,7 +50,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                     return $statusDropdown[$model->status];
                 },
             ],
-            'create_time',
             [
                 'attribute' => 'role_id',
                 'label' => 'Role',
@@ -60,6 +59,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                         return $roleDropdown[$model->role_id];
                     },
             ],
+            'create_time',
             /*
             'new_email:email',
             'password',

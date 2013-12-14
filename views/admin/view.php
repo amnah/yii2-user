@@ -25,15 +25,19 @@ $this->params['breadcrumbs'][] = $this->title;
 		]); ?>
 	</p>
 
+    <?php
+        $attributes = $model->getAttributes();
+        $attributes["full_name"] = $model->profile->full_name;
+    ?>
 	<?php echo DetailView::widget([
-		'model' => $model,
+		'model' => $attributes,
 		'attributes' => [
 			'id',
 			'role_id',
 			'email:email',
 			'new_email:email',
 			'username',
-			'password',
+            'full_name',
 			'status',
 			'auth_key',
 			'create_time',
