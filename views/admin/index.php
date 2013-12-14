@@ -53,14 +53,14 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                 },
             ],
             'create_time',
-
-            /*
             [
-                'class' => RelatedDataColumn::className(),
                 'attribute' => 'full_name',
-                'related' => 'profile',
                 'label' => 'Full Name',
+                'value' => function($model, $index, $dataColumn) {
+                    return $model->profile->full_name;
+                }
             ],
+            /*
             'new_email:email',
             'password',
             'auth_key',
