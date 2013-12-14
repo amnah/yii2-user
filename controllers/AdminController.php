@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\VerbFilter;
 use amnah\yii2\user\models\User;
+use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\search\UserSearch;
 
 /**
@@ -75,14 +76,19 @@ class AdminController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
-        $model = new User;
+        $user = new User;
+        $user->setScenario("admin");
+        $profile = new Profile;
 
-        if ($model->load($_POST) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($user->load($_POST) && $user->validate() && $profile->load($_POST) and $profile->validate()) {
+            $user->save();
+            $profile->setUser($user->id)->save(false);
+            return $this->redirect(['view', 'id' => $user->id]);
         }
         else {
             return $this->render('create', [
-                'model' => $model,
+                'user' => $user,
+                'profile' => $profile,
             ]);
         }
     }
@@ -95,15 +101,19 @@ class AdminController extends Controller {
      * @return mixed
      */
     public function actionUpdate($id) {
-        $model = $this->findModel($id);
-        $model->setScenario("admin");
+        $user = $this->findModel($id);
+        $user->setScenario("admin");
+        $profile = $user->profile;
 
-        if ($model->load($_POST) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($user->load($_POST) && $user->validate() && $profile->load($_POST) and $profile->validate()) {
+            $user->save();
+            $profile->save();
+            return $this->redirect(['view', 'id' => $user->id]);
         }
         else {
             return $this->render('update', [
-                'model' => $model,
+                'user' => $user,
+                'profile' => $profile,
             ]);
         }
     }

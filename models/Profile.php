@@ -81,4 +81,16 @@ class Profile extends ActiveRecord {
         $this->save(false);
         return $this;
     }
+
+    /**
+     * Set user id for profile
+     *
+     * @param int $userId
+     * @return static
+     */
+    public function setUser($userId) {
+
+        $this->user_id = $userId;
+        return $this;
+    }
 }

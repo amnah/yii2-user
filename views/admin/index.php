@@ -35,13 +35,11 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
             'email:email',
             'username',
             [
-                'attribute' => 'role_id',
-                'label' => 'Role',
-                'filter' => Role::dropdown(),
+                'attribute' => 'full_name',
+                'label' => 'Full Name',
                 'value' => function($model, $index, $dataColumn) {
-                    $roleDropdown = Role::dropdown();
-                    return $roleDropdown[$model->role_id];
-                },
+                        return $model->profile->full_name;
+                    }
             ],
             [
                 'attribute' => 'status',
@@ -54,11 +52,13 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
             ],
             'create_time',
             [
-                'attribute' => 'full_name',
-                'label' => 'Full Name',
+                'attribute' => 'role_id',
+                'label' => 'Role',
+                'filter' => Role::dropdown(),
                 'value' => function($model, $index, $dataColumn) {
-                    return $model->profile->full_name;
-                }
+                        $roleDropdown = Role::dropdown();
+                        return $roleDropdown[$model->role_id];
+                    },
             ],
             /*
             'new_email:email',
