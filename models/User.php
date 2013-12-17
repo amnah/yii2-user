@@ -285,11 +285,10 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * Encrypt newPassword into password
      *
-     * @return $this
+     * @return static
      */
     public function encryptNewPassword() {
         $this->password = Security::generatePasswordHash($this->newPassword);
-
         return $this;
     }
 
@@ -361,7 +360,7 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * Confirm user email
      *
-     * @return $this
+     * @return static
      */
     public function confirm() {
 
