@@ -55,9 +55,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                 'label' => 'Role',
                 'filter' => Role::dropdown(),
                 'value' => function($model, $index, $dataColumn) {
-                        $roleDropdown = Role::dropdown();
-                        return $roleDropdown[$model->role_id];
-                    },
+                    $roleDropdown = Role::dropdown();
+                    return $roleDropdown[$model->role_id];
+                },
             ],
             'create_time',
             /*
