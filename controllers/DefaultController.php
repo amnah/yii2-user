@@ -13,6 +13,7 @@ use amnah\yii2\user\models\Role;
 use amnah\yii2\user\models\Userkey;
 use amnah\yii2\user\models\forms\LoginForm;
 use amnah\yii2\user\models\forms\ForgotForm;
+use amnah\yii2\user\models\forms\ResendForm;
 use amnah\yii2\user\models\forms\ResetForm;
 
 
@@ -35,19 +36,19 @@ class DefaultController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'confirm'],
+                        'actions' => ['index', 'confirm', 'resend'],
                         'allow' => true,
                         'roles' => ['?', '@'],
                     ],
                     [
-                        'actions' => ['account', 'profile', 'resend', 'cancel', 'logout'],
+                        'actions' => ['account', 'profile', 'resend-change', 'cancel', 'logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
                         'actions' => ['login', 'register', 'forgot', 'reset'],
                         'allow' => true,
-                        'roles' => ['?', '*'],
+                        'roles' => ['?'],
                     ],
                 ],
             ],
@@ -266,9 +267,29 @@ class DefaultController extends Controller {
     }
 
     /**
-     * Resend email change confirmation
+     * Resend email confirmation
      */
     public function actionResend() {
+
+        // attempt to load $_POST data, validate, and send email
+        $model = new ResendForm();
+        if ($model->load($_POST) && $model->sendEmail()) {
+
+            // set flash and refresh page
+            Yii::$app->session->setFlash('Resend-success');
+            return $this->refresh();
+        }
+
+        // render view
+        return $this->render('resend', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resend email change confirmation
+     */
+    public function actionResendChange() {
 
         // attempt to find userkey and get user/profile to send confirmation email
         $userkey = Userkey::findActiveByUser(Yii::$app->user->id, Userkey::TYPE_EMAIL_CHANGE);
@@ -335,8 +356,8 @@ class DefaultController extends Controller {
     public function actionReset($key) {
 
         // check for success or invalid userkey
-        $userkey = Userkey::findActiveByKey($key, Userkey::TYPE_PASSWORD_RESET);
         $success = Yii::$app->session->getFlash('Reset-success');
+        $userkey = Userkey::findActiveByKey($key, Userkey::TYPE_PASSWORD_RESET);
         $invalidKey = !$userkey;
         if ($success or $invalidKey) {
 
