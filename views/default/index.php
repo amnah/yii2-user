@@ -28,10 +28,10 @@ $this->title = "User";
             ?>
 
             <tr>
-                <td><?= Html::a($text, $url) ?></td>
+                <td><?= $text ?></td>
                 <td>
-                    URL: <strong><?= $url[0] ?></strong><br/>
-                    <?= $description ?>
+                    URL: <strong><?= Html::a($url, [$url]) ?></strong>
+                    <?= $description ? "<br/><br/>$description" : "" ?>
                 </td>
             </tr>
 

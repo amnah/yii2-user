@@ -149,31 +149,34 @@ class Module extends \yii\base\Module {
     public function getActions() {
 
         return [
-            "User" => ["/{$this->id}"],
-            "Login" => ["/{$this->id}/login"],
-            "Logout" => ["/{$this->id}/logout"],
-            "Register" => ["/{$this->id}/register"],
-            "Account" => ["/{$this->id}/account"],
-            "Profile" => ["/{$this->id}/profile"],
-            "Forgot password" => ["/{$this->id}/forgot"],
-            "Admin" => ["/{$this->id}/admin"],
-
+            "User" => "/{$this->id}",
+            "Admin" => "/{$this->id}/admin",
+            "Login" => "/{$this->id}/login",
+            "Logout" => "/{$this->id}/logout",
+            "Register" => "/{$this->id}/register",
+            "Account" => "/{$this->id}/account",
+            "Profile" => "/{$this->id}/profile",
+            "Forgot password" => "/{$this->id}/forgot",
+            "Reset" => [
+                "url" => "/{$this->id}/reset?key=xxxxxxxxxx",
+                "description" => "Reset password. Automatically generated with key from 'Forgot password' page",
+            ],
             "Resend" => [
-                "url" => ["/{$this->id}/resend"],
-                "description" => "Resend email change confirmation (NOT FOR REGISTRATION/EMAIL ACTIVATION)",
+                "url" => "/{$this->id}/resend",
+                "description" => "Resend email confirmation (for both activation and change of email)",
+            ],
+            "ResendChange" => [
+                "url" => "/{$this->id}/resend-change",
+                "description" => "Resend email change confirmation (quick link on the 'Account' page)",
             ],
             "Cancel" => [
-                "url" => ["/{$this->id}/cancel"],
-                "description" => "Cancel email change confirmation. <br/>This and resend appear on the 'Account' page",
+                "url" => "/{$this->id}/cancel",
+                "description" => "Cancel email change confirmation. <br/>This and ResendChange appear on the 'Account' page",
             ],
 
             "Confirm" => [
-                "url" => ["/{$this->id}/confirm?key=xxxxxxxxx"],
+                "url" => "/{$this->id}/confirm?key=xxxxxxxxx",
                 "description" => "Confirm email address. Automatically generated with key",
-            ],
-            "Reset" => [
-                "url" => ["/{$this->id}/reset?key=xxxxxxxxxx"],
-                "description" => "Reset password. Automatically generated with key from 'Forgot password' page",
             ],
         ];
     }
