@@ -53,6 +53,8 @@ class m131114_141544_add_user extends \yii\db\Migration {
 
             // add indices for performance optimization
             $this->createIndex("userkey_key", Userkey::tableName(), "key", true);
+            $this->createIndex("user_email", User::tableName(), "email", true);
+            $this->createIndex("user_username", User::tableName(), "username", true);
 
             // add foreign keys for data integrity
             $this->addForeignKey("user_role_id", User::tableName(), "role_id", Role::tableName(), "id");
