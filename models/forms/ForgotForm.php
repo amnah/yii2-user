@@ -80,8 +80,10 @@ class ForgotForm extends Model {
 
             // generate a userkey
             $user = $this->getUser();
-            $expiration = date("Y-m-d H:i:s", strtotime("+" . Yii::$app->getModule("user")->resetKeyExpiration));
-            $userkey    = Userkey::generate($user->id, Userkey::TYPE_PASSWORD_RESET, $expiration);
+            $expireTime = Yii::$app->getModule("user")->resetKeyExpiration
+                ? date("Y-m-d H:i:s", strtotime("+" . Yii::$app->getModule("user")->resetKeyExpiration))
+                : null;
+            $userkey    = Userkey::generate($user->id, Userkey::TYPE_PASSWORD_RESET, $expireTime);
 
             // modify view path to module views
             /** @var Mailer $mailer */

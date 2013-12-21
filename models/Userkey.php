@@ -114,7 +114,7 @@ class Userkey extends ActiveRecord {
         $model->user_id = $userId;
         $model->type = $type;
         $model->create_time = date("Y-m-d H:i:s");
-        $model->expire_time = date("Y-m-d H:i:s", strtotime("+" . $expireTime));
+        $model->expire_time = $expireTime;
         $model->key = Security::generateRandomKey();
         $model->save(false);
 

@@ -23,16 +23,6 @@ class Module extends \yii\base\Module {
     public $alias = "@user";
 
     /**
-     * @var bool If true, users will have to confirm their email address after registering (aka email activation)
-     */
-    public $emailConfirmation = true;
-
-    /**
-     * @var bool If true, users will have to confirm their email address after updating email (account page)
-     */
-    public $emailChangeConfirmation = true;
-
-    /**
      * @var bool If true, users are required to enter an email
      */
     public $requireEmail = true;
@@ -66,6 +56,16 @@ class Module extends \yii\base\Module {
      * @var int Login duration
      */
     public $loginDuration = 2592000;
+
+    /**
+     * @var bool If true, users will have to confirm their email address after registering (aka email activation)
+     */
+    public $emailConfirmation = true;
+
+    /**
+     * @var bool If true, users will have to confirm their email address after updating email (account page)
+     */
+    public $emailChangeConfirmation = true;
 
     /**
      * @var string Time before keys expire (for password resets)
