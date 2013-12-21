@@ -15,7 +15,7 @@ class Module extends \yii\base\Module {
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = "amnah\yii2\user\controllers";
+    public $controllerNamespace = "amnah\\yii2\\user\\controllers";
 
     /**
      * @var string Alias for module
@@ -23,8 +23,7 @@ class Module extends \yii\base\Module {
     public $alias = "@user";
 
     /**
-     * @var bool If true, users will have to confirm their email address after registering
-     *           This is the same as email activation
+     * @var bool If true, users will have to confirm their email address after registering (aka email activation)
      */
     public $emailConfirmation = true;
 
@@ -69,6 +68,11 @@ class Module extends \yii\base\Module {
     public $loginDuration = 2592000;
 
     /**
+     * @var string Time before keys expire (for password resets)
+     */
+    public $resetKeyExpiration = "48 hours";
+
+    /**
      * @var string Email view path
      */
     public $emailViewPath = "@user/views/_email";
@@ -104,11 +108,9 @@ class Module extends \yii\base\Module {
             throw new InvalidConfigException("{$className}: \$loginEmail and/or \$loginUsername must be true");
         }
         // check email fields with emailConfirmation/emailChangeConfirmation is true
-        if (!$this->useEmail and $this->emailConfirmation) {
-            throw new InvalidConfigException("{$className}: \$useEmail must be true if \$emailConfirmation is true");
-        }
-        if (!$this->useEmail and $this->emailChangeConfirmation) {
-            throw new InvalidConfigException("{$className}: \$useEmail must be true if \$emailChangeConfirmation is true");
+        if (!$this->useEmail and ($this->emailConfirmation or $this->emailChangeConfirmation)) {
+            $msg = "{$className}: \$useEmail must be true if \$email(Change)Confirmation is true";
+            throw new InvalidConfigException($msg);
         }
     }
 
@@ -128,15 +130,15 @@ class Module extends \yii\base\Module {
 
         // check valid routes
         $validRoutes = [$this->defaultRoute, "admin", "copy"];
-        $isValid = false;
+        $isValidRoute = false;
         foreach ($validRoutes as $validRoute) {
             if (strpos($route, $validRoute) === 0) {
-                $isValid = true;
+                $isValidRoute = true;
                 break;
             }
         }
 
-        return (empty($route) or $isValid)
+        return (empty($route) or $isValidRoute)
             ? parent::createController($route)
             : parent::createController("{$this->defaultRoute}/{$route}");
     }

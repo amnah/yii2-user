@@ -48,10 +48,10 @@ class Userkey extends ActiveRecord {
      */
     public function rules() {
         return [
-            [['user_id', 'type', 'key'], 'required'],
-            [['user_id', 'type'], 'integer'],
-            [['create_time', 'consume_time', 'expire_time'], 'safe'],
-            [['key'], 'string', 'max' => 255]
+//            [['user_id', 'type', 'key'], 'required'],
+//            [['user_id', 'type'], 'integer'],
+//            [['create_time', 'consume_time', 'expire_time'], 'safe'],
+//            [['key'], 'string', 'max' => 255]
         ];
     }
 
@@ -114,9 +114,9 @@ class Userkey extends ActiveRecord {
         $model->user_id = $userId;
         $model->type = $type;
         $model->create_time = date("Y-m-d H:i:s");
-        $model->expire_time = $expireTime;
+        $model->expire_time = date("Y-m-d H:i:s", strtotime("+" . $expireTime));
         $model->key = Security::generateRandomKey();
-        $model->save();
+        $model->save(false);
 
         return $model;
     }
