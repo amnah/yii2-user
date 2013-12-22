@@ -7,7 +7,7 @@ Yii2 User - User authentication module
 
 ## Demo
 
-[See here](http://yii2user.amnahdev.com/user)
+[See here](http://yii2.amnahdev.com/user)
 
 ## Features
 
@@ -94,9 +94,6 @@ if (!Yii::$app->user->can("admin")) {
 Add more database columns for permissions as needed. If you need something more powerful, look into setting
 up [RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/authorization.md).
 
-**Note: I may decide to switch out my current permissions implementation to a basic RBAC implementation so
-developers will have a better base to start with ...**
-
 ### How can I extend this package?
 
 Unfortunately you can't. The classes are all intertwined, so you have no choice but to either fork the
@@ -135,7 +132,6 @@ php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user --to=@app/modul
 but you'll need to change the namespaces in the files. Replace ```amnah\yii2\user``` with ```your\namespace```
 
 ### Todo
-* Userkey expiration functionality
-* Convert permissions to RBAC ???
 * Add functionality for user groups (possibly as another package)
+* Possibly Convert permissions to RBAC ???
 * Have a request? Submit an [issue](https://github.com/amnah/yii2-user/issues)
