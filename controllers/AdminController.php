@@ -6,14 +6,36 @@ use Yii;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\VerbFilter;
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Profile;
-use amnah\yii2\user\models\search\UserSearch;
 
 /**
  * AdminController implements the CRUD actions for User model.
  */
 class AdminController extends Controller {
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
+
+    /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
+    }
 
     /**
      * @inheritdoc
@@ -48,7 +70,9 @@ class AdminController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new UserSearch;
+
+        /** @var \amnah\yii2\user\models\search\UserSearch $searchModel */
+        $searchModel = $this->getUserModule()->model("UserSearch");
         $dataProvider = $searchModel->search($_GET);
 
         return $this->render('index', [
@@ -76,9 +100,12 @@ class AdminController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
-        $user = new User;
+
+        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \amnah\yii2\user\models\Profile $profile */
+        $user = $this->getUserModule()->model("User");
         $user->setScenario("admin");
-        $profile = new Profile;
+        $profile = $this->getUserModule()->model("Profile");
 
         if ($user->load($_POST) && $user->validate() && $profile->load($_POST) and $profile->validate()) {
             $user->save();
@@ -141,11 +168,12 @@ class AdminController extends Controller {
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
-     * @return User the loaded model
+     * @return \amnah\yii2\user\models\User the loaded model
      * @throws HttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = User::find($id)) !== null) {
+        $user = $this->getUserModule()->model("User");
+        if (($model = $user::find($id)) !== null) {
             return $model;
         }
         else {

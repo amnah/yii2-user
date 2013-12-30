@@ -4,8 +4,6 @@ namespace amnah\yii2\user\models\forms;
 
 use Yii;
 use yii\base\Model;
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Userkey;
 
 /**
  * Reset password form
@@ -13,12 +11,13 @@ use amnah\yii2\user\models\Userkey;
 class ResetForm extends Model {
 
     /**
-     * @var Userkey
+     * @var \amnah\yii2\user\models\Userkey
      */
     public $userkey;
 
     /**
      * @var string
+     * @deprecated
      */
     public $email;
 
@@ -33,9 +32,14 @@ class ResetForm extends Model {
     public $newPasswordConfirm;
 
     /**
-     * @var User
+     * @var \amnah\yii2\user\models\User
      */
     protected $_user = false;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
 
     /**
      * @return array the validation rules.
@@ -57,7 +61,7 @@ class ResetForm extends Model {
     }
 
     /**
-     * Add user rules
+     * Add user rules to the newPassword field (min length, max length, etc)
      *
      * @param $rules
      * @return array
@@ -65,7 +69,7 @@ class ResetForm extends Model {
     protected function _addUserRules($rules) {
 
         // go through user rules
-        $user = new User;
+        $user = $this->getUserModule()->model("User");
         $userRules = $user->rules();
         foreach ($userRules as $rule) {
 
@@ -94,6 +98,8 @@ class ResetForm extends Model {
 
     /**
      * Validate proper email
+     *
+     * @deprecated
      */
     public function validateUserkeyEmail() {
 
@@ -115,21 +121,37 @@ class ResetForm extends Model {
     }
 
     /**
-     * Get user based on email
+     * Get user based on userkey.user_id
      *
-     * @return User|null
+     * @return \amnah\yii2\user\models\User|null
      */
     public function getUser() {
-
-        // check if we need to get user
         if ($this->_user === false) {
-
-            // get user
-            $this->_user = User::find($this->userkey->user_id);
+            $user = $this->getUserModule()->model("User");
+            $this->_user = $user::find($this->userkey->user_id);
         }
-
-        // return stored user
         return $this->_user;
+    }
+
+    /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     *
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
     }
 
     /**

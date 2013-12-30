@@ -2,13 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Role;
+$role = $this->context->getUserModule()->model("Role");
 
 /**
  * @var yii\web\View $this
  * @var amnah\yii2\user\models\User $user
  * @var amnah\yii2\user\models\Profile $profile
+ * @var amnah\yii2\user\models\Role $role
  * @var yii\widgets\ActiveForm $form
  */
 ?>
@@ -25,9 +25,9 @@ use amnah\yii2\user\models\Role;
 
         <?= $form->field($user, 'newPassword'); ?>
 
-		<?= $form->field($user, 'role_id')->dropDownList(Role::dropdown()); ?>
+		<?= $form->field($user, 'role_id')->dropDownList($role::dropdown()); ?>
 
-		<?= $form->field($user, 'status')->dropDownList(User::statusDropdown()); ?>
+		<?= $form->field($user, 'status')->dropDownList($user::statusDropdown()); ?>
 
         <?php // use checkbox for ban_time ?>
         <?= Html::activeLabel($user, 'ban_time', ['label' => 'Banned']); ?>

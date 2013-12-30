@@ -4,9 +4,6 @@ namespace amnah\yii2\user\models\forms;
 
 use Yii;
 use yii\base\Model;
-use yii\swiftmailer\Mailer;
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Userkey;
 
 /**
  * Forgot password form
@@ -19,9 +16,14 @@ class ResendForm extends Model {
     public $email;
 
     /**
-     * @var User
+     * @var \amnah\yii2\user\models\User
      */
     protected $_user = false;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
 
     /**
      * @return array the validation rules.
@@ -45,7 +47,7 @@ class ResendForm extends Model {
         if (!$user) {
             $this->addError("email", "Email not found");
         }
-        elseif ($user->status == User::STATUS_ACTIVE) {
+        elseif ($user->status == $user::STATUS_ACTIVE) {
             $this->addError("email", "Email is already active");
         }
         else {
@@ -56,22 +58,38 @@ class ResendForm extends Model {
     /**
      * Get user based on email
      *
-     * @return User|null
+     * @return \amnah\yii2\user\models\User|null
      */
     public function getUser() {
-
-        // check if we need to get user
         if ($this->_user === false) {
-
-            // get user
-            $this->_user = User::find()
+            $user = $this->getUserModule()->model("User");
+            $this->_user = $user::find()
                 ->where(["email" => $this->email])
                 ->orWhere(["new_email" => $this->email])
                 ->one();
         }
-
-        // return stored user
         return $this->_user;
+    }
+
+    /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     *
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
     }
 
     /**
@@ -84,17 +102,20 @@ class ResendForm extends Model {
         // validate
         if ($this->validate()) {
 
-            // generate a userkey
+            // define variables
+            /** @var \amnah\yii2\user\models\Userkey $userkey */
             $user = $this->getUser();
+            $userkey = $this->getUserModule()->model("Userkey");
 
-            // generate userkey
-            if ($user->status == User::STATUS_INACTIVE) {
-                $type = Userkey::TYPE_EMAIL_ACTIVATE;
+            // calculate type and generate userkey
+            if ($user->status == $user::STATUS_INACTIVE) {
+                $type = $userkey::TYPE_EMAIL_ACTIVATE;
             }
-            elseif ($user->status == User::STATUS_UNCONFIRMED_EMAIL) {
-                $type = Userkey::TYPE_EMAIL_CHANGE;
+            //elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {
+            else {
+                $type = $userkey::TYPE_EMAIL_CHANGE;
             }
-            $userkey = Userkey::generate($user->id, $type);
+            $userkey = $userkey::generate($user->id, $type);
 
             // send email confirmation
             return $user->sendEmailConfirmation($userkey);

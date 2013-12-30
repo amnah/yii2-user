@@ -4,7 +4,6 @@ namespace amnah\yii2\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use ReflectionClass;
 
 /**
  * Role model
@@ -35,10 +34,15 @@ class Role extends ActiveRecord {
     const ROLE_GUEST = 3;
 
     /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
+
+    /**
      * @inheritdoc
      */
     public static function tableName() {
-        return Yii::$app->db->tablePrefix . 'role';
+        return "{{%role}}";
     }
 
     /**
@@ -70,7 +74,29 @@ class Role extends ActiveRecord {
      * @return \yii\db\ActiveRelation
      */
     public function getUsers() {
-        return $this->hasMany(User::className(), ['role_id' => 'id']);
+        $user = $this->getUserModule()->model("User");
+        return $this->hasMany($user::className(), ['role_id' => 'id']);
+    }
+
+    /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     *
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
     }
 
     /**

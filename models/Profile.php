@@ -19,10 +19,15 @@ use yii\db\ActiveRecord;
 class Profile extends ActiveRecord {
 
     /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
+
+    /**
      * @inheritdoc
      */
     public static function tableName() {
-        return Yii::$app->db->tablePrefix . 'profile';
+        return "{{%profile}}";
     }
 
     /**
@@ -54,7 +59,29 @@ class Profile extends ActiveRecord {
      * @return \yii\db\ActiveRelation
      */
     public function getUser() {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        $user = $this->getUserModule()->model("User");
+        return $this->hasOne($user::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     *
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
     }
 
     /**

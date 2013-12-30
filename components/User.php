@@ -12,7 +12,7 @@ class User extends \yii\web\User {
     /**
      * @inheritdoc
      */
-    public $identityClass = "amnah\yii2\user\models\User";
+    public $identityClass = 'amnah\yii2\user\models\User';
 
     /**
      * @inheritdoc

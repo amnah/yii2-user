@@ -2,13 +2,14 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Role;
-//use amnah\yii2\grid\RelatedDataColumn;
+$user = $this->context->getUserModule()->model("User");
+$role = $this->context->getUserModule()->model("Role");
 
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
+ * @var amnah\yii2\user\models\User $user
+ * @var amnah\yii2\user\models\Role $role
  * @var amnah\yii2\user\models\search\UserSearch $searchModel
  */
 
@@ -44,18 +45,18 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
             [
                 'attribute' => 'status',
                 'label' => 'Status',
-                'filter' => User::statusDropdown(),
-                'value' => function($model, $index, $dataColumn) {
-                    $statusDropdown = User::statusDropdown();
+                'filter' => $user::statusDropdown(),
+                'value' => function($model, $index, $dataColumn) use ($user) {
+                    $statusDropdown = $user::statusDropdown();
                     return $statusDropdown[$model->status];
                 },
             ],
             [
                 'attribute' => 'role_id',
                 'label' => 'Role',
-                'filter' => Role::dropdown(),
-                'value' => function($model, $index, $dataColumn) {
-                    $roleDropdown = Role::dropdown();
+                'filter' => $role::dropdown(),
+                'value' => function($model, $index, $dataColumn) use ($role) {
+                    $roleDropdown = $role::dropdown();
                     return $roleDropdown[$model->role_id];
                 },
             ],

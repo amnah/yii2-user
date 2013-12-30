@@ -2,11 +2,10 @@
 
 namespace amnah\yii2\user\models\search;
 
-use amnah\yii2\user\models\Profile;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
-use amnah\yii2\user\models\User;
 
 /**
  * UserSearch represents the model behind the search form about User.
@@ -26,6 +25,32 @@ class UserSearch extends Model
 	public $ban_time;
 	public $ban_reason;
     public $full_name;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
+
+    /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     *
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
+    }
 
 	public function rules()
 	{
@@ -59,12 +84,15 @@ class UserSearch extends Model
 
 	public function search($params) {
 
-        $userTable = User::tableName();
-        $profileTable = Profile::tableName();
+        // get models
+        $user = $this->getUserModule()->model("User");
+        $profile = $this->getUserModule()->model("Profile");
+        $userTable = $user::tableName();
+        $profileTable = $profile::tableName();
 
         // set up query with innerJoin on profile data for search/filter
         // call with("profile") to eager load data when displaying
-        $query = User::find();
+        $query = $user::find();
         $query->innerJoin($profileTable, "$userTable.id=$profileTable.user_id");
         $query->with("profile");
         $dataProvider = new ActiveDataProvider([
@@ -104,17 +132,21 @@ class UserSearch extends Model
 
 	protected function addCondition($query, $attribute, $partialMatch = false)
 	{
-		$value = $this->$attribute;
-		if (trim($value) === '') {
-			return;
-		}
+        $value = $this->$attribute;
+        if (trim($value) === '') {
+            return;
+        }
 
-        /** @var ActiveQuery $query */
-		if ($partialMatch) {
-			$value = '%' . strtr($value, ['%'=>'\%', '_'=>'\_', '\\'=>'\\\\']) . '%';
-			$query->andWhere(['like', $attribute, $value]);
-		} else {
-			$query->andWhere([$attribute => $value]);
-		}
+        // add table name to id to prevent ambiguous error with profile.id, i.e., "tbl_user.id"
+        if ($attribute == "id") {
+            $user = $this->getUserModule()->model("User");
+            $attribute = $user::tableName() . ".id";
+        }
+
+        if ($partialMatch) {
+            $query->andWhere(['like', $attribute, $value]);
+        } else {
+            $query->andWhere([$attribute => $value]);
+        }
 	}
 }

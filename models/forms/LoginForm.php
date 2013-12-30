@@ -4,8 +4,6 @@ namespace amnah\yii2\user\models\forms;
 
 use Yii;
 use yii\base\Model;
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Userkey;
 
 /**
  * LoginForm is the model behind the login form.
@@ -28,9 +26,14 @@ class LoginForm extends Model {
     public $rememberMe = true;
 
     /**
-     * @var User
+     * @var \amnah\yii2\user\models\User
      */
     protected $_user = false;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
 
     /**
      * @return array the validation rules.
@@ -53,11 +56,12 @@ class LoginForm extends Model {
         // check for valid user
         $user = $this->getUser();
         if (!$user) {
+
             // calculate error message
-            if (Yii::$app->getModule("user")->loginEmail and Yii::$app->getModule("user")->loginUsername) {
+            if ($this->getUserModule()->loginEmail and $this->getUserModule()->loginUsername) {
                 $errorAttribute = "Email/username";
             }
-            elseif (Yii::$app->getModule("user")->loginEmail) {
+            elseif ($this->getUserModule()->loginEmail) {
                 $errorAttribute = "Email";
             }
             else {
@@ -72,16 +76,18 @@ class LoginForm extends Model {
      */
     public function validateUserStatus() {
 
-        // check for valid user
+        // define variables
+        /** @var \amnah\yii2\user\models\Userkey $userkey */
         $user = $this->getUser();
+        $userkey = $this->getUserModule()->model("Userkey");
 
         // check for ban status
         if ($user->ban_time) {
             $this->addError("username", "User is banned - {$user->ban_reason}");
         }
         // check for inactive status
-        if ($user->status == User::STATUS_INACTIVE) {
-            $userkey = Userkey::generate($user->id, Userkey::TYPE_EMAIL_ACTIVATE);
+        if ($user->status == $user::STATUS_INACTIVE) {
+            $userkey = $userkey::generate($user->id, $userkey::TYPE_EMAIL_ACTIVATE);
             $user->sendEmailConfirmation($userkey);
             $this->addError("username", "Email confirmation resent");
         }
@@ -98,7 +104,7 @@ class LoginForm extends Model {
         }
 
         // check password
-        /** @var User $user */
+        /** @var \amnah\yii2\user\models\User $user */
         $user = $this->getUser();
         if (!$user->verifyPassword($this->password)) {
             $this->addError("password", "Password incorrect");
@@ -108,7 +114,7 @@ class LoginForm extends Model {
     /**
      * Get user based on email and/or username
      *
-     * @return User|null
+     * @return \amnah\yii2\user\models\User|null
      */
     public function getUser() {
 
@@ -116,11 +122,12 @@ class LoginForm extends Model {
         if ($this->_user === false) {
 
             // build query based on email and/or username login properties
-            $user = User::find();
-            if (Yii::$app->getModule("user")->loginEmail) {
+            $user = $this->getUserModule()->model("User");
+            $user = $user::find();
+            if ($this->getUserModule()->loginEmail) {
                 $user->orWhere(["email" => $this->username]);
             }
-            if (Yii::$app->getModule("user")->loginUsername) {
+            if ($this->getUserModule()->loginUsername) {
                 $user->orWhere(["username" => $this->username]);
             }
 
@@ -133,12 +140,33 @@ class LoginForm extends Model {
     }
 
     /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     *
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels() {
 
         // calculate attribute label for "username"
-        $attribute = Yii::$app->getModule("user")->requireEmail ? "Email" : "Username";
+        $attribute = $this->getUserModule()->requireEmail ? "Email" : "Username";
         return [
             "username" => $attribute,
         ];

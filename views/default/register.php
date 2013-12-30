@@ -41,11 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'enableAjaxValidation' => true,
         ]); ?>
 
-        <?php if (Yii::$app->getModule("user")->requireEmail): ?>
+        <?php if ($this->context->getUserModule()->requireEmail): ?>
             <?= $form->field($user, 'email') ?>
         <?php endif; ?>
 
-        <?php if (Yii::$app->getModule("user")->requireUsername): ?>
+        <?php if ($this->context->getUserModule()->requireUsername): ?>
             <?= $form->field($user, 'username') ?>
         <?php endif; ?>
 
@@ -58,6 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
                 <?= Html::submitButton('Register', ['class' => 'btn btn-primary']) ?>
+
+                or <?= Html::a("Login", ["/user/login"]) ?>
             </div>
         </div>
 

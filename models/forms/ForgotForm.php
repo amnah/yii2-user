@@ -5,8 +5,6 @@ namespace amnah\yii2\user\models\forms;
 use Yii;
 use yii\base\Model;
 use yii\swiftmailer\Mailer;
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Userkey;
 
 /**
  * Forgot password form
@@ -19,9 +17,14 @@ class ForgotForm extends Model {
     public $email;
 
     /**
-     * @var User
+     * @var \amnah\yii2\user\models\User
      */
     protected $_user = false;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    protected $_userModule = false;
 
     /**
      * @return array the validation rules.
@@ -53,19 +56,35 @@ class ForgotForm extends Model {
     /**
      * Get user based on email
      *
-     * @return User|null
+     * @return \amnah\yii2\user\models\User|null
      */
     public function getUser() {
-
-        // check if we need to get user
         if ($this->_user === false) {
-
-            // get user
-            $this->_user = User::find(["email" => $this->email]);
+            $user = $this->getUserModule()->model("User");
+            $this->_user = $user::find(["email" => $this->email]);
         }
-
-        // return stored user
         return $this->_user;
+    }
+
+    /**
+     * Get user module
+     *
+     * @return \amnah\yii2\user\Module|null
+     */
+    public function getUserModule() {
+        if ($this->_userModule === false) {
+            $this->_userModule = Yii::$app->getModule("user");
+        }
+        return $this->_userModule;
+    }
+
+    /**
+     * Set user module
+     *
+     * @param \amnah\yii2\user\Module $value
+     */
+    public function setUserModule($value) {
+        $this->_userModule = $value;
     }
 
     /**
@@ -79,16 +98,17 @@ class ForgotForm extends Model {
         if ($this->validate()) {
 
             // generate a userkey
+            /** @var \amnah\yii2\user\models\Userkey $userkey */
             $user = $this->getUser();
-            $expireTime = Yii::$app->getModule("user")->resetKeyExpiration
-                ? date("Y-m-d H:i:s", strtotime("+" . Yii::$app->getModule("user")->resetKeyExpiration))
-                : null;
-            $userkey    = Userkey::generate($user->id, Userkey::TYPE_PASSWORD_RESET, $expireTime);
+            $userkey = $this->getUserModule()->model("Userkey");
+            $expireTime = $this->getUserModule()->resetKeyExpiration;
+            $expireTime = $expireTime !== null ? date("Y-m-d H:i:s", strtotime("+" . $expireTime)) : null;
+            $userkey    = $userkey::generate($user->id, $userkey::TYPE_PASSWORD_RESET, $expireTime);
 
             // modify view path to module views
             /** @var Mailer $mailer */
             $mailer = Yii::$app->mail;
-            $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
+            $mailer->viewPath = $this->getUserModule()->emailViewPath;
 
             // send email
             $subject = Yii::$app->id . " - Forgot password";

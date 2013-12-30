@@ -3,6 +3,7 @@
 namespace amnah\yii2\user;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\base\InvalidConfigException;
 
 /**
@@ -15,7 +16,7 @@ class Module extends \yii\base\Module {
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = "amnah\\yii2\\user\\controllers";
+    public $controllerNamespace = 'amnah\yii2\user\controllers';
 
     /**
      * @var string Alias for module
@@ -78,15 +79,38 @@ class Module extends \yii\base\Module {
     public $emailViewPath = "@user/views/_email";
 
     /**
+     * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]
+     */
+    public $modelClasses = [];
+
+    /**
+     * @var array Storage for models based on $modelClasses
+     */
+    protected $_models;
+
+    /**
      * @inheritdoc
      */
     public function init() {
+
         parent::init();
+
+        // check for valid email/username properties
+        $this->_checkEmailUsername();
+
+        // override modelClasses
+        $this->modelClasses = array_merge($this->_getDefaultModelClasses(), $this->modelClasses);
 
         // set alias
         $this->setAliases([
             $this->alias => __DIR__,
         ]);
+    }
+
+    /**
+     * Check for valid email/username properties
+     */
+    protected function _checkEmailUsername() {
 
         // set use fields based on required fields
         if ($this->requireEmail) {
@@ -112,6 +136,47 @@ class Module extends \yii\base\Module {
             $msg = "{$className}: \$useEmail must be true if \$email(Change)Confirmation is true";
             throw new InvalidConfigException($msg);
         }
+    }
+
+    /**
+     * Get default model classes
+     */
+    protected function _getDefaultModelClasses() {
+        
+        // use single quotes so nothing gets escaped
+        return [
+            'User' => 'amnah\yii2\user\models\User',
+            'Profile' => 'amnah\yii2\user\models\Profile',
+            'Role' => 'amnah\yii2\user\models\Role',
+            'Userkey' => 'amnah\yii2\user\models\Userkey',
+            'ForgotForm' => 'amnah\yii2\user\models\forms\ForgotForm',
+            'LoginForm' => 'amnah\yii2\user\models\forms\LoginForm',
+            'ResendForm' => 'amnah\yii2\user\models\forms\ResendForm',
+            'ResetForm' => 'amnah\yii2\user\models\forms\ResetForm',
+            'UserSearch' => 'amnah\yii2\user\models\search\UserSearch',
+        ];
+    }
+
+    /**
+     * Get object instance of model
+     * @param string $name
+     * @param array $config
+     * @return ActiveRecord
+     */
+    public function model($name, $config = []) {
+
+        // return object if already created
+        if (!empty($this->_models[$name])) {
+            return $this->_models[$name];
+        }
+
+        // create object
+        $className = $this->modelClasses[ucfirst($name)];
+        $obj = Yii::createObject(array_merge(["class" => $className], $config));
+
+        // store and return
+        $this->_models[$name] = $obj;
+        return $obj;
     }
 
     /**
