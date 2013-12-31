@@ -169,6 +169,3 @@ change the namespaces in the files. Replace ```amnah\yii2\user``` with ```your\n
 * Tests
 * Add functionality for user groups (possibly as another package)
 * Issues/requests? Submit a [github issue](https://github.com/amnah/yii2-user/issues)
-
-*Please note that I consider this package fairly complete. I have no intention of bloating it up with a myriad
-of features, but I do intend to extend some functionality via other packages.*
