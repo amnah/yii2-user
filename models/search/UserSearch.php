@@ -5,7 +5,6 @@ namespace amnah\yii2\user\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use yii\db\ActiveQuery;
 
 /**
  * UserSearch represents the model behind the search form about User.

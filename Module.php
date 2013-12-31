@@ -28,7 +28,7 @@ class Module extends \yii\base\Module {
      */
     public $requireUsername = false;
 
-    /*
+    /**
      * @var bool If true, users can enter an email. This is automatically set to true if $requireEmail = true
      */
     public $useEmail = true;
@@ -39,37 +39,37 @@ class Module extends \yii\base\Module {
     public $useUsername = true;
 
     /**
-     * @var bool If true, users can log in by entering their email
+     * @var bool If true, users can log in using their email
      */
     public $loginEmail = true;
 
     /**
-     * @var bool If true, users can log in by entering their username
+     * @var bool If true, users can log in using their username
      */
     public $loginUsername = true;
 
     /**
      * @var int Login duration
      */
-    public $loginDuration = 2592000;
+    public $loginDuration = 2592000; // 1 month
 
     /**
-     * @var bool If true, users will have to confirm their email address after registering (aka email activation)
+     * @var bool If true, users will have to confirm their email address after registering (= email activation)
      */
     public $emailConfirmation = true;
 
     /**
-     * @var bool If true, users will have to confirm their email address after updating email (account page)
+     * @var bool If true, users will have to confirm their email address after changing it on the account page
      */
     public $emailChangeConfirmation = true;
 
     /**
-     * @var string Time before keys expire (for password resets)
+     * @var string Time before userkeys expire (currently only used for password resets)
      */
     public $resetKeyExpiration = "48 hours";
 
     /**
-     * @var string|null View path
+     * @var string|null View path. Leave as null to use default "@user/views"
      */
     public $viewPath;
 
@@ -80,6 +80,7 @@ class Module extends \yii\base\Module {
 
     /**
      * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]
+     * The model classes here will be merged with/override the [[_getDefaultModelClasses()|default ones]]
      */
     public $modelClasses = [];
 
