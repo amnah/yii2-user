@@ -14,11 +14,6 @@ use yii\base\InvalidConfigException;
 class Module extends \yii\base\Module {
 
     /**
-     * @inheritdoc
-     */
-    public $controllerNamespace = 'amnah\yii2\user\controllers';
-
-    /**
      * @var string Alias for module
      */
     public $alias = "@user";
@@ -74,9 +69,14 @@ class Module extends \yii\base\Module {
     public $resetKeyExpiration = "48 hours";
 
     /**
+     * @var string|null View path
+     */
+    public $viewPath;
+
+    /**
      * @var string Email view path
      */
-    public $emailViewPath = "@user/views/_email";
+    public $emailViewPath = "@user/mails";
 
     /**
      * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]

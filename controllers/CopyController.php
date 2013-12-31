@@ -29,14 +29,14 @@ class CopyController extends Controller {
     /**
      * @inheritdoc
      */
-    public function beforeAction($action) {
+    public function init() {
 
         // check if this is being run via console only
         if (!\Yii::$app->request->isConsoleRequest) {
             throw new HttpException(404, 'The requested page does not exist.');
         }
 
-        return parent::beforeAction($action);
+        return parent::init();
     }
 
     /**

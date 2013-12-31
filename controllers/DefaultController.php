@@ -32,10 +32,22 @@ class DefaultController extends Controller {
 
     /**
      * Set user module
+     *
      * @param \amnah\yii2\user\Module $value
      */
     public function setUserModule($value) {
         $this->_userModule = $value;
+    }
+
+    /**
+     * Get view path based on module property
+     *
+     * @return string
+     */
+    public function getViewPath() {
+        return $this->getUserModule()->viewPath
+            ? rtrim($this->getUserModule()->viewPath, "/\\") . DIRECTORY_SEPARATOR . $this->id
+            :parent::getViewPath();
     }
 
     /**
