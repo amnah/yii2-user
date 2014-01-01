@@ -34,31 +34,16 @@ class User extends \yii\web\User {
     }
 
     /**
-     * Get user's email
-     *
-     * @return string
-     */
-    public function getEmail() {
-        return $this->getIdentity()->email;
-    }
-
-    /**
-     * Get user's username
-     *
-     * @return mixed
-     */
-    public function getUsername() {
-        return $this->getIdentity()->username;
-    }
-
-    /**
      * Get user's display name
      *
      * @param string $default
      * @return string
      */
     public function getDisplayName($default = "") {
-        return $this->getIdentity()->getDisplayName($default);
+
+        // check for current user
+        $user = $this->getIdentity();
+        return $user ? $user->getDisplayName($default) : "";
     }
 
     /**
@@ -69,9 +54,9 @@ class User extends \yii\web\User {
      */
     public function can($permission) {
 
-        // get current user if not specified
+        // check for current user and permission
         $user = $this->getIdentity();
-        return ($user and $user->can($permission));
+        return $user ? $user->can($permission) : false;
     }
 
     /**
