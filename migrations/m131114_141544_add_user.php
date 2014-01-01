@@ -10,6 +10,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
     public function up() {
 
         // start transaction in case we need to rollback
+        // note that this doesn't rollback table creations in mysql
         $transaction = $this->db->beginTransaction();
         try {
             // create tables in specific order
@@ -52,14 +53,14 @@ class m131114_141544_add_user extends \yii\db\Migration {
             ]);
 
             // add indices for performance optimization
-            $this->createIndex("userkey_key", Userkey::tableName(), "key", true);
-            $this->createIndex("user_email", User::tableName(), "email", true);
-            $this->createIndex("user_username", User::tableName(), "username", true);
+            $this->createIndex(Userkey::tableName() . "_key", Userkey::tableName(), "key", true);
+            $this->createIndex(User::tableName() . "_email", User::tableName(), "email", true);
+            $this->createIndex(User::tableName() . "_username", User::tableName(), "username", true);
 
             // add foreign keys for data integrity
-            $this->addForeignKey("user_role_id", User::tableName(), "role_id", Role::tableName(), "id");
-            $this->addForeignKey("profile_user_id", Profile::tableName(), "user_id", User::tableName(), "id");
-            $this->addForeignKey("userkey_user_id", Userkey::tableName(), "user_id", User::tableName(), "id");
+            $this->addForeignKey(User::tableName() . "_role_id", User::tableName(), "role_id", Role::tableName(), "id");
+            $this->addForeignKey(Profile::tableName() . "_user_id", Profile::tableName(), "user_id", User::tableName(), "id");
+            $this->addForeignKey(Userkey::tableName() . "_user_id", Userkey::tableName(), "user_id", User::tableName(), "id");
 
             // insert role data
             // note: i create a guest role because i like to give guest users the ability to use the site
@@ -93,6 +94,8 @@ class m131114_141544_add_user extends \yii\db\Migration {
 
             return false;
         }
+
+        return true;
     }
 
     public function down() {
@@ -116,5 +119,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
 
             return false;
         }
+
+        return true;
     }
 }
