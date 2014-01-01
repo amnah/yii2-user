@@ -65,17 +65,13 @@ class User extends \yii\web\User {
      * Check if user can do $permission
      *
      * @param string $permission
-     * @param bool $user
      * @return bool
      */
-    public function can($permission, $user = false) {
+    public function can($permission) {
 
         // get current user if not specified
-        $user = ($user !== false) ? $user : $this->getIdentity();
-
-        // check role attribute
-        $roleAttribute = "can_{$permission}";
-        return ($user and $user->role->$roleAttribute);
+        $user = $this->getIdentity();
+        return ($user and $user->can($permission));
     }
 
     /**

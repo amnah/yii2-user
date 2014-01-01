@@ -112,6 +112,17 @@ class Role extends ActiveRecord {
     }
 
     /**
+     * Check permission
+     *
+     * @param string $permission
+     * @return bool
+     */
+    public function checkPermission($permission) {
+        $roleAttribute = "can_{$permission}";
+        return $this->$roleAttribute ? true : false;
+    }
+
+    /**
      * Get list of roles for creating dropdowns
      *
      * @return array

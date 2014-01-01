@@ -409,6 +409,16 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
+     * Check if user can do specified $permission
+     *
+     * @param string $permission
+     * @return bool
+     */
+    public function can($permission) {
+        return $this->role->checkPermission($permission);
+    }
+
+    /**
      * Get list of statuses for creating dropdowns
      *
      * @return array

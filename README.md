@@ -87,10 +87,13 @@ in the form of database columns. It should follow the format: ```can_{permission
 For example, the ```role``` table has a column named ```can_admin``` by default. To check if the user can
 perform admin actions:
 
-```
+```php
 if (!Yii::$app->user->can("admin")) {
     throw new HttpException(404, 'The requested page does not exist.');
 }
+// --- or ----
+$user = User::find(1);
+$user->can("admin");
 ```
 
 Add more database columns for permissions as needed. If you need something more powerful, look into setting
