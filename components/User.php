@@ -58,15 +58,4 @@ class User extends \yii\web\User {
         $user = $this->getIdentity();
         return $user ? $user->can($permission) : false;
     }
-
-    /**
-     * Check if user cant do $permission
-     *
-     * @param string $permission
-     * @param bool $user
-     * @return bool
-     */
-    public function cant($permission, $user = false) {
-        return !$this->can($permission, $user);
-    }
 }
