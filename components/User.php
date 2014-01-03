@@ -34,6 +34,13 @@ class User extends \yii\web\User {
     }
 
     /**
+     * @inheritdoc
+     */
+    public function afterLogin($identity, $cookieBased) {
+        $identity->setLoginIpAndTime();
+    }
+
+    /**
      * Get user's display name
      *
      * @param string $default

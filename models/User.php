@@ -24,6 +24,9 @@ use ReflectionClass;
  * @property string $update_time
  * @property string $ban_time
  * @property string $ban_reason
+ * @property string $registration_ip
+ * @property string $login_ip
+ * @property string $login_time
  *
  * @property Profile $profile
  * @property Role $role
@@ -314,18 +317,25 @@ class User extends ActiveRecord implements IdentityInterface {
     public function register($roleId) {
 
         // set default attributes for registration
-        $attributes = [ "status" => static::STATUS_ACTIVE, "role_id" => $roleId ];
+        $attributes = [
+            "role_id" => $roleId,
+            "registration_ip" => Yii::$app->getRequest()->getUserIP(),
+        ];
 
         // determine if we need to change status based on module properties
         $emailConfirmation = Yii::$app->getModule("user")->emailConfirmation;
 
-        // set inactive if email is required
-        if (Yii::$app->getModule("user")->requireEmail and $emailConfirmation) {
+        // set status inactive if email is required
+        if ($emailConfirmation and Yii::$app->getModule("user")->requireEmail) {
             $attributes["status"] = static::STATUS_INACTIVE;
         }
         // set unconfirmed if email is set but NOT required
-        elseif (Yii::$app->getModule("user")->useEmail and $this->email and $emailConfirmation) {
+        elseif ($emailConfirmation and Yii::$app->getModule("user")->useEmail and $this->email) {
             $attributes["status"] = static::STATUS_UNCONFIRMED_EMAIL;
+        }
+        // set active otherwise
+        else {
+            $attributes["status"] = static::STATUS_ACTIVE;
         }
 
         // set attributes
@@ -334,6 +344,25 @@ class User extends ActiveRecord implements IdentityInterface {
         // save and return
         // note: we assume that we have already validated (both $user and $profile)
         $this->save(false);
+        return $this;
+    }
+
+    /**
+     * Set login ip and time
+     *
+     * @param bool $save Save record
+     * @return static
+     */
+    public function setLoginIpAndTime($save = true) {
+
+        // set data
+        $this->login_ip = Yii::$app->getRequest()->getUserIP();
+        $this->login_time = date("Y-m-d H:i:s");
+
+        // save and return
+        if ($save) {
+            $this->save(false, ["login_ip", "login_time"]);
+        }
         return $this;
     }
 

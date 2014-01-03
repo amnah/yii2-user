@@ -34,6 +34,9 @@ class m131114_141544_add_user extends \yii\db\Migration {
                 "update_time" => "timestamp NULL DEFAULT NULL",
                 "ban_time" => "timestamp NULL DEFAULT NULL",
                 "ban_reason" => "varchar(255) DEFAULT NULL",
+                "registration_ip" => "varchar(45) DEFAULT NULL",
+                "login_ip" => "varchar(45) DEFAULT NULL",
+                "login_time" => "timestamp NULL DEFAULT NULL",
             ]);
             $this->createTable(Userkey::tableName(), [
                 "id" => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",

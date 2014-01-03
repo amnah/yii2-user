@@ -140,7 +140,7 @@ class DefaultController extends Controller {
     }
 
     /**
-     * Calculate whether we need to send confirmation email or log user in
+     * Calculate whether we need to send confirmation email or log user in based on user's status
      *
      * @param \amnah\yii2\user\models\User $user
      */
