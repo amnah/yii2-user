@@ -13,39 +13,13 @@ use yii\web\VerbFilter;
 class AdminController extends Controller {
 
     /**
-     * @var \amnah\yii2\user\Module
-     */
-    protected $_userModule = false;
-
-    /**
-     * Get user module
-     *
-     * @return \amnah\yii2\user\Module|null
-     */
-    public function getUserModule() {
-        if ($this->_userModule === false) {
-            $this->_userModule = Yii::$app->getModule("user");
-        }
-        return $this->_userModule;
-    }
-
-    /**
-     * Set user module
-     *
-     * @param \amnah\yii2\user\Module $value
-     */
-    public function setUserModule($value) {
-        $this->_userModule = $value;
-    }
-
-    /**
      * Get view path based on module property
      *
      * @return string
      */
     public function getViewPath() {
-        return $this->getUserModule()->viewPath
-            ? rtrim($this->getUserModule()->viewPath, "/\\") . DIRECTORY_SEPARATOR . $this->id
+        return Yii::$app->getModule("user")->viewPath
+            ? rtrim(Yii::$app->getModule("user")->viewPath, "/\\") . DIRECTORY_SEPARATOR . $this->id
             :parent::getViewPath();
     }
 
@@ -84,7 +58,7 @@ class AdminController extends Controller {
     public function actionIndex() {
 
         /** @var \amnah\yii2\user\models\search\UserSearch $searchModel */
-        $searchModel = $this->getUserModule()->model("UserSearch");
+        $searchModel = Yii::$app->getModule("user")->model("UserSearch");
         $dataProvider = $searchModel->search($_GET);
 
         return $this->render('index', [
@@ -115,9 +89,9 @@ class AdminController extends Controller {
 
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = $this->getUserModule()->model("User");
+        $user = Yii::$app->getModule("user")->model("User");
         $user->setScenario("admin");
-        $profile = $this->getUserModule()->model("Profile");
+        $profile = Yii::$app->getModule("user")->model("Profile");
 
         if ($user->load($_POST) && $user->validate() && $profile->load($_POST) and $profile->validate()) {
             $user->save();
@@ -184,7 +158,7 @@ class AdminController extends Controller {
      * @throws HttpException if the model cannot be found
      */
     protected function findModel($id) {
-        $user = $this->getUserModule()->model("User");
+        $user = Yii::$app->getModule("user")->model("User");
         if (($model = $user::find($id)) !== null) {
             return $model;
         }

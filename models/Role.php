@@ -34,11 +34,6 @@ class Role extends ActiveRecord {
     const ROLE_GUEST = 3;
 
     /**
-     * @var \amnah\yii2\user\Module
-     */
-    protected $_userModule = false;
-
-    /**
      * @inheritdoc
      */
     public static function tableName() {
@@ -74,29 +69,8 @@ class Role extends ActiveRecord {
      * @return \yii\db\ActiveRelation
      */
     public function getUsers() {
-        $user = $this->getUserModule()->model("User");
+        $user = Yii::$app->getModule("user")->model("User");
         return $this->hasMany($user::className(), ['role_id' => 'id']);
-    }
-
-    /**
-     * Get user module
-     *
-     * @return \amnah\yii2\user\Module|null
-     */
-    public function getUserModule() {
-        if ($this->_userModule === false) {
-            $this->_userModule = Yii::$app->getModule("user");
-        }
-        return $this->_userModule;
-    }
-
-    /**
-     * Set user module
-     *
-     * @param \amnah\yii2\user\Module $value
-     */
-    public function setUserModule($value) {
-        $this->_userModule = $value;
     }
 
     /**

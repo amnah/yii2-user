@@ -57,11 +57,6 @@ class User extends ActiveRecord implements IdentityInterface {
     public $currentPassword;
 
     /**
-     * @var \amnah\yii2\user\Module
-     */
-    protected $_userModule = false;
-
-    /**
      * @inheritdoc
      */
     public static function tableName() {
@@ -101,7 +96,7 @@ class User extends ActiveRecord implements IdentityInterface {
         // add required rules for email/username depending on module properties
         $requireFields = ["requireEmail", "requireUsername"];
         foreach ($requireFields as $requireField) {
-            if ($this->getUserModule()->$requireField) {
+            if (Yii::$app->getModule("user")->$requireField) {
                 $attribute = strtolower(substr($requireField, 7)); // "email" or "username"
                 $rules[] = [$attribute, "required"];
             }
@@ -148,7 +143,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return \yii\db\ActiveRelation
      */
     public function getUserkeys() {
-        $userkey = $this->getUserModule()->model("Userkey");
+        $userkey = Yii::$app->getModule("user")->model("Userkey");
         return $this->hasMany($userkey::className(), ['user_id' => 'id']);
     }
 
@@ -157,7 +152,7 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     /*
     public function getProfiles() {
-        $profile = $this->getUserModule()->model("Profile");
+        $profile = Yii::$app->getModule("user")->model("Profile");
         return $this->hasMany($profile::className(), ['user_id' => 'id']);
     }
     */
@@ -166,7 +161,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return \yii\db\ActiveRelation
      */
     public function getProfile() {
-        $profile = $this->getUserModule()->model("Profile");
+        $profile = Yii::$app->getModule("user")->model("Profile");
         return $this->hasOne($profile::className(), ['user_id' => 'id']);
     }
 
@@ -174,29 +169,8 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return \yii\db\ActiveRelation
      */
     public function getRole() {
-        $role = $this->getUserModule()->model("Role");
+        $role = Yii::$app->getModule("user")->model("Role");
         return $this->hasOne($role::className(), ['id' => 'role_id']);
-    }
-
-    /**
-     * Get user module
-     *
-     * @return \amnah\yii2\user\Module|null
-     */
-    public function getUserModule() {
-        if ($this->_userModule === false) {
-            $this->_userModule = Yii::$app->getModule("user");
-        }
-        return $this->_userModule;
-    }
-
-    /**
-     * Set user module
-     *
-     * @param \amnah\yii2\user\Module $value
-     */
-    public function setUserModule($value) {
-        $this->_userModule = $value;
     }
 
     /**
@@ -208,7 +182,6 @@ class User extends ActiveRecord implements IdentityInterface {
                 'class' => 'yii\behaviors\AutoTimestamp',
                 'timestamp' => function() { return date("Y-m-d H:i:s"); },
             ],
-
         ];
     }
 
@@ -276,7 +249,7 @@ class User extends ActiveRecord implements IdentityInterface {
         // modify view path to module views
         /** @var Mailer $mailer */
         $mailer = Yii::$app->mail;
-        $mailer->viewPath = $this->getUserModule()->emailViewPath;
+        $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
 
         // send email
         $user = $this;
@@ -344,14 +317,14 @@ class User extends ActiveRecord implements IdentityInterface {
         $attributes = [ "status" => static::STATUS_ACTIVE, "role_id" => $roleId ];
 
         // determine if we need to change status based on module properties
-        $emailConfirmation = $this->getUserModule()->emailConfirmation;
+        $emailConfirmation = Yii::$app->getModule("user")->emailConfirmation;
 
         // set inactive if email is required
-        if ($this->getUserModule()->requireEmail and $emailConfirmation) {
+        if (Yii::$app->getModule("user")->requireEmail and $emailConfirmation) {
             $attributes["status"] = static::STATUS_INACTIVE;
         }
         // set unconfirmed if email is set but NOT required
-        elseif ($this->getUserModule()->useEmail and $this->email and $emailConfirmation) {
+        elseif (Yii::$app->getModule("user")->useEmail and $this->email and $emailConfirmation) {
             $attributes["status"] = static::STATUS_UNCONFIRMED_EMAIL;
         }
 

@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <hr/>
 
-    <?php if ($this->context->getUserModule()->useEmail): ?>
+    <?php if (\Yii::$app->getModule("user")->useEmail): ?>
         <?= $form->field($user, 'email') ?>
     <?php endif; ?>
 
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a("resend", ["/user/resend-change"]) ?> or <?= Html::a("cancel", ["/user/cancel"]) ?>
                 </p>
 
-            <?php elseif ($this->context->getUserModule()->emailConfirmation): ?>
+            <?php elseif (\Yii::$app->getModule("user")->emailConfirmation): ?>
 
                 <p class="small">Changing your email requires email confirmation</p>
 
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <?php if ($this->context->getUserModule()->useUsername): ?>
+    <?php if (\Yii::$app->getModule("user")->useUsername): ?>
         <?= $form->field($user, 'username') ?>
     <?php endif; ?>
 

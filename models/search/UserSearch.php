@@ -25,32 +25,6 @@ class UserSearch extends Model
 	public $ban_reason;
     public $full_name;
 
-    /**
-     * @var \amnah\yii2\user\Module
-     */
-    protected $_userModule = false;
-
-    /**
-     * Get user module
-     *
-     * @return \amnah\yii2\user\Module|null
-     */
-    public function getUserModule() {
-        if ($this->_userModule === false) {
-            $this->_userModule = Yii::$app->getModule("user");
-        }
-        return $this->_userModule;
-    }
-
-    /**
-     * Set user module
-     *
-     * @param \amnah\yii2\user\Module $value
-     */
-    public function setUserModule($value) {
-        $this->_userModule = $value;
-    }
-
 	public function rules()
 	{
 		return [
@@ -84,8 +58,8 @@ class UserSearch extends Model
 	public function search($params) {
 
         // get models
-        $user = $this->getUserModule()->model("User");
-        $profile = $this->getUserModule()->model("Profile");
+        $user = Yii::$app->getModule("user")->model("User");
+        $profile = Yii::$app->getModule("user")->model("Profile");
         $userTable = $user::tableName();
         $profileTable = $profile::tableName();
 
@@ -138,7 +112,7 @@ class UserSearch extends Model
 
         // add table name to id to prevent ambiguous error with profile.id, i.e., "tbl_user.id"
         if ($attribute == "id") {
-            $user = $this->getUserModule()->model("User");
+            $user = Yii::$app->getModule("user")->model("User");
             $attribute = $user::tableName() . ".id";
         }
 

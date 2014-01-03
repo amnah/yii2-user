@@ -37,11 +37,6 @@ class ResetForm extends Model {
     protected $_user = false;
 
     /**
-     * @var \amnah\yii2\user\Module
-     */
-    protected $_userModule = false;
-
-    /**
      * @return array the validation rules.
      */
     public function rules() {
@@ -69,7 +64,7 @@ class ResetForm extends Model {
     protected function _addUserRules($rules) {
 
         // go through user rules
-        $user = $this->getUserModule()->model("User");
+        $user = Yii::$app->getModule("user")->model("User");
         $userRules = $user->rules();
         foreach ($userRules as $rule) {
 
@@ -127,31 +122,10 @@ class ResetForm extends Model {
      */
     public function getUser() {
         if ($this->_user === false) {
-            $user = $this->getUserModule()->model("User");
+            $user = Yii::$app->getModule("user")->model("User");
             $this->_user = $user::find($this->userkey->user_id);
         }
         return $this->_user;
-    }
-
-    /**
-     * Get user module
-     *
-     * @return \amnah\yii2\user\Module|null
-     */
-    public function getUserModule() {
-        if ($this->_userModule === false) {
-            $this->_userModule = Yii::$app->getModule("user");
-        }
-        return $this->_userModule;
-    }
-
-    /**
-     * Set user module
-     *
-     * @param \amnah\yii2\user\Module $value
-     */
-    public function setUserModule($value) {
-        $this->_userModule = $value;
     }
 
     /**

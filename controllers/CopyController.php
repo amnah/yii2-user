@@ -36,7 +36,7 @@ class CopyController extends Controller {
             throw new HttpException(404, 'The requested page does not exist.');
         }
 
-        return parent::init();
+        parent::init();
     }
 
     /**

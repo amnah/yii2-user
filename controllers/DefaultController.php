@@ -14,40 +14,14 @@ use yii\widgets\ActiveForm;
 class DefaultController extends Controller {
 
     /**
-     * @var \amnah\yii2\user\Module
-     */
-    protected $_userModule = false;
-
-    /**
-     * Get user module
-     *
-     * @return \amnah\yii2\user\Module|null
-     */
-    public function getUserModule() {
-        if ($this->_userModule === false) {
-            $this->_userModule = Yii::$app->getModule("user");
-        }
-        return $this->_userModule;
-    }
-
-    /**
-     * Set user module
-     *
-     * @param \amnah\yii2\user\Module $value
-     */
-    public function setUserModule($value) {
-        $this->_userModule = $value;
-    }
-
-    /**
      * Get view path based on module property
      *
      * @return string
      */
     public function getViewPath() {
-        return $this->getUserModule()->viewPath
-            ? rtrim($this->getUserModule()->viewPath, "/\\") . DIRECTORY_SEPARATOR . $this->id
-            :parent::getViewPath();
+        return Yii::$app->getModule("user")->viewPath
+            ? rtrim(Yii::$app->getModule("user")->viewPath, "/\\") . DIRECTORY_SEPARATOR . $this->id
+            : parent::getViewPath();
     }
 
     /**
@@ -85,7 +59,7 @@ class DefaultController extends Controller {
 
         // display debug page if YII_DEBUG is set
         if (defined('YII_DEBUG')) {
-            $actions = $this->getUserModule()->getActions();
+            $actions = Yii::$app->getModule("user")->getActions();
             return $this->render('index', ["actions" => $actions]);
         }
         // redirect to login page if user is guest
@@ -105,8 +79,8 @@ class DefaultController extends Controller {
 
         // load data from $_POST and attempt login
         /** @var \amnah\yii2\user\models\forms\LoginForm $model */
-        $model = $this->getUserModule()->model("LoginForm");
-        if ($model->load($_POST) && $model->login($this->getUserModule()->loginDuration)) {
+        $model = Yii::$app->getModule("user")->model("LoginForm");
+        if ($model->load($_POST) && $model->login(Yii::$app->getModule("user")->loginDuration)) {
             return $this->goBack(["/user"]);
         }
 
@@ -132,8 +106,8 @@ class DefaultController extends Controller {
         // set up user/profile and attempt to load data from $_POST
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = $this->getUserModule()->model("User", ["scenario" => "register"]);
-        $profile = $this->getUserModule()->model("Profile");
+        $user = Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
+        $profile = Yii::$app->getModule("user")->model("Profile");
         if ($user->load($_POST)) {
 
             // validate for ajax request
@@ -148,7 +122,7 @@ class DefaultController extends Controller {
 
                 // perform registration
                 /** @var \amnah\yii2\user\models\Role $role */
-                $role = $this->getUserModule()->model("Role");
+                $role = Yii::$app->getModule("user")->model("Role");
                 $user->register($role::ROLE_USER);
                 $profile->register($user->id);
                 $this->_calcEmailOrLogin($user);
@@ -176,7 +150,7 @@ class DefaultController extends Controller {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Userkey $userkey */
         $userkeyType = null;
-        $userkey = $this->getUserModule()->model("Userkey");
+        $userkey = Yii::$app->getModule("user")->model("Userkey");
         if ($user->status == $user::STATUS_INACTIVE) {
             $userkeyType = $userkey::TYPE_EMAIL_ACTIVATE;
         }
@@ -197,7 +171,7 @@ class DefaultController extends Controller {
         }
         // log user in automatically
         else {
-            Yii::$app->user->login($user, $this->getUserModule()->loginDuration);
+            Yii::$app->user->login($user, Yii::$app->getModule("user")->loginDuration);
         }
     }
 
@@ -208,13 +182,13 @@ class DefaultController extends Controller {
 
         // search for userkey
         /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $userkey = $this->getUserModule()->model("Userkey");
+        $userkey = Yii::$app->getModule("user")->model("Userkey");
         $userkey = $userkey::findActiveByKey($key, [$userkey::TYPE_EMAIL_ACTIVATE, $userkey::TYPE_EMAIL_CHANGE]);
         if ($userkey) {
 
             // confirm user
             /** @var \amnah\yii2\user\models\User $user */
-            $user = $this->getUserModule()->model("User");
+            $user = Yii::$app->getModule("user")->model("User");
             $user = $user::find($userkey->user_id);
             $user->confirm();
 
@@ -254,10 +228,10 @@ class DefaultController extends Controller {
             if ($user->validate()) {
 
                 // generate userkey and send email if user changed his email
-                if ($this->getUserModule()->emailChangeConfirmation and $user->checkAndPrepareEmailChange()) {
+                if (Yii::$app->getModule("user")->emailChangeConfirmation and $user->checkAndPrepareEmailChange()) {
 
                     /** @var \amnah\yii2\user\models\Userkey $userkey */
-                    $userkey = $this->getUserModule()->model("Userkey");
+                    $userkey = Yii::$app->getModule("user")->model("Userkey");
                     $userkey = $userkey::generate($user->id, $userkey::TYPE_EMAIL_CHANGE);
                     if (!$numSent = $user->sendEmailConfirmation($userkey)) {
 
@@ -322,7 +296,7 @@ class DefaultController extends Controller {
 
         // attempt to load $_POST data, validate, and send email
         /** @var \amnah\yii2\user\models\forms\ResendForm $model */
-        $model = $this->getUserModule()->model("ResendForm");
+        $model = Yii::$app->getModule("user")->model("ResendForm");
         if ($model->load($_POST) && $model->sendEmail()) {
 
             // set flash and refresh page
@@ -343,7 +317,7 @@ class DefaultController extends Controller {
 
         // attempt to find userkey and get user/profile to send confirmation email
         /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $userkey = $this->getUserModule()->model("Userkey");
+        $userkey = Yii::$app->getModule("user")->model("Userkey");
         $userkey = $userkey::findActiveByUser(Yii::$app->user->id, $userkey::TYPE_EMAIL_CHANGE);
         if ($userkey) {
             /** @var \amnah\yii2\user\models\User $user */
@@ -365,7 +339,7 @@ class DefaultController extends Controller {
 
         // attempt to find userkey
         /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $userkey = $this->getUserModule()->model("Userkey");
+        $userkey = Yii::$app->getModule("user")->model("Userkey");
         $userkey = $userkey::findActiveByUser(Yii::$app->user->id, $userkey::TYPE_EMAIL_CHANGE);
         if ($userkey) {
 
@@ -391,7 +365,7 @@ class DefaultController extends Controller {
 
         // attempt to load $_POST data, validate, and send email
         /** @var \amnah\yii2\user\models\forms\ForgotForm $model */
-        $model = $this->getUserModule()->model("ForgotForm");
+        $model = Yii::$app->getModule("user")->model("ForgotForm");
         if ($model->load($_POST) && $model->sendForgotEmail()) {
 
             // set flash and refresh page
@@ -413,7 +387,7 @@ class DefaultController extends Controller {
         // check for success or invalid userkey
         /** @var \amnah\yii2\user\models\Userkey $userkey */
         $success = Yii::$app->session->getFlash('Reset-success');
-        $userkey = $this->getUserModule()->model("Userkey");
+        $userkey = Yii::$app->getModule("user")->model("Userkey");
         $userkey = $userkey::findActiveByKey($key, $userkey::TYPE_PASSWORD_RESET);
         $invalidKey = !$userkey;
         if ($success or $invalidKey) {
@@ -425,7 +399,7 @@ class DefaultController extends Controller {
 
         // attempt to load $_POST data, validate, and reset user password
         /** @var \amnah\yii2\user\models\forms\ResetForm $model */
-        $model = $this->getUserModule()->model("ResetForm", ["userkey" => $userkey]);
+        $model = Yii::$app->getModule("user")->model("ResetForm", ["userkey" => $userkey]);
         if ($model->load($_POST) && $model->resetPassword()) {
 
             // set flash and refresh page
