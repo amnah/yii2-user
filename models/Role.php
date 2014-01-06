@@ -37,7 +37,7 @@ class Role extends ActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        return Yii::$app->getDb()->tablePrefix . "role";
+        return static::getDb()->tablePrefix . "role";
     }
 
     /**

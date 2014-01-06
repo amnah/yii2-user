@@ -63,7 +63,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @inheritdoc
      */
     public static function tableName() {
-        return Yii::$app->getDb()->tablePrefix . "user";
+        return static::getDb()->tablePrefix . "user";
     }
 
     /**

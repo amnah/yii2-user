@@ -40,7 +40,7 @@ class Userkey extends ActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        return Yii::$app->getDb()->tablePrefix . "userkey";
+        return static::getDb()->tablePrefix . "userkey";
     }
 
     /**

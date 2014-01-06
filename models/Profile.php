@@ -22,7 +22,7 @@ class Profile extends ActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        return Yii::$app->getDb()->tablePrefix . "profile";
+        return static::getDb()->tablePrefix . "profile";
     }
 
     /**
