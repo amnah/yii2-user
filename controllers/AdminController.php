@@ -44,7 +44,7 @@ class AdminController extends Controller {
 
         // check for admin permission
         if (!Yii::$app->user->can("admin")) {
-            throw new HttpException(404, 'The requested page does not exist.');
+            throw new HttpException(403, 'You are not allowed to perform this action.');
         }
 
         parent::init();

@@ -89,7 +89,7 @@ perform admin actions:
 
 ```php
 if (!Yii::$app->user->can("admin")) {
-    throw new HttpException(404, 'The requested page does not exist.');
+    throw new HttpException(403, 'You are not allowed to perform this action.');
 }
 // --- or ----
 $user = User::find(1);
