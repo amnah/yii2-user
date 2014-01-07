@@ -29,8 +29,7 @@ Yii 2 User - User authentication module
 * Install [Yii2](http://www.yiiframework.com/download) using your preferred method
 * Install package via [composer](http://getcomposer.org/download/)
     * ```"amnah/yii2-user": "dev-master"```
-* Update config file *config/web.php*
-    * **Note: You will also need to add the db component to *config/console.php* for the migration**
+* Update config file *config/web.php* and *config/db.php*
 
 ```php
 // app/config/web.php
@@ -38,9 +37,6 @@ return [
     'components' => [
         'user' => [
             'class' => 'amnah\yii2\user\components\User',
-        ],
-        'db' => [
-            // set up db info here
         ],
         'mail' => [
             // set up mail for emails
@@ -52,6 +48,11 @@ return [
             // set custom module properties here ...
         ],
     ],
+];
+// app/config/db.php
+return [
+        'class' => 'yii\db\Connection',
+        // set up db info
 ];
 ```
 
