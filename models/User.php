@@ -312,14 +312,15 @@ class User extends ActiveRecord implements IdentityInterface {
      * Register a new user
      *
      * @param int $roleId
+     * @param string $userIp
      * @return static
      */
-    public function register($roleId) {
+    public function register($roleId, $userIp) {
 
         // set default attributes for registration
         $attributes = [
             "role_id" => $roleId,
-            "registration_ip" => Yii::$app->getRequest()->getUserIP(),
+            "registration_ip" => $userIp,
         ];
 
         // determine if we need to change status based on module properties

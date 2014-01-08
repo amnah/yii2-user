@@ -123,7 +123,7 @@ class DefaultController extends Controller {
                 // perform registration
                 /** @var \amnah\yii2\user\models\Role $role */
                 $role = Yii::$app->getModule("user")->model("Role");
-                $user->register($role::ROLE_USER);
+                $user->register($role::ROLE_USER, Yii::$app->request->userIP);
                 $profile->register($user->id);
                 $this->_calcEmailOrLogin($user);
 
