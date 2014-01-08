@@ -79,7 +79,7 @@ class Profile extends ActiveRecord {
     public function register($userId) {
 
         $this->user_id = $userId;
-        $this->save(false);
+        $this->save();
         return $this;
     }
 

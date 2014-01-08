@@ -19,23 +19,23 @@ class m131114_141544_add_user extends \yii\db\Migration {
                 "name" => "varchar(255) NOT NULL",
                 "create_time" => "timestamp NULL DEFAULT NULL",
                 "update_time" => "timestamp NULL DEFAULT NULL",
-                "can_admin" => "tinyint NOT NULL DEFAULT 0",
+                "can_admin" => "tinyint DEFAULT 0",
             ]);
             $this->createTable(User::tableName(), [
                 "id" => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",
                 "role_id" => "int UNSIGNED NOT NULL",
-                "email" => "varchar(255)",
-                "new_email" => "varchar(255)",
-                "username" => "varchar(255)",
-                "password" => "varchar(255)",
+                "email" => "varchar(255) NULL DEFAULT NULL",
+                "new_email" => "varchar(255) NULL DEFAULT NULL",
+                "username" => "varchar(255) NULL DEFAULT NULL",
+                "password" => "varchar(255) NULL DEFAULT NULL",
                 "status" => "tinyint NOT NULL",
                 "auth_key" => "varchar(255) NULL DEFAULT NULL",
                 "create_time" => "timestamp NULL DEFAULT NULL",
                 "update_time" => "timestamp NULL DEFAULT NULL",
                 "ban_time" => "timestamp NULL DEFAULT NULL",
-                "ban_reason" => "varchar(255) DEFAULT NULL",
-                "registration_ip" => "varchar(45) DEFAULT NULL",
-                "login_ip" => "varchar(45) DEFAULT NULL",
+                "ban_reason" => "varchar(255) NULL DEFAULT NULL",
+                "registration_ip" => "varchar(45) NULL DEFAULT NULL",
+                "login_ip" => "varchar(45) NULL DEFAULT NULL",
                 "login_time" => "timestamp NULL DEFAULT NULL",
             ]);
             $this->createTable(Userkey::tableName(), [
@@ -52,7 +52,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
                 "user_id" => "int UNSIGNED NOT NULL",
                 "create_time" => "timestamp NULL DEFAULT NULL",
                 "update_time" => "timestamp NULL DEFAULT NULL",
-                "full_name" => "varchar(255) NOT NULL DEFAULT ''",
+                "full_name" => "varchar(255) NULL DEFAULT NULL",
             ]);
 
             // add indices for performance optimization

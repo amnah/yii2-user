@@ -130,13 +130,15 @@ class Userkey extends ActiveRecord {
      * @return static
      */
     public static function findActiveByUser($userId, $type) {
+
+        $now = date("Y-m-d H:i:s");
         return static::find()
             ->where([
                 "user_id" => $userId,
                 "type" => $type,
                 "consume_time" => null,
             ])
-            ->andWhere("([[expire_time]] >= NOW() or [[expire_time]] is NULL)")
+            ->andWhere("([[expire_time]] >= '$now' or [[expire_time]] is NULL)")
             ->one();
     }
 
@@ -149,13 +151,14 @@ class Userkey extends ActiveRecord {
      */
     public static function findActiveByKey($key, $type) {
 
+        $now = date("Y-m-d H:i:s");
         return static::find()
             ->where([
                 "key" => $key,
                 "type" => $type,
                 "consume_time" => null,
             ])
-            ->andWhere("([[expire_time]] >= NOW() or [[expire_time]] is NULL)")
+            ->andWhere("([[expire_time]] >= '$now' or [[expire_time]] is NULL)")
             ->one();
     }
 
