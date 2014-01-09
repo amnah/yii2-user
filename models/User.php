@@ -228,7 +228,6 @@ class User extends ActiveRecord implements IdentityInterface {
         $possibleNames = [
             "username",
             "email",
-            "id",
         ];
 
         // go through each and return if valid
