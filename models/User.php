@@ -256,9 +256,10 @@ class User extends ActiveRecord implements IdentityInterface {
         // send email
         $user = $this;
         $profile = $user->profile;
+        $email = $user->new_email !== null ? $user->new_email : $user->email;
         $subject = Yii::$app->id . " - Email confirmation";
         return $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userkey"))
-            ->setTo($user->email)
+            ->setTo($email)
             ->setSubject($subject)
             ->send();
     }
@@ -372,6 +373,12 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return bool
      */
     public function checkAndPrepareEmailChange() {
+
+        // check if user is removing email address
+        // this only happens if $requireEmail = false
+        if (trim($this->email) === "") {
+            return false;
+        }
 
         // check for change in email
         if ($this->email != $this->getOldAttribute("email")) {

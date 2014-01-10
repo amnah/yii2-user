@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
 
-            <?php if ($user->new_email): ?>
+            <?php if ($user->new_email !== null): ?>
 
                 <p class="small">Pending email confirmation: [ <?= $user->new_email ?> ]</p>
                 <p class="small">
