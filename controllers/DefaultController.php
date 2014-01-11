@@ -58,7 +58,7 @@ class DefaultController extends Controller {
     public function actionIndex() {
 
         // display debug page if YII_DEBUG is set
-        if (defined('YII_DEBUG')) {
+        if (defined('YII_DEBUG') and YII_DEBUG) {
             $actions = Yii::$app->getModule("user")->getActions();
             return $this->render('index', ["actions" => $actions]);
         }
