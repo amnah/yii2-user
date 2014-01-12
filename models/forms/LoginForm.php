@@ -102,7 +102,7 @@ class LoginForm extends Model {
         /** @var \amnah\yii2\user\models\User $user */
         $user = $this->getUser();
         if (!$user->verifyPassword($this->password)) {
-            $this->addError("password", "Password incorrect");
+            $this->addError("password", "Incorrect password");
         }
     }
 
