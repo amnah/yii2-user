@@ -81,7 +81,7 @@ class DefaultController extends Controller {
         /** @var \amnah\yii2\user\models\forms\LoginForm $model */
         $model = Yii::$app->getModule("user")->model("LoginForm");
         if ($model->load($_POST) && $model->login(Yii::$app->getModule("user")->loginDuration)) {
-            return $this->goBack(["/user"]);
+            return $this->goBack(Yii::$app->getModule("user")->loginRedirect);
         }
 
         // render view
@@ -95,7 +95,7 @@ class DefaultController extends Controller {
      */
     public function actionLogout() {
         Yii::$app->user->logout();
-        return $this->goHome();
+        return $this->redirect(Yii::$app->getModule("user")->logoutRedirect);
     }
 
     /**

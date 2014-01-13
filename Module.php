@@ -54,6 +54,16 @@ class Module extends \yii\base\Module {
     public $loginDuration = 2592000; // 1 month
 
     /**
+     * @var array|string Url to redirect to after logging in
+     */
+    public $loginRedirect = ["/user"];
+
+    /**
+     * @var array|string Url to redirect to after logging out
+     */
+    public $logoutRedirect = ["/"];
+
+    /**
      * @var bool If true, users will have to confirm their email address after registering (= email activation)
      */
     public $emailConfirmation = true;
