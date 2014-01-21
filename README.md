@@ -3,8 +3,6 @@ Yii 2 User
 
 Yii 2 User - User authentication module
 
-**STILL IN DEVELOPMENT. EXPECT CHANGES AND B0RKS**
-
 ## Demo
 
 [See here](http://yii2.amnahdev.com/user)
@@ -12,7 +10,7 @@ Yii 2 User - User authentication module
 ## Features
 
 * Quick setup - works out of the box so you can see what it does
-* **NEW!** Easily extendable ([instructions below](#how-do-i-extend-this-package))
+* Easily extendable ([instructions below](#how-do-i-extend-this-package))
 * Registration using email and/or username
 * Login using email and/or username
 * Email confirmation (+resend functionality)
@@ -26,9 +24,8 @@ Yii 2 User - User authentication module
 
 ## Installation
 
-* Install [Yii2](http://www.yiiframework.com/download) using your preferred method
-* Install package via [composer](http://getcomposer.org/download/)
-    * ```"amnah/yii2-user": "dev-master"```
+* Install [Yii 2](http://www.yiiframework.com/download) using your preferred method
+* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "dev-master"```
 * Update config file *config/web.php* and *config/db.php*
 
 ```php
@@ -109,7 +106,7 @@ property:
 // app/config/web.php
 'components' => [
     'user' => [
-        'class' => 'app\models\MyUser',
+        'class' => 'app\components\MyUser',
     ],
 ],
 'modules' => [
@@ -167,7 +164,7 @@ php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user --to=@app/modul
 ```
 
 **Alternatively,** you can do this manually. Just copy/paste the files wherever you'd like and
-change the namespaces in the files. Replace ```amnah\yii2\user``` with ```your\namespace```.
+change the namespaces in the files. Replace ```amnah\yii2\user``` with ```app\modules\user```.
 
 ### Todo
 * Tests

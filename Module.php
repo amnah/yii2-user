@@ -90,6 +90,11 @@ class Module extends \yii\base\Module {
 
     /**
      * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]
+     * Usage:
+     *   $user = Yii::$app->getModule("user")->model("User", $config);
+     *   (equivalent to)
+     *   $user = new \amnah\yii2\user\models\User($config);
+     *
      * The model classes here will be merged with/override the [[_getDefaultModelClasses()|default ones]]
      */
     public $modelClasses = [];

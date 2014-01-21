@@ -3,7 +3,7 @@
 These are the module properties and their default values
 
 ```php
-/**
+    /**
      * @var string Alias for module
      */
     public $alias = "@user";
@@ -44,6 +44,16 @@ These are the module properties and their default values
     public $loginDuration = 2592000; // 1 month
 
     /**
+     * @var array|string Url to redirect to after logging in
+     */
+    public $loginRedirect = ["/user"];
+
+    /**
+     * @var array|string Url to redirect to after logging out
+     */
+    public $logoutRedirect = ["/"];
+
+    /**
      * @var bool If true, users will have to confirm their email address after registering (= email activation)
      */
     public $emailConfirmation = true;
@@ -70,6 +80,11 @@ These are the module properties and their default values
 
     /**
      * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]
+     * Usage:
+     *   $user = Yii::$app->getModule("user")->model("User", $config);
+     *   (equivalent to)
+     *   $user = new \amnah\yii2\user\models\User($config);
+     *
      * The model classes here will be merged with/override the [[_getDefaultModelClasses()|default ones]]
      */
     public $modelClasses = [];
