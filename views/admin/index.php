@@ -60,12 +60,12 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                     return $roleDropdown[$model->role_id];
                 },
             ],
-            'created_at',
+            'create_time',
             /*
             'new_email:email',
             'password',
             'auth_key',
-            'updated_at',
+            'update_time',
             'ban_time',
             'ban_reason',
             */

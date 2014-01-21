@@ -10,8 +10,8 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string $name
- * @property string $created_at
- * @property string $updated_at
+ * @property string $create_time
+ * @property string $update_time
  * @property int $can_admin
  *
  * @property User[] $users
@@ -46,7 +46,7 @@ class Role extends ActiveRecord {
     public function rules() {
         return [
             [['name'], 'required'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['create_time', 'update_time'], 'safe'],
             [['can_admin'], 'boolean'],
             [['name'], 'string', 'max' => 255]
         ];
@@ -59,8 +59,8 @@ class Role extends ActiveRecord {
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'create_time' => 'Create Time',
+            'update_time' => 'Update Time',
             'can_admin' => 'Can Admin',
         ];
     }
@@ -80,6 +80,10 @@ class Role extends ActiveRecord {
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\AutoTimestamp',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
+                ],
                 'timestamp' => function() { return date("Y-m-d H:i:s"); },
             ],
         ];
