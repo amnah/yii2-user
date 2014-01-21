@@ -13,7 +13,7 @@ use yii\helpers\Security;
  * @property string $user_id
  * @property int $type
  * @property string $key
- * @property string $create_time
+ * @property string $created_at
  * @property string $consume_time
  * @property string $expire_time
  *
@@ -50,7 +50,7 @@ class Userkey extends ActiveRecord {
         return [
 //            [['user_id', 'type', 'key'], 'required'],
 //            [['user_id', 'type'], 'integer'],
-//            [['create_time', 'consume_time', 'expire_time'], 'safe'],
+//            [['created_at', 'consume_time', 'expire_time'], 'safe'],
 //            [['key'], 'string', 'max' => 255]
         ];
     }
@@ -64,8 +64,8 @@ class Userkey extends ActiveRecord {
             'user_id' => 'User ID',
             'type' => 'Type',
             'key' => 'Key',
-            'create_time' => 'Create Time',
-            'consume_time' => 'Consume Time',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
             'expire_time' => 'Expire Time',
         ];
     }
@@ -86,8 +86,8 @@ class Userkey extends ActiveRecord {
             'timestamp' => [
                 'class' => 'yii\behaviors\AutoTimestamp',
                 'attributes' => [
-                    // set only create_time because there is no update_time
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
+                    // set only created_at because there is no updated_at
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
                 ],
                 'timestamp' => function() { return date("Y-m-d H:i:s"); },
             ],
@@ -114,7 +114,7 @@ class Userkey extends ActiveRecord {
         // set/update data
         $model->user_id = $userId;
         $model->type = $type;
-        $model->create_time = date("Y-m-d H:i:s");
+        $model->created_at = date("Y-m-d H:i:s");
         $model->expire_time = $expireTime;
         $model->key = Security::generateRandomKey();
         $model->save(false);

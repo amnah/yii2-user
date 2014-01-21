@@ -20,8 +20,8 @@ use ReflectionClass;
  * @property string $password
  * @property int $status
  * @property string $auth_key
- * @property string $create_time
- * @property string $update_time
+ * @property string $created_at
+ * @property string $updated_at
  * @property string $ban_time
  * @property string $ban_reason
  * @property string $registration_ip
@@ -134,8 +134,8 @@ class User extends ActiveRecord implements IdentityInterface {
             'auth_key' => 'Auth Key',
             'ban_time' => 'Ban Time',
             'ban_reason' => 'Ban Reason',
-            'create_time' => 'Create Time',
-            'update_time' => 'Update Time',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
 
             // attributes in model
             'newPassword' => ($this->isNewRecord) ? 'Password' : 'New Password',

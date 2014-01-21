@@ -10,8 +10,8 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property string $name
- * @property string $create_time
- * @property string $update_time
+ * @property string $created_at
+ * @property string $updated_at
  * @property int $can_admin
  *
  * @property User[] $users
@@ -46,7 +46,7 @@ class Role extends ActiveRecord {
     public function rules() {
         return [
             [['name'], 'required'],
-            [['create_time', 'update_time'], 'safe'],
+            [['created_at', 'updated_at'], 'safe'],
             [['can_admin'], 'boolean'],
             [['name'], 'string', 'max' => 255]
         ];
@@ -59,8 +59,8 @@ class Role extends ActiveRecord {
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'create_time' => 'Create Time',
-            'update_time' => 'Update Time',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
             'can_admin' => 'Can Admin',
         ];
     }

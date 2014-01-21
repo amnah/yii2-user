@@ -19,8 +19,8 @@ class UserSearch extends Model
 	public $password;
 	public $status;
 	public $auth_key;
-	public $create_time;
-	public $update_time;
+	public $created_at;
+	public $updated_at;
 	public $ban_time;
 	public $ban_reason;
     public $full_name;
@@ -29,7 +29,7 @@ class UserSearch extends Model
 	{
 		return [
 			[['id', 'role_id', 'status'], 'integer'],
-			[['email', 'new_email', 'username', 'password', 'auth_key', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'full_name'], 'safe'],
+			[['email', 'new_email', 'username', 'password', 'auth_key', 'created_at', 'updated_at', 'ban_time', 'ban_reason', 'full_name'], 'safe'],
 		];
 	}
 
@@ -47,8 +47,8 @@ class UserSearch extends Model
 			'password' => 'Password',
 			'status' => 'Status',
 			'auth_key' => 'Auth Key',
-			'create_time' => 'Create Time',
-			'update_time' => 'Update Time',
+			'created_at' => 'Created At',
+			'updated_at' => 'Updated At',
 			'ban_time' => 'Ban Time',
 			'ban_reason' => 'Ban Reason',
 			'full_name' => 'Full Name',
@@ -94,8 +94,8 @@ class UserSearch extends Model
 		$this->addCondition($query, 'password', true);
 		$this->addCondition($query, 'status');
 		$this->addCondition($query, 'auth_key', true);
-		$this->addCondition($query, 'create_time', true);
-		$this->addCondition($query, 'update_time', true);
+		$this->addCondition($query, 'created_at', true);
+		$this->addCondition($query, 'updated_at', true);
 		$this->addCondition($query, 'ban_time', true);
 		$this->addCondition($query, 'ban_reason', true);
 		$this->addCondition($query, 'full_name', true);
