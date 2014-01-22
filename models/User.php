@@ -417,7 +417,7 @@ class User extends ActiveRecord implements IdentityInterface {
         }
 
         // save and return
-        $this->save(true, ["email", "new_email"]);
+        $this->save(true, ["email", "new_email", "status"]);
         return $this;
     }
 
