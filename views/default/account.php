@@ -14,17 +14,23 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-account">
 	<h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if (Yii::$app->session->getFlash("Account-success")): ?>
+    <?php if ($flash = Yii::$app->session->getFlash("Account-success")): ?>
 
-        <div class="alert alert-success">Account updated</div>
+        <div class="alert alert-success">
+            <p><?= $flash ?></p>
+        </div>
 
-    <?php elseif (Yii::$app->session->getFlash("Resend-success")): ?>
+    <?php elseif ($flash = Yii::$app->session->getFlash("Resend-success")): ?>
 
-        <div class="alert alert-success">Confirmation email resent</div>
+        <div class="alert alert-success">
+            <p><?= $flash ?></p>
+        </div>
 
-    <?php elseif (Yii::$app->session->getFlash("Cancel-success")): ?>
+    <?php elseif ($flash = Yii::$app->session->getFlash("Cancel-success")): ?>
 
-        <div class="alert alert-success">Email change cancelled</div>
+        <div class="alert alert-success">
+            <p><?= $flash ?></p>
+        </div>
 
     <?php endif; ?>
 

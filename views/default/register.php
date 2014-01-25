@@ -15,16 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-register">
 	<h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if ($userDisplayName = Yii::$app->session->getFlash("Register-success")): ?>
+    <?php if ($flash = Yii::$app->session->getFlash("Register-success")): ?>
 
         <div class="alert alert-success">
-            <p>Successfully registered [ <?= $userDisplayName ?> ]</p>
-
-            <?php if (Yii::$app->user->isGuest): ?>
-
-                <p>Please check your email to confirm your account</p>
-
-            <?php endif; ?>
+            <p><?= $flash ?></p>
         </div>
 
     <?php else: ?>

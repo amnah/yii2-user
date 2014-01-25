@@ -13,9 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-profile">
 	<h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if (Yii::$app->session->getFlash("Profile-success")): ?>
+    <?php if ($flash = Yii::$app->session->getFlash("Profile-success")): ?>
 
-        <div class="alert alert-success">Profile updated</div>
+        <div class="alert alert-success">
+            <p><?= $flash ?></p>
+        </div>
 
     <?php endif; ?>
 

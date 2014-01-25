@@ -128,7 +128,9 @@ class DefaultController extends Controller {
                 $this->_calcEmailOrLogin($user);
 
                 // set flash
-                Yii::$app->session->setFlash("Register-success", $user->getDisplayName());
+                $userDisplayName = $user->getDisplayName();
+                $guestText = Yii::$app->user->isGuest ? ". Please check your email to confirm your account" : "";
+                Yii::$app->session->setFlash("Register-success", "Successfully registered [ $userDisplayName ]" . $guestText);
             }
         }
 
@@ -166,7 +168,7 @@ class DefaultController extends Controller {
             if (!$numSent = $user->sendEmailConfirmation($userkey)) {
 
                 // handle email error
-                //Yii::$app->session->setFlash("Email-error");
+                //Yii::$app->session->setFlash("Email-error", "Failed to send email");
             }
         }
         // log user in automatically
@@ -182,6 +184,7 @@ class DefaultController extends Controller {
 
         // search for userkey
         /** @var \amnah\yii2\user\models\Userkey $userkey */
+        $success = false;
         $userkey = Yii::$app->getModule("user")->model("Userkey");
         $userkey = $userkey::findActiveByKey($key, [$userkey::TYPE_EMAIL_ACTIVATE, $userkey::TYPE_EMAIL_CHANGE]);
         if ($userkey) {
@@ -195,16 +198,14 @@ class DefaultController extends Controller {
             // consume userkey
             $userkey->consume();
 
-            // set flash and refresh
-            Yii::$app->session->setFlash("Confirm-success", $user->email);
-            $this->refresh();
+            $success = $user->email;
         }
 
         // render view
         return $this->render("confirm", [
             "userkey" => $userkey,
+            "success" => $success
         ]);
-
     }
 
     /**
@@ -236,14 +237,14 @@ class DefaultController extends Controller {
                     if (!$numSent = $user->sendEmailConfirmation($userkey)) {
 
                         // handle email error
-                        //Yii::$app->session->setFlash("Email-error");
+                        //Yii::$app->session->setFlash("Email-error", "Failed to send email");
                     }
                 }
 
                 // save, set flash, and refresh page
                 $user->save(false);
-                Yii::$app->session->setFlash("Account-success", true);
-                $this->refresh();
+                Yii::$app->session->setFlash("Account-success", "Account updated");
+                return $this->refresh();
             }
         }
 
@@ -278,8 +279,8 @@ class DefaultController extends Controller {
 
                 // save - pass false in so that we don't have to validate again
                 $profile->save(false);
-                Yii::$app->session->setFlash("Profile-success", true);
-                $this->refresh();
+                Yii::$app->session->setFlash("Profile-success", "Profile updated");
+                return $this->refresh();
             }
         }
 
@@ -300,13 +301,13 @@ class DefaultController extends Controller {
         if ($model->load($_POST) && $model->sendEmail()) {
 
             // set flash and refresh page
-            Yii::$app->session->setFlash('Resend-success');
+            Yii::$app->session->setFlash("Resend-success", "Confirmation email resent");
             return $this->refresh();
         }
 
         // render view
-        return $this->render('resend', [
-            'model' => $model,
+        return $this->render("resend", [
+            "model" => $model,
         ]);
     }
 
@@ -325,7 +326,7 @@ class DefaultController extends Controller {
             $user->sendEmailConfirmation($userkey);
 
             // set flash message
-            Yii::$app->session->setFlash("Resend-success", true);
+            Yii::$app->session->setFlash("Resend-success", "Confirmation email resent");
         }
 
         // go to account page
@@ -351,7 +352,7 @@ class DefaultController extends Controller {
 
             // delete userkey and set flash message
             $userkey->expire();
-            Yii::$app->session->setFlash("Cancel-success", true);
+            Yii::$app->session->setFlash("Cancel-success", "Email change cancelled");
         }
 
         // go to account page
@@ -369,13 +370,13 @@ class DefaultController extends Controller {
         if ($model->load($_POST) && $model->sendForgotEmail()) {
 
             // set flash and refresh page
-            Yii::$app->session->setFlash('Forgot-success');
-            return $this->refresh();
+            Yii::$app->session->setFlash("Forgot-success", "Instructions to reset your password have been sent");
+            //return $this->refresh();
         }
 
         // render view
-        return $this->render('forgot', [
-            'model' => $model,
+        return $this->render("forgot", [
+            "model" => $model,
         ]);
     }
 
@@ -392,8 +393,8 @@ class DefaultController extends Controller {
         $invalidKey = !$userkey;
         if ($success or $invalidKey) {
 
-            // render view with invalid flag
-            // using setFlash()/refresh() would cause an infinite loop
+            // render view with success and invalid flags
+            // using setFlash()/refresh() here would cause an infinite loop
             return $this->render('reset', compact("success", "invalidKey"));
         }
 
