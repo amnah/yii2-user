@@ -43,25 +43,28 @@ class ResetForm extends Model {
 
         // set initial rules
         $rules = [
-//            [["email"], "required"],
-//            [["email"], "email"],
-//            [["email"], "validateUserkeyEmail"],
-//            [["email"], "filter", "filter" => "trim"],
+            // uncomment these lines if you want users to confirm their email address
+            /*
+            [["email"], "required"],
+            [["email"], "email"],
+            [["email"], "validateUserkeyEmail"],
+            [["email"], "filter", "filter" => "trim"],
+            */
             [["newPassword", "newPasswordConfirm"], "required"],
             [["newPasswordConfirm"], "compare", "compareAttribute" => "newPassword", "message" => "Passwords do not match"]
         ];
 
         // add and return user rules
-        return $this->_addUserRules($rules);
+        return $this->_copyNewPasswordRules($rules);
     }
 
     /**
-     * Add user rules to the newPassword field (min length, max length, etc)
+     * Copy newPassword rules (min length, max length, etc) from user class
      *
      * @param $rules
      * @return array
      */
-    protected function _addUserRules($rules) {
+    protected function _copyNewPasswordRules($rules) {
 
         // go through user rules
         $user = Yii::$app->getModule("user")->model("User");

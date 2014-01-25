@@ -21,14 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="alert alert-success">
 
             <p>Password reset</p>
-
             <p><?= Html::a("Log in here", ["/user/login"]) ?></p>
 
         </div>
 
     <?php elseif (!empty($invalidKey)): ?>
 
-        <div class="alert alert-danger">Invalid key</div>
+        <div class="alert alert-danger">
+            <p>Invalid key</p>
+        </div>
 
 	<?php else: ?>
 

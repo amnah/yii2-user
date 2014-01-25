@@ -128,8 +128,9 @@ class DefaultController extends Controller {
                 $this->_calcEmailOrLogin($user);
 
                 // set flash
+                // dont use $this->refresh() because user may automatically be logged in and get 403 forbidden
                 $userDisplayName = $user->getDisplayName();
-                $guestText = Yii::$app->user->isGuest ? ". Please check your email to confirm your account" : "";
+                $guestText = Yii::$app->user->isGuest ? " - Please check your email to confirm your account" : "";
                 Yii::$app->session->setFlash("Register-success", "Successfully registered [ $userDisplayName ]" . $guestText);
             }
         }
@@ -180,7 +181,7 @@ class DefaultController extends Controller {
     /**
      * Confirm email
      */
-    public function actionConfirm($key = "") {
+    public function actionConfirm($key) {
 
         // search for userkey
         /** @var \amnah\yii2\user\models\Userkey $userkey */
@@ -195,9 +196,8 @@ class DefaultController extends Controller {
             $user = $user::find($userkey->user_id);
             $user->confirm();
 
-            // consume userkey
+            // consume userkey and set success
             $userkey->consume();
-
             $success = $user->email;
         }
 
@@ -260,10 +260,8 @@ class DefaultController extends Controller {
     public function actionProfile() {
 
         // set up profile and attempt to load data from $_POST
-        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->user->identity;
-        $profile = $user->profile;
+        $profile = Yii::$app->user->identity->profile;
         if ($profile->load($_POST)) {
 
             // validate for ajax request
@@ -272,13 +270,8 @@ class DefaultController extends Controller {
                 return ActiveForm::validate($profile);
             }
 
-            // validate for normal request
-            if ($profile->validate()) {
-
-                // call something here if needed
-
-                // save - pass false in so that we don't have to validate again
-                $profile->save(false);
+            // save
+            if ($profile->save()) {
                 Yii::$app->session->setFlash("Profile-success", "Profile updated");
                 return $this->refresh();
             }
@@ -385,32 +378,23 @@ class DefaultController extends Controller {
      */
     public function actionReset($key) {
 
-        // check for success or invalid userkey
+        // check for invalid userkey
         /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $success = Yii::$app->session->getFlash('Reset-success');
         $userkey = Yii::$app->getModule("user")->model("Userkey");
         $userkey = $userkey::findActiveByKey($key, $userkey::TYPE_PASSWORD_RESET);
-        $invalidKey = !$userkey;
-        if ($success or $invalidKey) {
-
-            // render view with success and invalid flags
-            // using setFlash()/refresh() here would cause an infinite loop
-            return $this->render('reset', compact("success", "invalidKey"));
+        if (!$userkey) {
+            return $this->render('reset', ["invalidKey" => true]);
         }
 
         // attempt to load $_POST data, validate, and reset user password
         /** @var \amnah\yii2\user\models\forms\ResetForm $model */
+        $success = false;
         $model = Yii::$app->getModule("user")->model("ResetForm", ["userkey" => $userkey]);
         if ($model->load($_POST) && $model->resetPassword()) {
-
-            // set flash and refresh page
-            Yii::$app->session->setFlash('Reset-success');
-            return $this->refresh();
+            $success = true;
         }
 
         // render view
-        return $this->render('reset', [
-            'model' => $model,
-        ]);
+        return $this->render('reset', compact("model", "success"));
     }
 }
