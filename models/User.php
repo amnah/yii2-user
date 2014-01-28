@@ -278,15 +278,20 @@ class User extends ActiveRecord implements IdentityInterface {
             $this->encryptNewPassword();
         }
 
-        // ensure fields are null so they won't get set as empty string
-        $nullAttributes = ["email", "username", "ban_time", "ban_reason"];
-        foreach ($nullAttributes as $nullAttribute) {
-            $this->$nullAttribute = $this->$nullAttribute ? $this->$nullAttribute : null;
+        // generate auth key if needed
+        if (!$this->auth_key) {
+            $this->auth_key = Security::generateRandomKey();
         }
 
         // convert ban_time checkbox to date
         if ($this->ban_time) {
             $this->ban_time = date("Y-m-d H:i:s");
+        }
+
+        // ensure fields are null so they won't get set as empty string
+        $nullAttributes = ["email", "username", "ban_time", "ban_reason"];
+        foreach ($nullAttributes as $nullAttribute) {
+            $this->$nullAttribute = $this->$nullAttribute ? $this->$nullAttribute : null;
         }
 
         return parent::beforeSave($insert);
@@ -365,8 +370,10 @@ class User extends ActiveRecord implements IdentityInterface {
         $this->login_time = date("Y-m-d H:i:s");
 
         // save and return
+        // auth key is added here in case user doesn't have one set from registration
+        // it will be calculated in [[before_save]]
         if ($save) {
-            $this->save(false, ["login_ip", "login_time"]);
+            $this->save(false, ["login_ip", "login_time", "auth_key"]);
         }
         return $this;
     }
