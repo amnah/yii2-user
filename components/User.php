@@ -36,8 +36,9 @@ class User extends \yii\web\User {
     /**
      * @inheritdoc
      */
-    public function afterLogin($identity, $cookieBased) {
+    public function afterLogin($identity, $cookieBased, $duration) {
         $identity->setLoginIpAndTime();
+        return parent::afterLogin($identity, $cookieBased, $duration);
     }
 
     /**

@@ -84,12 +84,12 @@ class Userkey extends ActiveRecord {
     public function behaviors() {
         return [
             'timestamp' => [
-                'class' => 'yii\behaviors\AutoTimestamp',
+                'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
                     // set only create_time because there is no update_time
                     ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
                 ],
-                'timestamp' => function() { return date("Y-m-d H:i:s"); },
+                'value' => function() { return date("Y-m-d H:i:s"); },
             ],
         ];
     }

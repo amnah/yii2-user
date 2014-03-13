@@ -30,6 +30,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
                 "password" => "varchar(255) NULL DEFAULT NULL",
                 "status" => "tinyint NOT NULL",
                 "auth_key" => "varchar(255) NULL DEFAULT NULL",
+                "api_key" => "varchar(255) NULL DEFAULT NULL",
                 "create_time" => "timestamp NULL DEFAULT NULL",
                 "update_time" => "timestamp NULL DEFAULT NULL",
                 "ban_time" => "timestamp NULL DEFAULT NULL",

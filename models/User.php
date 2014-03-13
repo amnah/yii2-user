@@ -20,6 +20,7 @@ use ReflectionClass;
  * @property string $password
  * @property int $status
  * @property string $auth_key
+ * @property string $api_key
  * @property string $create_time
  * @property string $update_time
  * @property string $ban_time
@@ -182,12 +183,12 @@ class User extends ActiveRecord implements IdentityInterface {
     public function behaviors() {
         return [
             'timestamp' => [
-                'class' => 'yii\behaviors\AutoTimestamp',
+                'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
                 ],
-                'timestamp' => function() { return date("Y-m-d H:i:s"); },
+                'value' => function() { return date("Y-m-d H:i:s"); },
             ],
         ];
     }
@@ -197,6 +198,13 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public static function findIdentity($id) {
         return static::find($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentityByAccessToken($token) {
+        return static::find(["api_key" => $token]);
     }
 
     /**
@@ -278,10 +286,14 @@ class User extends ActiveRecord implements IdentityInterface {
             $this->encryptNewPassword();
         }
 
-        // generate auth key if needed
+        // generate auth_key and api_key if needed
         if (!$this->auth_key) {
             $this->auth_key = Security::generateRandomKey();
         }
+        if (!$this->api_key) {
+            $this->api_key = Security::generateRandomKey();
+        }
+
 
         // convert ban_time checkbox to date
         if ($this->ban_time) {

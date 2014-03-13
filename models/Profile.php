@@ -64,12 +64,12 @@ class Profile extends ActiveRecord {
     public function behaviors() {
         return [
             'timestamp' => [
-                'class' => 'yii\behaviors\AutoTimestamp',
+                'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
                 ],
-                'timestamp' => function() { return date("Y-m-d H:i:s"); },
+                'value' => function() { return date("Y-m-d H:i:s"); },
             ],
         ];
     }
