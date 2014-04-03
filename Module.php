@@ -188,11 +188,9 @@ class Module extends \yii\base\Module {
 
         // create object
         $className = $this->modelClasses[ucfirst($name)];
-        $obj = Yii::createObject(array_merge(["class" => $className], $config));
+        $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
 
-        // store and return
-        $this->_models[$name] = $obj;
-        return $obj;
+        return $this->_models[$name];
     }
 
     /**
