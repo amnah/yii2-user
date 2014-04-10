@@ -55,7 +55,7 @@ class ForgotForm extends Model {
     public function getUser() {
         if ($this->_user === false) {
             $user = Yii::$app->getModule("user")->model("User");
-            $this->_user = $user::find(["email" => $this->email]);
+            $this->_user = $user::findOne(["email" => $this->email]);
         }
         return $this->_user;
     }

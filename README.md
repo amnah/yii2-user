@@ -90,7 +90,7 @@ if (!Yii::$app->user->can("admin")) {
     throw new HttpException(403, 'You are not allowed to perform this action.');
 }
 // --- or ----
-$user = User::find(1);
+$user = User::findOne(1);
 $user->can("admin");
 ```
 

@@ -126,7 +126,7 @@ class ResetForm extends Model {
     public function getUser() {
         if ($this->_user === false) {
             $user = Yii::$app->getModule("user")->model("User");
-            $this->_user = $user::find($this->userkey->user_id);
+            $this->_user = $user::findOne($this->userkey->user_id);
         }
         return $this->_user;
     }
