@@ -5,7 +5,7 @@ namespace amnah\yii2\user\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\web\AccessControl;
+use yii\filters\AccessControl;
 use yii\widgets\ActiveForm;
 
 /**
@@ -193,7 +193,7 @@ class DefaultController extends Controller {
             // confirm user
             /** @var \amnah\yii2\user\models\User $user */
             $user = Yii::$app->getModule("user")->model("User");
-            $user = $user::find($userkey->user_id);
+            $user = $user::findOne($userkey->user_id);
             $user->confirm();
 
             // consume userkey and set success

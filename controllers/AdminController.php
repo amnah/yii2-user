@@ -5,7 +5,7 @@ namespace amnah\yii2\user\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\HttpException;
-use yii\web\VerbFilter;
+use yii\filters\VerbFilter;
 
 /**
  * AdminController implements the CRUD actions for User model.
@@ -159,7 +159,7 @@ class AdminController extends Controller {
      */
     protected function findModel($id) {
         $user = Yii::$app->getModule("user")->model("User");
-        if (($model = $user::find($id)) !== null) {
+        if (($model = $user::findOne($id)) !== null) {
             return $model;
         }
         else {

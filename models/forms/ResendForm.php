@@ -60,9 +60,9 @@ class ResendForm extends Model {
             $user = Yii::$app->getModule("user")->model("User");
 
             // check email first, then new_email (former is indexed, latter is not)
-            $this->_user = $user::find()->where(["email" => $this->email])->one();
+            $this->_user = $user::findOne(["email" => $this->email]);
             if (!$this->_user) {
-                $this->_user = $user::find()->where(["new_email" => $this->email])->one();
+                $this->_user = $user::findOne(["new_email" => $this->email]);
             }
         }
         return $this->_user;
