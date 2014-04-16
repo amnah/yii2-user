@@ -14,4 +14,4 @@ use amnah\yii2\user\models\Userkey;
 
 <p>Please use this link to reset your password:</p>
 
-<p><?= Yii::$app->urlManager->createAbsoluteUrl("user/reset", ["key" => $userkey->key]); ?></p>
+<p><?= Yii::$app->urlManager->createAbsoluteUrl(["user/reset", "key" => $userkey->key]); ?></p>
