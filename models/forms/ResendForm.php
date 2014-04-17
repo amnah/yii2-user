@@ -93,7 +93,6 @@ class ResendForm extends Model {
             }
 
             // generate userkey
-            $userkey = Yii::$app->getModule("user")->model("Userkey");
             $userkey = $userkey::generate($user->id, $type);
 
             // send email confirmation
