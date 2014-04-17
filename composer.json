@@ -14,9 +14,6 @@
         "yiisoft/yii2": "*"
     },
     "autoload": {
-        "psr-0": {
-            "amnah\\yii2\\user\\": ""
-        }
-    },
-    "target-dir": "amnah/yii2/user"
+        "psr-4": { "amnah\\yii2\\user\\": "" }
+    }
 }
