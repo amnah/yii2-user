@@ -42,8 +42,8 @@ class AdminController extends Controller {
      */
     public function init() {
 
-        // check for admin permission
-        if (!Yii::$app->user->can("admin")) {
+        // check for admin permission in web requests. console requests should not throw the exception
+        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->user->can("admin")) {
             throw new HttpException(403, 'You are not allowed to perform this action.');
         }
 
