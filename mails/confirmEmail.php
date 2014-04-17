@@ -16,4 +16,4 @@ use amnah\yii2\user\models\Userkey;
 
 <p>Please confirm your email address by clicking the link below:</p>
 
-<p><?= Yii::$app->urlManager->createAbsoluteUrl("user/confirm", ["key" => $userkey->key]); ?></p>
+<p><?= Yii::$app->urlManager->createAbsoluteUrl(["user/confirm", "key" => $userkey->key]); ?></p>
