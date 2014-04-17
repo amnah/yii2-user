@@ -171,6 +171,9 @@ php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user --to=@app/modul
 **Alternatively,** you can do this manually. Just copy/paste the files wherever you'd like and
 change the namespaces in the files. Replace ```amnah\yii2\user``` with ```app\modules\user```.
 
+### Changelog
+* 2014/4/17 - Release 1.0.0-beta
+
 ### Todo
 * Tests
 * Add functionality for user groups (possibly as another package)
