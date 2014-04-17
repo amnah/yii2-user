@@ -81,6 +81,7 @@ class ResendForm extends Model {
             // get user
             /** @var \amnah\yii2\user\models\Userkey $userkey */
             $user = $this->getUser();
+            $userkey = Yii::$app->getModule("user")->model("Userkey");
 
             // calculate type
             if ($user->status == $user::STATUS_INACTIVE) {
