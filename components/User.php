@@ -55,15 +55,23 @@ class User extends \yii\web\User {
     }
 
     /**
-     * Check if user can do $permission
+     * Check if user can do $permissionName
      *
-     * @param string $permission
+     * @param string $permissionName
+     * @param array  $params
+     * @param bool   $allowCaching
      * @return bool
      */
-    public function can($permission) {
+    public function can($permissionName, $params = [], $allowCaching = true) {
 
-        // check for current user and permission
+        // check if we have an authmanager. if so, call the parent functionality
+        $auth = Yii::$app->getAuthManager();
+        if ($auth) {
+            return parent::can($permissionName, $params, $allowCaching);
+        }
+
+        // otherwise use our own custom permission via roles table
         $user = $this->getIdentity();
-        return $user ? $user->can($permission) : false;
+        return $user ? $user->can($permissionName) : false;
     }
 }
