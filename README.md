@@ -54,7 +54,7 @@ return [
 ```
 
 * Run migration file
-    * ```php yii migrate --migrationPath=@vendor/amnah/yii2-user/amnah/yii2/user/migrations```
+    * ```php yii migrate --migrationPath=@vendor/amnah/yii2-user/migrations```
 * Go to your application in your browser
     * ```http://localhost/pathtoapp/web/user```
 * Log in as admin using ```neo/neo``` (change it!)
@@ -71,7 +71,9 @@ return [
     ['label' => 'User', 'url' => ['/user']],
     Yii::$app->user->isGuest ?
         ['label' => 'Login', 'url' => ['/user/login']] :
-        ['label' => 'Logout (' . Yii::$app->user->displayName . ')' , 'url' => ['/user/logout']],
+        ['label' => 'Logout (' . Yii::$app->user->displayName . ')',
+            'url' => ['/user/logout'],
+            'linkOptions' => ['data-method' => 'post']],
 ],
 ```
 
@@ -96,6 +98,9 @@ $user->can("admin");
 
 Add more database columns for permissions as needed. If you need something more powerful, look into setting
 up [RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/authorization.md).
+
+**Note:** If you set up an ```authManager``` component for RBAC, then ```Yii::$app->user->can()``` will use
+that instead of this module's custom ```role``` table.
 
 ### How do I extend this package?
 

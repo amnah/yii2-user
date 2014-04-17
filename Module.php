@@ -14,6 +14,11 @@ use yii\base\InvalidConfigException;
 class Module extends \yii\base\Module {
 
     /**
+     * @var string Module version
+     */
+    protected $_version = "1.0.0-beta";
+
+    /**
      * @var string Alias for module
      */
     public $alias = "@user";
@@ -105,6 +110,14 @@ class Module extends \yii\base\Module {
     protected $_models;
 
     /**
+     * Get module version
+     * @return string
+     */
+    public function getVersion() {
+        return $this->_version;
+    }
+
+    /**
      * @inheritdoc
      */
     public function init() {
@@ -189,7 +202,6 @@ class Module extends \yii\base\Module {
         // create object
         $className = $this->modelClasses[ucfirst($name)];
         $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
-
         return $this->_models[$name];
     }
 
@@ -200,8 +212,8 @@ class Module extends \yii\base\Module {
      * @link https://github.com/yiisoft/yii2/issues/810
      * @link http://www.yiiframework.com/forum/index.php/topic/21884-module-and-url-management/
      *
-     * "user" and "user/default" work like normal
-     * "user/xxx" gets changed to "user/default/xxx"
+     * "user", "user/default", "user/admin", and "user/copy" work like normal
+     * any other "user/xxx" gets changed to "user/default/xxx"
      *
      * @inheritdoc
      */

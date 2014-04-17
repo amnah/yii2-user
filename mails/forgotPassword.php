@@ -4,8 +4,8 @@ use yii\helpers\Url;
 
 /**
  * @var string $subject
- * @var User $user
- * @var Userkey $userkey
+ * @var \amnah\yii2\user\models\User $user
+ * @var \amnah\yii2\user\models\Userkey $userkey
  */
 ?>
 
