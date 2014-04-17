@@ -1,7 +1,6 @@
 <?php
 
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Userkey;
+use yii\helpers\Url;
 
 /**
  * @var string $subject
@@ -14,4 +13,4 @@ use amnah\yii2\user\models\Userkey;
 
 <p>Please use this link to reset your password:</p>
 
-<p><?= Yii::$app->urlManager->createAbsoluteUrl(["user/reset", "key" => $userkey->key]); ?></p>
+<p><?= Url::toRoute(["/user/reset", "key" => $userkey->key], true); ?></p>
