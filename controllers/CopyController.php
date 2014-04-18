@@ -7,14 +7,14 @@ use yii\web\HttpException;
 use yii\console\Controller;
 
 /**
- * CopyController - Copy package to your app/modules folder
+ * Copies user module to your app/modules folder
  */
 class CopyController extends Controller {
 
     /**
      * @var string From path
      */
-    public $from = "@vendor/amnah/yii2-user/amnah/yii2/user";
+    public $from = "@vendor/amnah/yii2-user";
 
     /**
      * @var string To path
@@ -42,10 +42,8 @@ class CopyController extends Controller {
     /**
      * @inheritdoc
      */
-    public function globalOptions() {
-        return array_merge(parent::globalOptions(), [
-            'from', 'to', 'namespace',
-        ]);
+    public function options($actionId) {
+        return ['from', 'to', 'namespace'];
     }
 
     /**
@@ -54,11 +52,14 @@ class CopyController extends Controller {
     public function actionIndex() {
 
         // define confirm message
-        $confirmMsg  = "Please confirm:\r\n";
+        $confirmMsg  = "\r\n";
+        $confirmMsg .= "Please confirm:\r\n";
+        $confirmMsg .= "\r\n";
         $confirmMsg .= "    From        [ $this->from ]\r\n";
         $confirmMsg .= "    To          [ $this->to ]\r\n";
         $confirmMsg .= "    Namespace   [ $this->namespace ]\r\n";
-        $confirmMsg .= "(yes|no):";
+        $confirmMsg .= "\r\n";
+        $confirmMsg .= "(yes|no)";
 
         // confirm copy
         $confirm = $this->prompt($confirmMsg, [
@@ -75,10 +76,13 @@ class CopyController extends Controller {
         }
         // display cancellation + usage
         else {
-            echo "--- Copy cancelled --- \r\n";
-            echo "You can specify the paths using:\r\n";
-            echo "    php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user";
+            echo "\r\n";
+            echo "--- Copy cancelled! --- \r\n";
+            echo "\r\n";
+            echo "You can specify the paths using:\r\n\r\n";
+            echo "    php yii user/copy --from=@vendor/amnah/yii2-user";
             echo " --to=@app/modules/user --namespace=app\\\\modules\\\\user";
+            echo "\r\n";
         }
     }
 
