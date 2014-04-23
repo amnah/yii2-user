@@ -6,15 +6,15 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * Profile model
+ * This is the model class for table "tbl_profile".
  *
- * @property int $id
- * @property int $user_id
- * @property string $create_time
- * @property string $update_time
- * @property string $full_name
+ * @property integer $id
+ * @property integer $user_id
+ * @property string  $create_time
+ * @property string  $update_time
+ * @property string  $full_name
  *
- * @property User $user
+ * @property User    $user
  */
 class Profile extends ActiveRecord {
 
@@ -42,20 +42,31 @@ class Profile extends ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id' => 'ID',
-            'user_id' => 'User ID',
-            'create_time' => 'Create Time',
-            'update_time' => 'Update Time',
-            'full_name' => 'Full Name',
+            'id'          => Yii::t('app', 'ID'),
+            'user_id'     => Yii::t('app', 'User ID'),
+            'create_time' => Yii::t('app', 'Create Time'),
+            'update_time' => Yii::t('app', 'Update Time'),
+            'full_name'   => Yii::t('app', 'Full Name'),
         ];
     }
 
     /**
-     * @return \yii\db\ActiveRelation
+     * @return \yii\db\ActiveQuery
      */
     public function getUser() {
         $user = Yii::$app->getModule("user")->model("User");
         return $this->hasOne($user::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Set user id
+     *
+     * @param int $userId
+     * @return static
+     */
+    public function setUser($userId) {
+        $this->user_id = $userId;
+        return $this;
     }
 
     /**
@@ -81,21 +92,8 @@ class Profile extends ActiveRecord {
      * @return static
      */
     public function register($userId) {
-
         $this->user_id = $userId;
         $this->save();
-        return $this;
-    }
-
-    /**
-     * Set user id for profile
-     *
-     * @param int $userId
-     * @return static
-     */
-    public function setUser($userId) {
-
-        $this->user_id = $userId;
         return $this;
     }
 }

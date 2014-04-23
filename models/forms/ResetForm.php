@@ -11,13 +11,12 @@ use yii\base\Model;
 class ResetForm extends Model {
 
     /**
-     * @var \amnah\yii2\user\models\Userkey
+     * @var \amnah\yii2\user\models\UserKey
      */
-    public $userkey;
+    public $userKey;
 
     /**
      * @var string
-     * @deprecated
      */
     public $email;
 
@@ -47,7 +46,7 @@ class ResetForm extends Model {
             /*
             [["email"], "required"],
             [["email"], "email"],
-            [["email"], "validateUserkeyEmail"],
+            [["email"], "validateUserKeyEmail"],
             [["email"], "filter", "filter" => "trim"],
             */
             [["newPassword", "newPasswordConfirm"], "required"],
@@ -99,7 +98,7 @@ class ResetForm extends Model {
      *
      * @deprecated
      */
-    public function validateUserkeyEmail() {
+    public function validateUserKeyEmail() {
 
         // compare user's email
         $user = $this->getUser();
@@ -119,14 +118,14 @@ class ResetForm extends Model {
     }
 
     /**
-     * Get user based on userkey.user_id
+     * Get user based on userKey.user_id
      *
      * @return \amnah\yii2\user\models\User|null
      */
     public function getUser() {
         if ($this->_user === false) {
             $user = Yii::$app->getModule("user")->model("User");
-            $this->_user = $user::findOne($this->userkey->user_id);
+            $this->_user = $user::findOne($this->userKey->user_id);
         }
         return $this->_user;
     }
@@ -146,9 +145,9 @@ class ResetForm extends Model {
             $user->newPassword = $this->newPassword;
             $user->save(false);
 
-            // consume userkey
-            $userkey = $this->userkey;
-            $userkey->consume();
+            // consume userKey
+            $userKey = $this->userKey;
+            $userKey->consume();
 
             return true;
         }

@@ -6,15 +6,15 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * Role model
+ * This is the model class for table "tbl_role".
  *
- * @property int $id
- * @property string $name
- * @property string $create_time
- * @property string $update_time
- * @property int $can_admin
+ * @property integer $id
+ * @property string  $name
+ * @property string  $create_time
+ * @property string  $update_time
+ * @property integer $can_admin
  *
- * @property User[] $users
+ * @property User[]  $users
  */
 class Role extends ActiveRecord {
 
@@ -29,11 +29,6 @@ class Role extends ActiveRecord {
     const ROLE_USER = 2;
 
     /**
-     * @var int Guest user role
-     */
-    const ROLE_GUEST = 3;
-
-    /**
      * @inheritdoc
      */
     public static function tableName() {
@@ -46,8 +41,8 @@ class Role extends ActiveRecord {
     public function rules() {
         return [
             [['name'], 'required'],
-            [['create_time', 'update_time'], 'safe'],
-            [['can_admin'], 'boolean'],
+//            [['create_time', 'update_time'], 'safe'],
+            [['can_admin'], 'integer'],
             [['name'], 'string', 'max' => 255]
         ];
     }
@@ -57,16 +52,16 @@ class Role extends ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'create_time' => 'Create Time',
-            'update_time' => 'Update Time',
-            'can_admin' => 'Can Admin',
+            'id'          => Yii::t('app', 'ID'),
+            'name'        => Yii::t('app', 'Name'),
+            'create_time' => Yii::t('app', 'Create Time'),
+            'update_time' => Yii::t('app', 'Update Time'),
+            'can_admin'   => Yii::t('app', 'Can Admin'),
         ];
     }
 
     /**
-     * @return \yii\db\ActiveRelation
+     * @return \yii\db\ActiveQuery
      */
     public function getUsers() {
         $user = Yii::$app->getModule("user")->model("User");
@@ -107,7 +102,7 @@ class Role extends ActiveRecord {
      */
     public static function dropdown() {
 
-        // get data if needed
+        // get and cache data
         static $dropdown;
         if ($dropdown === null) {
 

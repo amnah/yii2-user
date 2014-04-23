@@ -7,64 +7,70 @@ use amnah\yii2\user\models\Userkey;
 
 class m131114_141544_add_user extends \yii\db\Migration {
 
+    /**
+     * Up
+     *
+     * @return bool
+     */
     public function up() {
 
-        // start transaction in case we need to rollback
-        // note that this doesn't rollback table creations in mysql
+        // start transaction
+        // note that rollback doesn't undo table creations in mysql
+        // @see http://dev.mysql.com/doc/refman/5.1/en/implicit-commit.html
         $transaction = $this->db->beginTransaction();
         try {
-            // create tables in specific order
+            // create tables. note the specific order
             $this->createTable(Role::tableName(), [
-                "id" => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",
-                "name" => "varchar(255) NOT NULL",
-                "create_time" => "timestamp NULL DEFAULT NULL",
-                "update_time" => "timestamp NULL DEFAULT NULL",
-                "can_admin" => "tinyint DEFAULT 0",
+                "id" => "int unsigned not null auto_increment primary key",
+                "name" => "varchar(255) not null",
+                "create_time" => "timestamp null default null",
+                "update_time" => "timestamp null default null",
+                "can_admin" => "tinyint not null default 0",
             ]);
             $this->createTable(User::tableName(), [
-                "id" => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",
-                "role_id" => "int UNSIGNED NOT NULL",
-                "email" => "varchar(255) NULL DEFAULT NULL",
-                "new_email" => "varchar(255) NULL DEFAULT NULL",
-                "username" => "varchar(255) NULL DEFAULT NULL",
-                "password" => "varchar(255) NULL DEFAULT NULL",
-                "status" => "tinyint NOT NULL",
-                "auth_key" => "varchar(255) NULL DEFAULT NULL",
-                "api_key" => "varchar(255) NULL DEFAULT NULL",
-                "create_time" => "timestamp NULL DEFAULT NULL",
-                "update_time" => "timestamp NULL DEFAULT NULL",
-                "ban_time" => "timestamp NULL DEFAULT NULL",
-                "ban_reason" => "varchar(255) NULL DEFAULT NULL",
-                "registration_ip" => "varchar(45) NULL DEFAULT NULL",
-                "login_ip" => "varchar(45) NULL DEFAULT NULL",
-                "login_time" => "timestamp NULL DEFAULT NULL",
+                "id" => "int unsigned not null auto_increment primary key",
+                "role_id" => "int unsigned not null",
+                "status" => "tinyint not null",
+                "email" => "varchar(255) null default null",
+                "new_email" => "varchar(255) null default null",
+                "username" => "varchar(255) null default null",
+                "password" => "varchar(255) null default null",
+                "auth_key" => "varchar(255) null default null",
+                "api_key" => "varchar(255) null default null",
+                "login_ip" => "varchar(45) null default null",
+                "login_time" => "timestamp null default null",
+                "create_ip" => "varchar(45) null default null",
+                "create_time" => "timestamp null default null",
+                "update_time" => "timestamp null default null",
+                "ban_time" => "timestamp null default null",
+                "ban_reason" => "varchar(255) null default null",
             ]);
-            $this->createTable(Userkey::tableName(), [
-                "id" => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",
-                "user_id" => "int UNSIGNED NOT NULL",
-                "type" => "tinyint NOT NULL",
-                "key" => "varchar(255) NOT NULL",
-                "create_time" => "timestamp NULL DEFAULT NULL",
-                "consume_time" => "timestamp NULL DEFAULT NULL",
-                "expire_time" => "timestamp NULL DEFAULT NULL",
+            $this->createTable(UserKey::tableName(), [
+                "id" => "int unsigned not null auto_increment primary key",
+                "user_id" => "int unsigned not null",
+                "type" => "tinyint not null",
+                "key" => "varchar(255) not null",
+                "create_time" => "timestamp null default null",
+                "consume_time" => "timestamp null default null",
+                "expire_time" => "timestamp null default null",
             ]);
             $this->createTable(Profile::tableName(), [
-                "id" => "int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY",
-                "user_id" => "int UNSIGNED NOT NULL",
-                "create_time" => "timestamp NULL DEFAULT NULL",
-                "update_time" => "timestamp NULL DEFAULT NULL",
-                "full_name" => "varchar(255) NULL DEFAULT NULL",
+                "id" => "int unsigned not null auto_increment primary key",
+                "user_id" => "int unsigned not null",
+                "create_time" => "timestamp null default null",
+                "update_time" => "timestamp null default null",
+                "full_name" => "varchar(255) null default null",
             ]);
 
-            // add indices for performance optimization
-            $this->createIndex(Userkey::tableName() . "_key", Userkey::tableName(), "key", true);
+            // add indexes for performance optimization
+            $this->createIndex(UserKey::tableName() . "_key", UserKey::tableName(), "key", true);
             $this->createIndex(User::tableName() . "_email", User::tableName(), "email", true);
             $this->createIndex(User::tableName() . "_username", User::tableName(), "username", true);
 
             // add foreign keys for data integrity
             $this->addForeignKey(User::tableName() . "_role_id", User::tableName(), "role_id", Role::tableName(), "id");
             $this->addForeignKey(Profile::tableName() . "_user_id", Profile::tableName(), "user_id", User::tableName(), "id");
-            $this->addForeignKey(Userkey::tableName() . "_user_id", Userkey::tableName(), "user_id", User::tableName(), "id");
+            $this->addForeignKey(UserKey::tableName() . "_user_id", UserKey::tableName(), "user_id", User::tableName(), "id");
 
             // insert role data
             // note: i create a guest role because i like to give guest users the ability to use the site
@@ -76,7 +82,7 @@ class m131114_141544_add_user extends \yii\db\Migration {
                 ["Guest", 0, date("Y-m-d H:i:s")],
             ]);
 
-            // insert user data
+            // insert admin user: neo/neo
             $columns = ["id", "role_id", "email", "username", "password", "status", "create_time"];
             $this->batchInsert(User::tableName(), $columns, [
                 [1, Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s")],
@@ -93,34 +99,34 @@ class m131114_141544_add_user extends \yii\db\Migration {
 
         }
         catch (Exception $e) {
-            echo "Exception: " . $e->getMessage() . "\n";
             $transaction->rollback();
-
+            echo "Exception: " . $e->getMessage() . "\n";
             return false;
         }
 
         return true;
+
     }
 
+    /**
+     * Down
+     *
+     * @return bool
+     */
     public function down() {
-
-        // get class name for error message
-        $class = get_called_class();
 
         $transaction = $this->db->beginTransaction();
         try {
-            // drop tables in specific order - be careful with foreign key constraints
+            // drop tables in reverse order (for foreign key constraints)
             $this->dropTable(Profile::tableName());
-            $this->dropTable(Userkey::tableName());
+            $this->dropTable(UserKey::tableName());
             $this->dropTable(User::tableName());
             $this->dropTable(Role::tableName());
             $transaction->commit();
         }
         catch (Exception $e) {
             $transaction->rollback();
-            echo $e->getMessage() . "\n";
-            echo "$class cannot be reverted.\n";
-
+            echo "Exception: " . $e->getMessage() . "\n";
             return false;
         }
 

@@ -56,6 +56,8 @@ class ResendForm extends Model {
      * @return \amnah\yii2\user\models\User|null
      */
     public function getUser() {
+
+        // get and store user
         if ($this->_user === false) {
             $user = Yii::$app->getModule("user")->model("User");
 
@@ -79,24 +81,24 @@ class ResendForm extends Model {
         if ($this->validate()) {
 
             // get user
-            /** @var \amnah\yii2\user\models\Userkey $userkey */
+            /** @var \amnah\yii2\user\models\UserKey $userKey */
             $user = $this->getUser();
-            $userkey = Yii::$app->getModule("user")->model("Userkey");
+            $userKey = Yii::$app->getModule("user")->model("UserKey");
 
             // calculate type
             if ($user->status == $user::STATUS_INACTIVE) {
-                $type = $userkey::TYPE_EMAIL_ACTIVATE;
+                $type = $userKey::TYPE_EMAIL_ACTIVATE;
             }
             //elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {
             else {
-                $type = $userkey::TYPE_EMAIL_CHANGE;
+                $type = $userKey::TYPE_EMAIL_CHANGE;
             }
 
-            // generate userkey
-            $userkey = $userkey::generate($user->id, $type);
+            // generate userKey
+            $userKey = $userKey::generate($user->id, $type);
 
             // send email confirmation
-            return $user->sendEmailConfirmation($userkey);
+            return $user->sendEmailConfirmation($userKey);
         }
 
         return false;

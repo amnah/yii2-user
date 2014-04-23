@@ -71,19 +71,17 @@ class LoginForm extends Model {
      */
     public function validateUserStatus() {
 
-        // define variables
-        $user = $this->getUser();
-
         // check for ban status
+        $user = $this->getUser();
         if ($user->ban_time) {
             $this->addError("username", "User is banned - {$user->ban_reason}");
         }
-        // check for inactive status and resend email
+        // check for inactive status and resend email if so
         if ($user->status == $user::STATUS_INACTIVE) {
-            /** @var \amnah\yii2\user\models\Userkey $userkey */
-            $userkey = Yii::$app->getModule("user")->model("Userkey");
-            $userkey = $userkey::generate($user->id, $userkey::TYPE_EMAIL_ACTIVATE);
-            $user->sendEmailConfirmation($userkey);
+            /** @var \amnah\yii2\user\models\UserKey $userKey */
+            $userKey = Yii::$app->getModule("user")->model("UserKey");
+            $userKey = $userKey::generate($user->id, $userKey::TYPE_EMAIL_ACTIVATE);
+            $user->sendEmailConfirmation($userKey);
             $this->addError("username", "Email confirmation resent");
         }
     }

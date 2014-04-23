@@ -149,24 +149,24 @@ class DefaultController extends Controller {
      */
     protected function _calcEmailOrLogin($user) {
 
-        // determine userkey type to see if we need to send email
+        // determine userKey type to see if we need to send email
         /** @var \amnah\yii2\user\models\User $user */
-        /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $userkeyType = null;
-        $userkey = Yii::$app->getModule("user")->model("Userkey");
+        /** @var \amnah\yii2\user\models\UserKey $userKey */
+        $userKeyType = null;
+        $userKey = Yii::$app->getModule("user")->model("UserKey");
         if ($user->status == $user::STATUS_INACTIVE) {
-            $userkeyType = $userkey::TYPE_EMAIL_ACTIVATE;
+            $userKeyType = $userKey::TYPE_EMAIL_ACTIVATE;
         }
         elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {
-            $userkeyType = $userkey::TYPE_EMAIL_CHANGE;
+            $userKeyType = $userKey::TYPE_EMAIL_CHANGE;
         }
 
-        // check if we have a userkey type to process
-        if ($userkeyType !== null) {
+        // check if we have a userKey type to process
+        if ($userKeyType !== null) {
 
-            // generate userkey and send email
-            $userkey = $userkey::generate($user->id, $userkeyType);
-            if (!$numSent = $user->sendEmailConfirmation($userkey)) {
+            // generate userKey and send email
+            $userKey = $userKey::generate($user->id, $userKeyType);
+            if (!$numSent = $user->sendEmailConfirmation($userKey)) {
 
                 // handle email error
                 //Yii::$app->session->setFlash("Email-error", "Failed to send email");
@@ -183,27 +183,27 @@ class DefaultController extends Controller {
      */
     public function actionConfirm($key) {
 
-        // search for userkey
-        /** @var \amnah\yii2\user\models\Userkey $userkey */
+        // search for userKey
+        /** @var \amnah\yii2\user\models\UserKey $userKey */
         $success = false;
-        $userkey = Yii::$app->getModule("user")->model("Userkey");
-        $userkey = $userkey::findActiveByKey($key, [$userkey::TYPE_EMAIL_ACTIVATE, $userkey::TYPE_EMAIL_CHANGE]);
-        if ($userkey) {
+        $userKey = Yii::$app->getModule("user")->model("UserKey");
+        $userKey = $userKey::findActiveByKey($key, [$userKey::TYPE_EMAIL_ACTIVATE, $userKey::TYPE_EMAIL_CHANGE]);
+        if ($userKey) {
 
             // confirm user
             /** @var \amnah\yii2\user\models\User $user */
             $user = Yii::$app->getModule("user")->model("User");
-            $user = $user::findOne($userkey->user_id);
+            $user = $user::findOne($userKey->user_id);
             $user->confirm();
 
-            // consume userkey and set success
-            $userkey->consume();
+            // consume userKey and set success
+            $userKey->consume();
             $success = $user->email;
         }
 
         // render view
         return $this->render("confirm", [
-            "userkey" => $userkey,
+            "userKey" => $userKey,
             "success" => $success
         ]);
     }
@@ -228,13 +228,13 @@ class DefaultController extends Controller {
             // validate for normal request
             if ($user->validate()) {
 
-                // generate userkey and send email if user changed his email
+                // generate userKey and send email if user changed his email
                 if (Yii::$app->getModule("user")->emailChangeConfirmation and $user->checkAndPrepareEmailChange()) {
 
-                    /** @var \amnah\yii2\user\models\Userkey $userkey */
-                    $userkey = Yii::$app->getModule("user")->model("Userkey");
-                    $userkey = $userkey::generate($user->id, $userkey::TYPE_EMAIL_CHANGE);
-                    if (!$numSent = $user->sendEmailConfirmation($userkey)) {
+                    /** @var \amnah\yii2\user\models\UserKey $userKey */
+                    $userKey = Yii::$app->getModule("user")->model("UserKey");
+                    $userKey = $userKey::generate($user->id, $userKey::TYPE_EMAIL_CHANGE);
+                    if (!$numSent = $user->sendEmailConfirmation($userKey)) {
 
                         // handle email error
                         //Yii::$app->session->setFlash("Email-error", "Failed to send email");
@@ -309,14 +309,14 @@ class DefaultController extends Controller {
      */
     public function actionResendChange() {
 
-        // attempt to find userkey and get user/profile to send confirmation email
-        /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $userkey = Yii::$app->getModule("user")->model("Userkey");
-        $userkey = $userkey::findActiveByUser(Yii::$app->user->id, $userkey::TYPE_EMAIL_CHANGE);
-        if ($userkey) {
+        // attempt to find userKey and get user/profile to send confirmation email
+        /** @var \amnah\yii2\user\models\UserKey $userKey */
+        $userKey = Yii::$app->getModule("user")->model("UserKey");
+        $userKey = $userKey::findActiveByUser(Yii::$app->user->id, $userKey::TYPE_EMAIL_CHANGE);
+        if ($userKey) {
             /** @var \amnah\yii2\user\models\User $user */
             $user = Yii::$app->user->identity;
-            $user->sendEmailConfirmation($userkey);
+            $user->sendEmailConfirmation($userKey);
 
             // set flash message
             Yii::$app->session->setFlash("Resend-success", "Confirmation email resent");
@@ -331,11 +331,11 @@ class DefaultController extends Controller {
      */
     public function actionCancel() {
 
-        // attempt to find userkey
-        /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $userkey = Yii::$app->getModule("user")->model("Userkey");
-        $userkey = $userkey::findActiveByUser(Yii::$app->user->id, $userkey::TYPE_EMAIL_CHANGE);
-        if ($userkey) {
+        // attempt to find userKey
+        /** @var \amnah\yii2\user\models\UserKey $userKey */
+        $userKey = Yii::$app->getModule("user")->model("UserKey");
+        $userKey = $userKey::findActiveByUser(Yii::$app->user->id, $userKey::TYPE_EMAIL_CHANGE);
+        if ($userKey) {
 
             // remove user.new_email
             /** @var \amnah\yii2\user\models\User $user */
@@ -343,8 +343,8 @@ class DefaultController extends Controller {
             $user->new_email = null;
             $user->save(false);
 
-            // delete userkey and set flash message
-            $userkey->expire();
+            // delete userKey and set flash message
+            $userKey->expire();
             Yii::$app->session->setFlash("Cancel-success", "Email change cancelled");
         }
 
@@ -378,18 +378,18 @@ class DefaultController extends Controller {
      */
     public function actionReset($key) {
 
-        // check for invalid userkey
-        /** @var \amnah\yii2\user\models\Userkey $userkey */
-        $userkey = Yii::$app->getModule("user")->model("Userkey");
-        $userkey = $userkey::findActiveByKey($key, $userkey::TYPE_PASSWORD_RESET);
-        if (!$userkey) {
+        // check for invalid userKey
+        /** @var \amnah\yii2\user\models\UserKey $userKey */
+        $userKey = Yii::$app->getModule("user")->model("UserKey");
+        $userKey = $userKey::findActiveByKey($key, $userKey::TYPE_PASSWORD_RESET);
+        if (!$userKey) {
             return $this->render('reset', ["invalidKey" => true]);
         }
 
         // attempt to load $_POST data, validate, and reset user password
         /** @var \amnah\yii2\user\models\forms\ResetForm $model */
         $success = false;
-        $model = Yii::$app->getModule("user")->model("ResetForm", ["userkey" => $userkey]);
+        $model = Yii::$app->getModule("user")->model("ResetForm", ["userKey" => $userKey]);
         if ($model->load($_POST) && $model->resetPassword()) {
             $success = true;
         }

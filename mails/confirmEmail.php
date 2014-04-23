@@ -6,7 +6,7 @@ use yii\helpers\Url;
  * @var string $subject
  * @var \amnah\yii2\user\models\User $user
  * @var \amnah\yii2\user\models\Profile $profile
- * @var \amnah\yii2\user\models\Userkey $userkey
+ * @var \amnah\yii2\user\models\UserKey $userKey
  */
 ?>
 
@@ -14,4 +14,4 @@ use yii\helpers\Url;
 
 <p>Please confirm your email address by clicking the link below:</p>
 
-<p><?= Url::toRoute(["/user/confirm", "key" => $userkey->key], true); ?></p>
+<p><?= Url::toRoute(["/user/confirm", "key" => $userKey->key], true); ?></p>

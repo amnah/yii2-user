@@ -79,7 +79,7 @@ class Module extends \yii\base\Module {
     public $emailChangeConfirmation = true;
 
     /**
-     * @var string Time before userkeys expire (currently only used for password resets)
+     * @var string Time before userKeys expire (currently only used for password resets)
      */
     public $resetKeyExpiration = "48 hours";
 
@@ -177,7 +177,7 @@ class Module extends \yii\base\Module {
             'User' => 'amnah\yii2\user\models\User',
             'Profile' => 'amnah\yii2\user\models\Profile',
             'Role' => 'amnah\yii2\user\models\Role',
-            'Userkey' => 'amnah\yii2\user\models\Userkey',
+            'UserKey' => 'amnah\yii2\user\models\UserKey',
             'ForgotForm' => 'amnah\yii2\user\models\forms\ForgotForm',
             'LoginForm' => 'amnah\yii2\user\models\forms\LoginForm',
             'ResendForm' => 'amnah\yii2\user\models\forms\ResendForm',

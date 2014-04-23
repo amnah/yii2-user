@@ -5,7 +5,7 @@ use yii\helpers\Url;
 /**
  * @var string $subject
  * @var \amnah\yii2\user\models\User $user
- * @var \amnah\yii2\user\models\Userkey $userkey
+ * @var \amnah\yii2\user\models\UserKey $userKey
  */
 ?>
 
@@ -13,4 +13,4 @@ use yii\helpers\Url;
 
 <p>Please use this link to reset your password:</p>
 
-<p><?= Url::toRoute(["/user/reset", "key" => $userkey->key], true); ?></p>
+<p><?= Url::toRoute(["/user/reset", "key" => $userKey->key], true); ?></p>
