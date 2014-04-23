@@ -38,7 +38,7 @@ class User extends \yii\web\User {
      */
     public function afterLogin($identity, $cookieBased, $duration) {
         $identity->setLoginIpAndTime();
-        return parent::afterLogin($identity, $cookieBased, $duration);
+        parent::afterLogin($identity, $cookieBased, $duration);
     }
 
     /**
