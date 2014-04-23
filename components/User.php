@@ -37,7 +37,8 @@ class User extends \yii\web\User {
      * @inheritdoc
      */
     public function afterLogin($identity, $cookieBased, $duration) {
-        $identity->setLoginIpAndTime();
+        /** @var \amnah\yii2\user\models\User $identity */
+        $identity->setLoginIpAndTime(true);
         parent::afterLogin($identity, $cookieBased, $duration);
     }
 
@@ -50,6 +51,7 @@ class User extends \yii\web\User {
     public function getDisplayName($default = "") {
 
         // check for current user
+        /** @var \amnah\yii2\user\models\User $user */
         $user = $this->getIdentity();
         return $user ? $user->getDisplayName($default) : "";
     }
@@ -71,6 +73,7 @@ class User extends \yii\web\User {
         }
 
         // otherwise use our own custom permission via roles table
+        /** @var \amnah\yii2\user\models\User $user */
         $user = $this->getIdentity();
         return $user ? $user->can($permissionName) : false;
     }

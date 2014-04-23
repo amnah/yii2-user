@@ -339,7 +339,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @param bool $save Save record
      * @return static
      */
-    public function setLoginIpAndTime($save = true) {
+    public function setLoginIpAndTime($save = false) {
 
         // set data
         $this->login_ip = Yii::$app->getRequest()->getUserIP();
