@@ -43,6 +43,8 @@ class UserSearch extends User {
     public function search($params) {
 
         // get models
+        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
         $userTable = $user::tableName();
@@ -75,10 +77,6 @@ class UserSearch extends User {
             "{$userTable}.id" => $this->id,
             'role_id' => $this->role_id,
             'status' => $this->status,
-            'login_time' => $this->login_time,
-            'create_time' => $this->create_time,
-            'update_time' => $this->update_time,
-            'ban_time' => $this->ban_time,
         ]);
 
         $query->andFilterWhere(['like', 'email', $this->email])
@@ -90,7 +88,10 @@ class UserSearch extends User {
             ->andFilterWhere(['like', 'login_ip', $this->login_ip])
             ->andFilterWhere(['like', 'create_ip', $this->create_ip])
             ->andFilterWhere(['like', 'ban_reason', $this->ban_reason])
-            ->andFilterWhere(['like', 'full_name', $this->full_name]);
+            ->andFilterWhere(['like', 'login_time', $this->login_time])
+            ->andFilterWhere(['like', "{$userTable}.create_time", $this->create_time])
+            ->andFilterWhere(['like', "{$userTable}.update_time", $this->update_time])
+            ->andFilterWhere(['like', 'ban_time', $this->ban_time]);
 
         return $dataProvider;
     }
