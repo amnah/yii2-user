@@ -154,7 +154,7 @@ I've created a helper command to copy the files for you.
 (https://github.com/yiisoft/yii2-app-basic) app, you can call the default command without any options
 
 ```
-php yii user/copy --from=@vendor/amnah/yii2-user/amnah/yii2/user --to=@app/modules/user --namespace=app\\modules\\user
+php yii user/copy --from=@vendor/amnah/yii2-user --to=@app/modules/user --namespace=app\\modules\\user
 ```
 
 * Update config to point to your new package
