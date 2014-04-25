@@ -3,30 +3,37 @@
 namespace amnah\yii2\user\controllers;
 
 use Yii;
+use amnah\yii2\user\models\User;
+use amnah\yii2\user\models\search\UserSearch;
 use yii\web\Controller;
-use yii\web\HttpException;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * AdminController implements the CRUD actions for User model.
  */
-class AdminController extends Controller {
+class AdminController extends Controller
+{
 
     /**
-     * Get view path based on module property
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function getViewPath() {
-        return Yii::$app->getModule("user")->viewPath
-            ? rtrim(Yii::$app->getModule("user")->viewPath, "/\\") . DIRECTORY_SEPARATOR . $this->id
-            :parent::getViewPath();
+    public function init()
+    {
+        // check for admin permission (`tbl_role.can_admin`)
+        if (!Yii::$app->user->can("admin")) {
+            throw new ForbiddenHttpException('You are not allowed to perform this action.');
+        }
+
+        parent::init();
     }
 
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -38,28 +45,14 @@ class AdminController extends Controller {
     }
 
     /**
-     * @inheritdoc
-     */
-    public function init() {
-
-        // check for admin permission in web requests. console requests should not throw the exception
-        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->user->can("admin")) {
-            throw new HttpException(403, 'You are not allowed to perform this action.');
-        }
-
-        parent::init();
-    }
-
-    /**
      * Lists all User models.
-     *
      * @return mixed
      */
-    public function actionIndex() {
-
+    public function actionIndex()
+    {
         /** @var \amnah\yii2\user\models\search\UserSearch $searchModel */
         $searchModel = Yii::$app->getModule("user")->model("UserSearch");
-        $dataProvider = $searchModel->search($_GET);
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -69,36 +62,35 @@ class AdminController extends Controller {
 
     /**
      * Displays a single User model.
-     *
      * @param string $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionView($id)
+    {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'user' => $this->findModel($id),
         ]);
     }
 
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     *
      * @return mixed
      */
-    public function actionCreate() {
-
+    public function actionCreate()
+    {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $user->setScenario("admin");
         $profile = Yii::$app->getModule("user")->model("Profile");
 
-        if ($user->load($_POST) && $user->validate() && $profile->load($_POST) and $profile->validate()) {
-            $user->save();
+        $post = Yii::$app->request->post();
+        if ($user->load($post) && $user->validate() && $profile->load($post) and $profile->validate()) {
+            $user->save(false);
             $profile->setUser($user->id)->save(false);
             return $this->redirect(['view', 'id' => $user->id]);
-        }
-        else {
+        } else {
             return $this->render('create', [
                 'user' => $user,
                 'profile' => $profile,
@@ -109,21 +101,20 @@ class AdminController extends Controller {
     /**
      * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     *
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $user = $this->findModel($id);
         $user->setScenario("admin");
         $profile = $user->profile;
 
         if ($user->load($_POST) && $user->validate() && $profile->load($_POST) and $profile->validate()) {
-            $user->save();
-            $profile->save();
-            return $this->redirect(['view', 'id' => $user->id]);
-        }
-        else {
+            $user->save(false);
+            $profile->setUser($user->id)->save(false);
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
             return $this->render('update', [
                 'user' => $user,
                 'profile' => $profile,
@@ -134,12 +125,11 @@ class AdminController extends Controller {
     /**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     *
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id) {
-
+    public function actionDelete($id)
+    {
         // delete profile first to handle foreign key constraint
         $user = $this->findModel($id);
         $profile = $user->profile;
@@ -152,18 +142,18 @@ class AdminController extends Controller {
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     *
      * @param string $id
-     * @return \amnah\yii2\user\models\User the loaded model
-     * @throws HttpException if the model cannot be found
+     * @return User the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id) {
+    protected function findModel($id)
+    {
+        /** @var \amnah\yii2\user\models\User $user */
         $user = Yii::$app->getModule("user")->model("User");
-        if (($model = $user::findOne($id)) !== null) {
-            return $model;
-        }
-        else {
-            throw new HttpException(404, 'The requested page does not exist.');
+        if (($user = $user::findOne($id)) !== null) {
+            return $user;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 }

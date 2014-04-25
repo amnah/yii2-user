@@ -8,39 +8,41 @@ $role = \Yii::$app->getModule("user")->model("Role");
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
+ * @var amnah\yii2\user\models\search\UserSearch $searchModel
  * @var amnah\yii2\user\models\User $user
  * @var amnah\yii2\user\models\Role $role
- * @var amnah\yii2\user\models\search\UserSearch $searchModel
  */
 
-$this->title = 'Users';
-$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admin']];
+$this->title = Yii::t('app', 'Users');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-	<h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 
-	<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-	<p>
-		<?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-	</p>
+    <p>
+        <?= Html::a(Yii::t('app', 'Create {modelClass}', [
+  'modelClass' => 'User',
+]), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
-	<?php echo GridView::widget([
-		'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
-		'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
-			'id',
-            'email:email',
-            'username',
+            'id',
             [
-                'attribute' => 'full_name',
-                'label' => 'Full Name',
-                'value' => function($model, $index, $dataColumn) {
-                        return $model->profile->full_name;
-                    }
+                'attribute' => 'role_id',
+                'label' => 'Role',
+                'filter' => $role::dropdown(),
+                'value' => function($model, $index, $dataColumn) use ($role) {
+                    $roleDropdown = $role::dropdown();
+                    return $roleDropdown[$model->role_id];
+                },
             ],
             [
                 'attribute' => 'status',
@@ -51,27 +53,30 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['/user/admi
                     return $statusDropdown[$model->status];
                 },
             ],
+            'email:email',
             [
-                'attribute' => 'role_id',
-                'label' => 'Role',
-                'filter' => $role::dropdown(),
-                'value' => function($model, $index, $dataColumn) use ($role) {
-                    $roleDropdown = $role::dropdown();
-                    return $roleDropdown[$model->role_id];
-                },
+                'attribute' => 'full_name',
+                'label' => 'Full Name',
+                'value' => function($model, $index, $dataColumn) {
+                    return $model->profile->full_name;
+                }
             ],
             'create_time',
-            /*
-            'new_email:email',
-            'password',
-            'auth_key',
-            'update_time',
-            'ban_time',
-            'ban_reason',
-            */
+            // 'new_email:email',
+            // 'username',
+            // 'password',
+            // 'auth_key',
+            // 'api_key',
+            // 'login_ip',
+            // 'login_time',
+            // 'create_ip',
+            // 'create_time',
+            // 'update_time',
+            // 'ban_time',
+            // 'ban_reason',
 
-			['class' => 'yii\grid\ActionColumn'],
-		],
-	]); ?>
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 </div>

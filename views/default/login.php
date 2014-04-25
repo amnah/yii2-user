@@ -46,6 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<div class="col-lg-offset-2" style="color:#999;">
 		You may login with <strong>neo/neo</strong>.<br>
-		To modify the username/password, log in first and then go <?= HTML::a("update your profile", ["/user/profile"]) ?>.
+		To modify the username/password, log in first and then go <?= HTML::a("update your account", ["/user/account"]) ?>.
 	</div>
 </div>

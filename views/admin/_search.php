@@ -12,40 +12,48 @@ use yii\widgets\ActiveForm;
 
 <div class="user-search">
 
-	<?php $form = ActiveForm::begin([
-		'action' => ['index'],
-		'method' => 'get',
-	]); ?>
+    <?php $form = ActiveForm::begin([
+        'action' => ['index'],
+        'method' => 'get',
+    ]); ?>
 
-		<?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'id') ?>
 
-		<?= $form->field($model, 'role_id') ?>
+    <?= $form->field($model, 'role_id') ?>
 
-		<?= $form->field($model, 'email') ?>
+    <?= $form->field($model, 'status') ?>
 
-		<?= $form->field($model, 'new_email') ?>
+    <?= $form->field($model, 'email') ?>
 
-		<?= $form->field($model, 'username') ?>
+    <?= $form->field($model, 'new_email') ?>
 
-		<?php // echo $form->field($model, 'password') ?>
+    <?php // echo $form->field($model, 'username') ?>
 
-		<?php // echo $form->field($model, 'status') ?>
+    <?php // echo $form->field($model, 'password') ?>
 
-		<?php // echo $form->field($model, 'auth_key') ?>
+    <?php // echo $form->field($model, 'auth_key') ?>
 
-		<?php // echo $form->field($model, 'create_time') ?>
+    <?php // echo $form->field($model, 'api_key') ?>
 
-		<?php // echo $form->field($model, 'update_time') ?>
+    <?php // echo $form->field($model, 'login_ip') ?>
 
-		<?php // echo $form->field($model, 'ban_time') ?>
+    <?php // echo $form->field($model, 'login_time') ?>
 
-		<?php // echo $form->field($model, 'ban_reason') ?>
+    <?php // echo $form->field($model, 'create_ip') ?>
 
-		<div class="form-group">
-			<?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-			<?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-		</div>
+    <?php // echo $form->field($model, 'create_time') ?>
 
-	<?php ActiveForm::end(); ?>
+    <?php // echo $form->field($model, 'update_time') ?>
+
+    <?php // echo $form->field($model, 'ban_time') ?>
+
+    <?php // echo $form->field($model, 'ban_reason') ?>
+
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>
