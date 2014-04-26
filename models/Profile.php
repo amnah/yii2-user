@@ -84,16 +84,4 @@ class Profile extends ActiveRecord {
             ],
         ];
     }
-
-    /**
-     * Register a new profile for user
-     *
-     * @param int $userId
-     * @return static
-     */
-    public function register($userId) {
-        $this->user_id = $userId;
-        $this->save();
-        return $this;
-    }
 }

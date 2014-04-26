@@ -69,11 +69,6 @@ These are the module properties and their default values
     public $resetKeyExpiration = "48 hours";
 
     /**
-     * @var string|null View path. Leave as null to use default "@user/views"
-     */
-    public $viewPath;
-
-    /**
      * @var string Email view path
      */
     public $emailViewPath = "@user/mails";

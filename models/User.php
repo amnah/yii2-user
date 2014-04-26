@@ -263,15 +263,15 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
-     * Register a new user
+     * Set attributes for registration
      *
      * @param int $roleId
      * @param string $userIp
      * @return static
      */
-    public function register($roleId, $userIp) {
+    public function setRegisterAttributes($roleId, $userIp) {
 
-        // set default attributes for registration
+        // set default attributes
         $attributes = [
             "role_id" => $roleId,
             "create_ip" => $userIp,
@@ -283,6 +283,7 @@ class User extends ActiveRecord implements IdentityInterface {
         $emailConfirmation = Yii::$app->getModule("user")->emailConfirmation;
 
         // set status inactive if email is required
+        $attributes["status"] = static::STATUS_ACTIVE;
         if ($emailConfirmation and Yii::$app->getModule("user")->requireEmail) {
             $attributes["status"] = static::STATUS_INACTIVE;
         }
@@ -290,26 +291,18 @@ class User extends ActiveRecord implements IdentityInterface {
         elseif ($emailConfirmation and Yii::$app->getModule("user")->useEmail and $this->email) {
             $attributes["status"] = static::STATUS_UNCONFIRMED_EMAIL;
         }
-        // set active otherwise
-        else {
-            $attributes["status"] = static::STATUS_ACTIVE;
-        }
 
-        // set attributes
+        // set attributes and return
         $this->setAttributes($attributes, false);
-
-        // save and return
-        // note: we assume that we have already validated (both $user and $profile)
-        $this->save(false);
         return $this;
     }
 
     /**
      * Check and prepare for email change
      *
-     * @return bool
+     * @return bool True if user set a `new_email`
      */
-    public function checkAndPrepareEmailChange() {
+    public function checkAndPrepEmailChange() {
 
         // check if user is removing email address
         // this only happens if Module::$requireEmail = false

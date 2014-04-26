@@ -14,7 +14,6 @@ use yii\filters\VerbFilter;
  */
 class AdminController extends Controller
 {
-
     /**
      * @inheritdoc
      */
@@ -83,6 +82,7 @@ class AdminController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
+
         $user = Yii::$app->getModule("user")->model("User");
         $user->setScenario("admin");
         $profile = Yii::$app->getModule("user")->model("Profile");
@@ -92,12 +92,13 @@ class AdminController extends Controller
             $user->save(false);
             $profile->setUser($user->id)->save(false);
             return $this->redirect(['view', 'id' => $user->id]);
-        } else {
-            return $this->render('create', [
-                'user' => $user,
-                'profile' => $profile,
-            ]);
         }
+
+        // render
+        return $this->render('create', [
+            'user' => $user,
+            'profile' => $profile,
+        ]);
     }
 
     /**
@@ -109,20 +110,24 @@ class AdminController extends Controller
      */
     public function actionUpdate($id)
     {
+        // set up user and profile
         $user = $this->findModel($id);
         $user->setScenario("admin");
         $profile = $user->profile;
 
-        if ($user->load($_POST) && $user->validate() && $profile->load($_POST) and $profile->validate()) {
+        // load post data and validate
+        $post = Yii::$app->request->post();
+        if ($user->load($post) && $user->validate() && $profile->load($post) and $profile->validate()) {
             $user->save(false);
             $profile->setUser($user->id)->save(false);
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'user' => $user,
-                'profile' => $profile,
-            ]);
+            return $this->redirect(['view', 'id' => $user->id]);
         }
+
+        // render
+        return $this->render('update', [
+            'user' => $user,
+            'profile' => $profile,
+        ]);
     }
 
     /**
@@ -146,7 +151,7 @@ class AdminController extends Controller
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * 
+     *
      * @param string $id
      * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found

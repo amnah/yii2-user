@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="alert alert-success">
 
-            <p>Password reset</p>
+            <p>Password has been reset</p>
             <p><?= Html::a("Log in here", ["/user/login"]) ?></p>
 
         </div>
@@ -36,10 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-lg-5">
                 <?php $form = ActiveForm::begin(['id' => 'reset-form']); ?>
-
-                    <?php /*
-                    <?= $form->field($model, 'email') ?>
-                    */ ?>
 
                     <?= $form->field($model, 'newPassword')->passwordInput() ?>
                     <?= $form->field($model, 'newPasswordConfirm')->passwordInput() ?>

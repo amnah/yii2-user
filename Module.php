@@ -11,8 +11,8 @@ use yii\base\InvalidConfigException;
  *
  * @author amnah <amnah.dev@gmail.com>
  */
-class Module extends \yii\base\Module {
-
+class Module extends \yii\base\Module
+{
     /**
      * @var string Module version
      */
@@ -84,11 +84,6 @@ class Module extends \yii\base\Module {
     public $resetKeyExpiration = "48 hours";
 
     /**
-     * @var string|null View path. Leave as null to use default "@user/views"
-     */
-    public $viewPath;
-
-    /**
      * @var string Email view path
      */
     public $emailViewPath = "@user/mails";
@@ -100,7 +95,7 @@ class Module extends \yii\base\Module {
      *   (equivalent to)
      *   $user = new \amnah\yii2\user\models\User($config);
      *
-     * The model classes here will be merged with/override the [[_getDefaultModelClasses()|default ones]]
+     * The model classes here will be merged with/override the [[getDefaultModelClasses()|default ones]]
      */
     public $modelClasses = [];
 
@@ -111,24 +106,26 @@ class Module extends \yii\base\Module {
 
     /**
      * Get module version
+     *
      * @return string
      */
-    public function getVersion() {
+    public function getVersion()
+    {
         return $this->_version;
     }
 
     /**
      * @inheritdoc
      */
-    public function init() {
-
+    public function init()
+    {
         parent::init();
 
         // check for valid email/username properties
-        $this->_checkEmailUsername();
+        $this->checkEmailUsername();
 
         // override modelClasses
-        $this->modelClasses = array_merge($this->_getDefaultModelClasses(), $this->modelClasses);
+        $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
 
         // set alias
         $this->setAliases([
@@ -139,8 +136,8 @@ class Module extends \yii\base\Module {
     /**
      * Check for valid email/username properties
      */
-    protected function _checkEmailUsername() {
-
+    protected function checkEmailUsername()
+    {
         // set use fields based on required fields
         if ($this->requireEmail) {
             $this->useEmail = true;
@@ -170,37 +167,38 @@ class Module extends \yii\base\Module {
     /**
      * Get default model classes
      */
-    protected function _getDefaultModelClasses() {
-        
+    protected function getDefaultModelClasses()
+    {
         // use single quotes so nothing gets escaped
         return [
-            'User' => 'amnah\yii2\user\models\User',
-            'Profile' => 'amnah\yii2\user\models\Profile',
-            'Role' => 'amnah\yii2\user\models\Role',
-            'UserKey' => 'amnah\yii2\user\models\UserKey',
+            'User'       => 'amnah\yii2\user\models\User',
+            'Profile'    => 'amnah\yii2\user\models\Profile',
+            'Role'       => 'amnah\yii2\user\models\Role',
+            'UserKey'    => 'amnah\yii2\user\models\UserKey',
             'ForgotForm' => 'amnah\yii2\user\models\forms\ForgotForm',
-            'LoginForm' => 'amnah\yii2\user\models\forms\LoginForm',
+            'LoginForm'  => 'amnah\yii2\user\models\forms\LoginForm',
             'ResendForm' => 'amnah\yii2\user\models\forms\ResendForm',
-            'ResetForm' => 'amnah\yii2\user\models\forms\ResetForm',
+            'ResetForm'  => 'amnah\yii2\user\models\forms\ResetForm',
             'UserSearch' => 'amnah\yii2\user\models\search\UserSearch',
         ];
     }
 
     /**
      * Get object instance of model
+     *
      * @param string $name
-     * @param array $config
+     * @param array  $config
      * @return ActiveRecord
      */
-    public function model($name, $config = []) {
-
+    public function model($name, $config = [])
+    {
         // return object if already created
         if (!empty($this->_models[$name])) {
             return $this->_models[$name];
         }
 
         // create object
-        $className = $this->modelClasses[ucfirst($name)];
+        $className            = $this->modelClasses[ucfirst($name)];
         $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
         return $this->_models[$name];
     }
@@ -209,6 +207,7 @@ class Module extends \yii\base\Module {
      * Modify createController() to handle routes in the default controller
      *
      * This is a temporary hack until they add in url management via modules
+     *
      * @link https://github.com/yiisoft/yii2/issues/810
      * @link http://www.yiiframework.com/forum/index.php/topic/21884-module-and-url-management/
      *
@@ -217,10 +216,10 @@ class Module extends \yii\base\Module {
      *
      * @inheritdoc
      */
-    public function createController($route) {
-
+    public function createController($route)
+    {
         // check valid routes
-        $validRoutes = [$this->defaultRoute, "admin", "copy"];
+        $validRoutes  = [$this->defaultRoute, "admin", "copy"];
         $isValidRoute = false;
         foreach ($validRoutes as $validRoute) {
             if (strpos($route, $validRoute) === 0) {
@@ -237,36 +236,36 @@ class Module extends \yii\base\Module {
     /**
      * Get a list of actions for this module. Used for debugging/initial installations
      */
-    public function getActions() {
-
+    public function getActions()
+    {
         return [
-            "User" => "/{$this->id}",
-            "Admin" => "/{$this->id}/admin",
-            "Login" => "/{$this->id}/login",
-            "Logout" => "/{$this->id}/logout",
-            "Register" => "/{$this->id}/register",
-            "Account" => "/{$this->id}/account",
-            "Profile" => "/{$this->id}/profile",
+            "User"            => "/{$this->id}",
+            "Admin"           => "/{$this->id}/admin",
+            "Login"           => "/{$this->id}/login",
+            "Logout"          => "/{$this->id}/logout",
+            "Register"        => "/{$this->id}/register",
+            "Account"         => "/{$this->id}/account",
+            "Profile"         => "/{$this->id}/profile",
             "Forgot password" => "/{$this->id}/forgot",
-            "Reset" => [
-                "url" => "/{$this->id}/reset?key=xxxxxxxxxx",
+            "Reset"           => [
+                "url"         => "/{$this->id}/reset?key=xxxxxxxxxx",
                 "description" => "Reset password. Automatically generated with key from 'Forgot password' page",
             ],
-            "Resend" => [
-                "url" => "/{$this->id}/resend",
+            "Resend"          => [
+                "url"         => "/{$this->id}/resend",
                 "description" => "Resend email confirmation (for both activation and change of email)",
             ],
-            "ResendChange" => [
-                "url" => "/{$this->id}/resend-change",
+            "ResendChange"    => [
+                "url"         => "/{$this->id}/resend-change",
                 "description" => "Resend email change confirmation (quick link on the 'Account' page)",
             ],
-            "Cancel" => [
-                "url" => "/{$this->id}/cancel",
+            "Cancel"          => [
+                "url"         => "/{$this->id}/cancel",
                 "description" => "Cancel email change confirmation. <br/>This and ResendChange appear on the 'Account' page",
             ],
 
-            "Confirm" => [
-                "url" => "/{$this->id}/confirm?key=xxxxxxxxx",
+            "Confirm"         => [
+                "url"         => "/{$this->id}/confirm?key=xxxxxxxxx",
                 "description" => "Confirm email address. Automatically generated with key",
             ],
         ];

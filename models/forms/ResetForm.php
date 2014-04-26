@@ -18,11 +18,6 @@ class ResetForm extends Model {
     /**
      * @var string
      */
-    public $email;
-
-    /**
-     * @var string
-     */
     public $newPassword;
 
     /**
@@ -42,13 +37,6 @@ class ResetForm extends Model {
 
         // set initial rules
         $rules = [
-            // uncomment these lines if you want users to confirm their email address
-            /*
-            [["email"], "required"],
-            [["email"], "email"],
-            [["email"], "validateUserKeyEmail"],
-            [["email"], "filter", "filter" => "trim"],
-            */
             [["newPassword", "newPasswordConfirm"], "required"],
             [["newPasswordConfirm"], "compare", "compareAttribute" => "newPassword", "message" => "Passwords do not match"]
         ];
