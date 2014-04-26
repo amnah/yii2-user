@@ -8,8 +8,8 @@ use yii\base\Model;
 /**
  * LoginForm is the model behind the login form.
  */
-class LoginForm extends Model {
-
+class LoginForm extends Model
+{
     /**
      * @var string Username and/or email
      */
@@ -33,7 +33,8 @@ class LoginForm extends Model {
     /**
      * @return array the validation rules.
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [["username", "password"], "required"],
             ["username", "validateUser"],
@@ -46,8 +47,8 @@ class LoginForm extends Model {
     /**
      * Validate user
      */
-    public function validateUser() {
-
+    public function validateUser()
+    {
         // check for valid user
         $user = $this->getUser();
         if (!$user) {
@@ -55,11 +56,9 @@ class LoginForm extends Model {
             // calculate error message
             if (Yii::$app->getModule("user")->loginEmail and Yii::$app->getModule("user")->loginUsername) {
                 $errorAttribute = "Email/username";
-            }
-            elseif (Yii::$app->getModule("user")->loginEmail) {
+            } elseif (Yii::$app->getModule("user")->loginEmail) {
                 $errorAttribute = "Email";
-            }
-            else {
+            } else {
                 $errorAttribute = "Username";
             }
             $this->addError("username", "$errorAttribute not found");
@@ -69,15 +68,17 @@ class LoginForm extends Model {
     /**
      * Validate user status
      */
-    public function validateUserStatus() {
-
+    public function validateUserStatus()
+    {
         // check for ban status
         $user = $this->getUser();
         if ($user->ban_time) {
             $this->addError("username", "User is banned - {$user->ban_reason}");
         }
-        // check for inactive status and resend email if so
+
+        // check status and resend email if inactive
         if ($user->status == $user::STATUS_INACTIVE) {
+
             /** @var \amnah\yii2\user\models\UserKey $userKey */
             $userKey = Yii::$app->getModule("user")->model("UserKey");
             $userKey = $userKey::generate($user->id, $userKey::TYPE_EMAIL_ACTIVATE);
@@ -89,8 +90,8 @@ class LoginForm extends Model {
     /**
      * Validate password
      */
-    public function validatePassword() {
-
+    public function validatePassword()
+    {
         // skip if there are already errors
         if ($this->hasErrors()) {
             return;
@@ -109,7 +110,8 @@ class LoginForm extends Model {
      *
      * @return \amnah\yii2\user\models\User|null
      */
-    public function getUser() {
+    public function getUser()
+    {
 
         // check if we need to get user
         if ($this->_user === false) {
@@ -135,8 +137,8 @@ class LoginForm extends Model {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
-
+    public function attributeLabels()
+    {
         // calculate attribute label for "username"
         $attribute = Yii::$app->getModule("user")->requireEmail ? "Email" : "Username";
         return [
@@ -150,8 +152,8 @@ class LoginForm extends Model {
      * @param int $loginDuration
      * @return bool
      */
-    public function login($loginDuration) {
-
+    public function login($loginDuration)
+    {
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? $loginDuration : 0);
         }

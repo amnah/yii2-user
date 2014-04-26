@@ -40,7 +40,7 @@ class User extends \yii\web\User
     public function afterLogin($identity, $cookieBased, $duration)
     {
         /** @var \amnah\yii2\user\models\User $identity */
-        $identity->setLoginIpAndTime(true);
+        $identity->updateLoginMeta();
         parent::afterLogin($identity, $cookieBased, $duration);
     }
 

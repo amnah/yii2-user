@@ -16,23 +16,25 @@ use yii\db\ActiveRecord;
  *
  * @property User    $user
  */
-class Profile extends ActiveRecord {
-
+class Profile extends ActiveRecord
+{
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return static::getDb()->tablePrefix . "profile";
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-//            [['user_id'], 'required'],
-//            [['user_id'], 'integer'],
-//            [['create_time', 'update_time'], 'safe'],
+            //            [['user_id'], 'required'],
+            //            [['user_id'], 'integer'],
+            //            [['create_time', 'update_time'], 'safe'],
             [['full_name'], 'string', 'max' => 255]
         ];
     }
@@ -40,7 +42,8 @@ class Profile extends ActiveRecord {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id'          => Yii::t('app', 'ID'),
             'user_id'     => Yii::t('app', 'User ID'),
@@ -53,7 +56,8 @@ class Profile extends ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser() {
+    public function getUser()
+    {
         $user = Yii::$app->getModule("user")->model("User");
         return $this->hasOne($user::className(), ['id' => 'user_id']);
     }
@@ -64,7 +68,8 @@ class Profile extends ActiveRecord {
      * @param int $userId
      * @return static
      */
-    public function setUser($userId) {
+    public function setUser($userId)
+    {
         $this->user_id = $userId;
         return $this;
     }
@@ -72,15 +77,16 @@ class Profile extends ActiveRecord {
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
+                'class'      => 'yii\behaviors\TimestampBehavior',
+                'value'      => function () { return date("Y-m-d H:i:s"); },
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
                 ],
-                'value' => function() { return date("Y-m-d H:i:s"); },
             ],
         ];
     }

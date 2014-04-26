@@ -8,7 +8,8 @@ use yii\base\Model;
 /**
  * Reset password form
  */
-class ResetForm extends Model {
+class ResetForm extends Model
+{
 
     /**
      * @var \amnah\yii2\user\models\UserKey
@@ -33,7 +34,8 @@ class ResetForm extends Model {
     /**
      * @return array the validation rules.
      */
-    public function rules() {
+    public function rules()
+    {
 
         // set initial rules
         $rules = [
@@ -51,10 +53,11 @@ class ResetForm extends Model {
      * @param $rules
      * @return array
      */
-    protected function _copyNewPasswordRules($rules) {
+    protected function _copyNewPasswordRules($rules)
+    {
 
         // go through user rules
-        $user = Yii::$app->getModule("user")->model("User");
+        $user      = Yii::$app->getModule("user")->model("User");
         $userRules = $user->rules();
         foreach ($userRules as $rule) {
 
@@ -86,7 +89,8 @@ class ResetForm extends Model {
      *
      * @deprecated
      */
-    public function validateUserKeyEmail() {
+    public function validateUserKeyEmail()
+    {
 
         // compare user's email
         $user = $this->getUser();
@@ -98,9 +102,10 @@ class ResetForm extends Model {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
-            "newPassword" => "New Password",
+            "newPassword"        => "New Password",
             "newPasswordConfirm" => "Confirm New Password",
         ];
     }
@@ -110,9 +115,10 @@ class ResetForm extends Model {
      *
      * @return \amnah\yii2\user\models\User|null
      */
-    public function getUser() {
+    public function getUser()
+    {
         if ($this->_user === false) {
-            $user = Yii::$app->getModule("user")->model("User");
+            $user        = Yii::$app->getModule("user")->model("User");
             $this->_user = $user::findOne($this->userKey->user_id);
         }
         return $this->_user;
@@ -123,13 +129,14 @@ class ResetForm extends Model {
      *
      * @return bool
      */
-    public function resetPassword() {
+    public function resetPassword()
+    {
 
         // validate
         if ($this->validate()) {
 
             // update password
-            $user = $this->getUser();
+            $user              = $this->getUser();
             $user->newPassword = $this->newPassword;
             $user->save(false);
 

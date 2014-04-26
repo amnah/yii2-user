@@ -10,8 +10,8 @@ use amnah\yii2\user\models\User;
 /**
  * UserSearch represents the model behind the search form about `amnah\yii2\user\models\User`.
  */
-class UserSearch extends User {
-
+class UserSearch extends User
+{
     /**
      * @var string Full name from profile
      */
@@ -20,7 +20,8 @@ class UserSearch extends User {
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['id', 'role_id', 'status'], 'integer'],
             [['email', 'new_email', 'username', 'password', 'auth_key', 'api_key', 'login_ip', 'login_time', 'create_ip', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'full_name'], 'safe'],
@@ -30,24 +31,27 @@ class UserSearch extends User {
     /**
      * @inheritdoc
      */
-    public function scenarios() {
+    public function scenarios()
+    {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
     /**
      * Search
+     *
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params) {
-
-        // get models
+    public function search($params)
+    {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
-        $userTable = $user::tableName();
+
+        // get models
+        $user         = Yii::$app->getModule("user")->model("User");
+        $profile      = Yii::$app->getModule("user")->model("Profile");
+        $userTable    = $user::tableName();
         $profileTable = $profile::tableName();
 
         // set up query with innerJoin on profile data for search/filter
@@ -63,8 +67,8 @@ class UserSearch extends User {
         $addSortAttributes = ["full_name"];
         foreach ($addSortAttributes as $addSortAttribute) {
             $dataProvider->sort->attributes[$addSortAttribute] = [
-                'asc' => [$addSortAttribute => SORT_ASC],
-                'desc' => [$addSortAttribute => SORT_DESC],
+                'asc'   => [$addSortAttribute => SORT_ASC],
+                'desc'  => [$addSortAttribute => SORT_DESC],
                 'label' => $this->getAttributeLabel($addSortAttribute),
             ];
         }
@@ -75,8 +79,8 @@ class UserSearch extends User {
 
         $query->andFilterWhere([
             "{$userTable}.id" => $this->id,
-            'role_id' => $this->role_id,
-            'status' => $this->status,
+            'role_id'         => $this->role_id,
+            'status'          => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'email', $this->email])
