@@ -1,17 +1,19 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\captcha\Captcha;
 
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var amnah\yii2\user\models\forms\Resend $model
+ * @var amnah\yii2\user\models\forms\ResendForm $model
  */
-$this->title = 'Resend';
+
+$this->title = Yii::t('app', 'Resend');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-resend">
+<div class="user-default-resend">
+
 	<h1><?= Html::encode($this->title) ?></h1>
 
 	<?php if ($flash = Yii::$app->session->getFlash('Resend-success')): ?>
@@ -34,4 +36,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
 	<?php endif; ?>
+
 </div>

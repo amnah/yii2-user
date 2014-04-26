@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-$user = \Yii::$app->getModule("user")->model("User");
-$role = \Yii::$app->getModule("user")->model("Role");
+$user = Yii::$app->getModule("user")->model("User");
+$role = Yii::$app->getModule("user")->model("Role");
 
 /**
  * @var yii\web\View $this

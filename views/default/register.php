@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -9,10 +10,12 @@ use yii\widgets\ActiveForm;
  * @var amnah\yii2\user\models\User $profile
  * @var string $userDisplayName
  */
-$this->title = 'Register';
+
+$this->title = Yii::t('app', 'Register');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-register">
+<div class="user-default-register">
+
 	<h1><?= Html::encode($this->title) ?></h1>
 
     <?php if ($flash = Yii::$app->session->getFlash("Register-success")): ?>
@@ -35,11 +38,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'enableAjaxValidation' => true,
         ]); ?>
 
-        <?php if (\Yii::$app->getModule("user")->requireEmail): ?>
+        <?php if (Yii::$app->getModule("user")->requireEmail): ?>
             <?= $form->field($user, 'email') ?>
         <?php endif; ?>
 
-        <?php if (\Yii::$app->getModule("user")->requireUsername): ?>
+        <?php if (Yii::$app->getModule("user")->requireUsername): ?>
             <?= $form->field($user, 'username') ?>
         <?php endif; ?>
 

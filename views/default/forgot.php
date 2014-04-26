@@ -1,17 +1,19 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\captcha\Captcha;
 
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
  * @var amnah\yii2\user\models\forms\ForgotForm $model
  */
-$this->title = 'Forgot';
+
+$this->title = Yii::t('app', 'Forgot');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-forgot">
+<div class="user-default-forgot">
+
 	<h1><?= Html::encode($this->title) ?></h1>
 
 	<?php if ($flash = Yii::$app->session->getFlash('Forgot-success')): ?>
@@ -34,4 +36,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
 	<?php endif; ?>
+
 </div>

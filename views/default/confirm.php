@@ -1,13 +1,15 @@
 <?php
+
 use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
  * @var bool $success
  */
-$this->title = $success ? "Confirmed" : "Error";
+
+$this->title = Yii::t('app', $success ? 'Confirmed' : 'Error');
 ?>
-<div class="site-confirm">
+<div class="user-default-confirm">
 
     <?php if ($success): ?>
 
@@ -34,4 +36,5 @@ $this->title = $success ? "Confirmed" : "Error";
         <div class="alert alert-danger">Invalid key</div>
 
     <?php endif; ?>
+
 </div>

@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -7,10 +8,12 @@ use yii\widgets\ActiveForm;
  * @var yii\widgets\ActiveForm $form
  * @var app\models\LoginForm $model
  */
-$this->title = 'Login';
+
+$this->title = Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
+<div class="user-default-login">
+
 	<h1><?= Html::encode($this->title) ?></h1>
 
 	<p>Please fill out the following fields to login:</p>
@@ -46,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<div class="col-lg-offset-2" style="color:#999;">
 		You may login with <strong>neo/neo</strong>.<br>
-		To modify the username/password, log in first and then go <?= HTML::a("update your account", ["/user/account"]) ?>.
+		To modify the username/password, log in first and then <?= HTML::a("update your account", ["/user/account"]) ?>.
 	</div>
+
 </div>

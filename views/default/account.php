@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -6,12 +7,13 @@ use yii\widgets\ActiveForm;
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
  * @var amnah\yii2\user\models\User $user
- * @var amnah\yii2\user\models\User $userSuccess
  */
-$this->title = 'Account';
+
+$this->title = Yii::t('app', 'Account');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-account">
+<div class="user-default-account">
+
 	<h1><?= Html::encode($this->title) ?></h1>
 
     <?php if ($flash = Yii::$app->session->getFlash("Account-success")): ?>
@@ -48,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <hr/>
 
-    <?php if (\Yii::$app->getModule("user")->useEmail): ?>
+    <?php if (Yii::$app->getModule("user")->useEmail): ?>
         <?= $form->field($user, 'email') ?>
     <?php endif; ?>
 
@@ -62,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a("resend", ["/user/resend-change"]) ?> or <?= Html::a("cancel", ["/user/cancel"]) ?>
                 </p>
 
-            <?php elseif (\Yii::$app->getModule("user")->emailConfirmation): ?>
+            <?php elseif (Yii::$app->getModule("user")->emailConfirmation): ?>
 
                 <p class="small">Changing your email requires email confirmation</p>
 
@@ -71,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <?php if (\Yii::$app->getModule("user")->useUsername): ?>
+    <?php if (Yii::$app->getModule("user")->useUsername): ?>
         <?= $form->field($user, 'username') ?>
     <?php endif; ?>
 

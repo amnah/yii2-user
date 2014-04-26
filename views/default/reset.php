@@ -1,7 +1,7 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\captcha\Captcha;
 
 /**
  * @var yii\web\View $this
@@ -10,10 +10,12 @@ use yii\captcha\Captcha;
  * @var bool $success
  * @var bool $invalidKey
  */
-$this->title = 'Reset';
+
+$this->title = Yii::t('app', 'Reset');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-reset">
+<div class="user-default-reset">
+
 	<h1><?= Html::encode($this->title) ?></h1>
 
     <?php if (!empty($success)): ?>
@@ -47,4 +49,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
 	<?php endif; ?>
+    
 </div>

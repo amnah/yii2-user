@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -7,10 +8,12 @@ use yii\widgets\ActiveForm;
  * @var yii\widgets\ActiveForm $form
  * @var amnah\yii2\user\models\Profile $profile
  */
-$this->title = 'Profile';
+
+$this->title = Yii::t('app', 'Profile');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-profile">
+<div class="user-default-profile">
+
 	<h1><?= Html::encode($this->title) ?></h1>
 
     <?php if ($flash = Yii::$app->session->getFlash("Profile-success")): ?>
