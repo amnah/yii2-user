@@ -10,7 +10,6 @@ use yii\base\Model;
  */
 class ResetForm extends Model
 {
-
     /**
      * @var \amnah\yii2\user\models\UserKey
      */
@@ -36,7 +35,6 @@ class ResetForm extends Model
      */
     public function rules()
     {
-
         // set initial rules
         $rules = [
             [["newPassword", "newPasswordConfirm"], "required"],
@@ -55,7 +53,6 @@ class ResetForm extends Model
      */
     protected function _copyNewPasswordRules($rules)
     {
-
         // go through user rules
         $user      = Yii::$app->getModule("user")->model("User");
         $userRules = $user->rules();
@@ -71,7 +68,7 @@ class ResetForm extends Model
             }
 
             // check for newPassword attribute and that it's not required
-            if (in_array("newPassword", $attribute) and $validator != "required") {
+            if (in_array("newPassword", $attribute) && $validator != "required") {
 
                 // overwrite the attribute
                 $rule[0] = ["newPassword"];
@@ -91,10 +88,9 @@ class ResetForm extends Model
      */
     public function validateUserKeyEmail()
     {
-
         // compare user's email
         $user = $this->getUser();
-        if (!$user or ($user->email !== $this->email)) {
+        if (!$user || ($user->email !== $this->email)) {
             $this->addError("email", "Incorrect email");
         }
     }
@@ -131,7 +127,6 @@ class ResetForm extends Model
      */
     public function resetPassword()
     {
-
         // validate
         if ($this->validate()) {
 

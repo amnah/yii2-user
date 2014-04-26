@@ -54,7 +54,7 @@ class LoginForm extends Model
         if (!$user) {
 
             // calculate error message
-            if (Yii::$app->getModule("user")->loginEmail and Yii::$app->getModule("user")->loginUsername) {
+            if (Yii::$app->getModule("user")->loginEmail && Yii::$app->getModule("user")->loginUsername) {
                 $errorAttribute = "Email/username";
             } elseif (Yii::$app->getModule("user")->loginEmail) {
                 $errorAttribute = "Email";
@@ -112,7 +112,6 @@ class LoginForm extends Model
      */
     public function getUser()
     {
-
         // check if we need to get user
         if ($this->_user === false) {
 

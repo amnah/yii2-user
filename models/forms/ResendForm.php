@@ -10,7 +10,6 @@ use yii\base\Model;
  */
 class ResendForm extends Model
 {
-
     /**
      * @var string Username and/or email
      */
@@ -39,7 +38,6 @@ class ResendForm extends Model
      */
     public function validateEmailInactive()
     {
-
         // check for valid user
         $user = $this->getUser();
         if (!$user) {
@@ -58,7 +56,6 @@ class ResendForm extends Model
      */
     public function getUser()
     {
-
         // get and store user
         if ($this->_user === false) {
             $user = Yii::$app->getModule("user")->model("User");
@@ -79,7 +76,6 @@ class ResendForm extends Model
      */
     public function sendEmail()
     {
-
         // validate
         if ($this->validate()) {
 

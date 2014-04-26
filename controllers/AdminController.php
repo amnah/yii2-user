@@ -88,7 +88,7 @@ class AdminController extends Controller
         $profile = Yii::$app->getModule("user")->model("Profile");
 
         $post = Yii::$app->request->post();
-        if ($user->load($post) && $user->validate() && $profile->load($post) and $profile->validate()) {
+        if ($user->load($post) && $user->validate() && $profile->load($post) && $profile->validate()) {
             $user->save(false);
             $profile->setUser($user->id)->save(false);
             return $this->redirect(['view', 'id' => $user->id]);
@@ -117,7 +117,7 @@ class AdminController extends Controller
 
         // load post data and validate
         $post = Yii::$app->request->post();
-        if ($user->load($post) && $user->validate() && $profile->load($post) and $profile->validate()) {
+        if ($user->load($post) && $user->validate() && $profile->load($post) && $profile->validate()) {
             $user->save(false);
             $profile->setUser($user->id)->save(false);
             return $this->redirect(['view', 'id' => $user->id]);

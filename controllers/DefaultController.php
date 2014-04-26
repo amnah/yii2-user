@@ -47,7 +47,7 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        if (defined('YII_DEBUG') and YII_DEBUG) {
+        if (defined('YII_DEBUG') && YII_DEBUG) {
             $actions = Yii::$app->getModule("user")->getActions();
             return $this->render('index', ["actions" => $actions]);
         } elseif (Yii::$app->user->isGuest) {
@@ -112,7 +112,7 @@ class DefaultController extends Controller
             }
 
             // validate for normal request
-            if ($user->validate() and $profile->validate()) {
+            if ($user->validate() && $profile->validate()) {
 
                 // perform registration
                 $role = Yii::$app->getModule("user")->model("Role");
@@ -223,7 +223,7 @@ class DefaultController extends Controller
         if ($loadedPost && $user->validate()) {
 
             // generate userKey and send email if user changed his email
-            if (Yii::$app->getModule("user")->emailChangeConfirmation and $user->checkAndPrepEmailChange()) {
+            if (Yii::$app->getModule("user")->emailChangeConfirmation && $user->checkAndPrepEmailChange()) {
 
                 $userKey = Yii::$app->getModule("user")->model("UserKey");
                 $userKey = $userKey::generate($user->id, $userKey::TYPE_EMAIL_CHANGE);

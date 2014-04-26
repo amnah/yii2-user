@@ -150,15 +150,15 @@ class Module extends \yii\base\Module
         $className = get_called_class();
 
         // check required fields
-        if (!$this->requireEmail and !$this->requireUsername) {
+        if (!$this->requireEmail && !$this->requireUsername) {
             throw new InvalidConfigException("{$className}: \$requireEmail and/or \$requireUsername must be true");
         }
         // check login fields
-        if (!$this->loginEmail and !$this->loginUsername) {
+        if (!$this->loginEmail && !$this->loginUsername) {
             throw new InvalidConfigException("{$className}: \$loginEmail and/or \$loginUsername must be true");
         }
         // check email fields with emailConfirmation/emailChangeConfirmation is true
-        if (!$this->useEmail and ($this->emailConfirmation or $this->emailChangeConfirmation)) {
+        if (!$this->useEmail && ($this->emailConfirmation || $this->emailChangeConfirmation)) {
             $msg = "{$className}: \$useEmail must be true if \$email(Change)Confirmation is true";
             throw new InvalidConfigException($msg);
         }

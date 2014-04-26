@@ -299,10 +299,10 @@ class User extends ActiveRecord implements IdentityInterface
         $emailConfirmation = Yii::$app->getModule("user")->emailConfirmation;
         $requireEmail      = Yii::$app->getModule("user")->requireEmail;
         $useEmail          = Yii::$app->getModule("user")->useEmail;
-        if ($emailConfirmation and $requireEmail) {
+        if ($emailConfirmation && $requireEmail) {
             $attributes["status"] = static::STATUS_INACTIVE;
         }
-        elseif ($emailConfirmation and $useEmail and $this->email) {
+        elseif ($emailConfirmation && $useEmail && $this->email) {
             $attributes["status"] = static::STATUS_UNCONFIRMED_EMAIL;
         }
 
