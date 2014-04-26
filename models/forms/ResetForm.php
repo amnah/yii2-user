@@ -42,7 +42,7 @@ class ResetForm extends Model
         ];
 
         // add and return user rules
-        return $this->_copyNewPasswordRules($rules);
+        return $this->copyNewPasswordRules($rules);
     }
 
     /**
@@ -51,7 +51,7 @@ class ResetForm extends Model
      * @param $rules
      * @return array
      */
-    protected function _copyNewPasswordRules($rules)
+    protected function copyNewPasswordRules($rules)
     {
         // go through user rules
         $user      = Yii::$app->getModule("user")->model("User");
