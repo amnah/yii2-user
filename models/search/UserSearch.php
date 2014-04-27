@@ -13,18 +13,13 @@ use amnah\yii2\user\models\User;
 class UserSearch extends User
 {
     /**
-     * @var string Full name from profile
-     */
-    public $full_name;
-
-    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
             [['id', 'role_id', 'status'], 'integer'],
-            [['email', 'new_email', 'username', 'password', 'auth_key', 'api_key', 'login_ip', 'login_time', 'create_ip', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'full_name'], 'safe'],
+            [['email', 'new_email', 'username', 'password', 'auth_key', 'api_key', 'login_ip', 'login_time', 'create_ip', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'profile.full_name'], 'safe'],
         ];
     }
 
@@ -35,6 +30,15 @@ class UserSearch extends User
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes()
+    {
+        // add related fields to searchable attributes
+        return array_merge(parent::attributes(), ['profile.full_name']);
     }
 
     /**
@@ -54,22 +58,23 @@ class UserSearch extends User
         $userTable    = $user::tableName();
         $profileTable = $profile::tableName();
 
-        // set up query with innerJoin on profile data for search/filter
-        // note: we call 'with("profile")' to eager-load data for displaying grid
+        // set up query with relation to `profile.full_name`
         $query = $user::find();
-        $query->innerJoin($profileTable, "$userTable.id=$profileTable.user_id");
-        $query->with("profile");
+        $query->joinWith(['profile' => function($query) use ($profileTable) {
+            $query->from(['profile' => $profileTable]);
+        }]);
+
+        // create data provider
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        // add extra sort attributes
-        $addSortAttributes = ["full_name"];
+        // enable sorting for the related columns
+        $addSortAttributes = ["profile.full_name"];
         foreach ($addSortAttributes as $addSortAttribute) {
             $dataProvider->sort->attributes[$addSortAttribute] = [
                 'asc'   => [$addSortAttribute => SORT_ASC],
                 'desc'  => [$addSortAttribute => SORT_DESC],
-                'label' => $this->getAttributeLabel($addSortAttribute),
             ];
         }
 
@@ -95,7 +100,8 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'login_time', $this->login_time])
             ->andFilterWhere(['like', "{$userTable}.create_time", $this->create_time])
             ->andFilterWhere(['like', "{$userTable}.update_time", $this->update_time])
-            ->andFilterWhere(['like', 'ban_time', $this->ban_time]);
+            ->andFilterWhere(['like', 'ban_time', $this->ban_time])
+            ->andFilterWhere(['like', 'profile.full_name', $this->getAttribute('profile.full_name')]);
 
         return $dataProvider;
     }

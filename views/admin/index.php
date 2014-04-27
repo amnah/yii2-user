@@ -54,13 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'email:email',
-            [
-                'attribute' => 'full_name',
-                'label' => 'Full Name',
-                'value' => function($model, $index, $dataColumn) {
-                    return $model->profile->full_name;
-                }
-            ],
+            'profile.full_name',
             'create_time',
             // 'new_email:email',
             // 'username',
