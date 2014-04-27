@@ -86,7 +86,7 @@ class Module extends \yii\base\Module
     /**
      * @var string Email view path
      */
-    public $emailViewPath = "@user/mails";
+    public $emailViewPath = "@user/mail";
 
     /**
      * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]
