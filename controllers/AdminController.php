@@ -73,7 +73,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Creates a new User model. If creation is successful, the browser will
+     * Create a new User model. If creation is successful, the browser will
      * be redirected to the 'view' page.
      *
      * @return mixed
@@ -102,7 +102,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Updates an existing User model. If update is successful, the browser
+     * Update an existing User model. If update is successful, the browser
      * will be redirected to the 'view' page.
      *
      * @param string $id
@@ -131,7 +131,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Deletes an existing User model. If deletion is successful, the browser
+     * Delete an existing User model. If deletion is successful, the browser
      * will be redirected to the 'index' page.
      *
      * @param string $id
@@ -149,7 +149,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Find the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param string $id
