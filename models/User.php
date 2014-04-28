@@ -430,6 +430,7 @@ class User extends ActiveRecord implements IdentityInterface
         $email   = $user->new_email !== null ? $user->new_email : $user->email;
         $subject = Yii::$app->id . " - Email confirmation";
         $result  = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userKey"))
+            ->setFrom(Yii::$app->params["adminEmail"])
             ->setTo($email)
             ->setSubject($subject)
             ->send();
