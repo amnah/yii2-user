@@ -31,6 +31,8 @@ $role = Yii::$app->getModule("user")->model("Role");
     <?= $form->field($user, 'status')->dropDownList($user::statusDropdown()); ?>
 
     <?php // use checkbox for ban_time ?>
+    <?php // convert `ban_time` to int so that the checkbox gets set properly ?>
+    <?php $user->ban_time = $user->ban_time ? 1 : 0 ?>
     <?= Html::activeLabel($user, 'ban_time', ['label' => 'Banned']); ?>
     <?= Html::activeCheckbox($user, 'ban_time'); ?>
     <?= Html::error($user, 'ban_time'); ?>
