@@ -373,8 +373,8 @@ class DefaultController extends Controller
      */
     public function actionReset($key)
     {
+        /** @var \amnah\yii2\user\models\User    $user */
         /** @var \amnah\yii2\user\models\UserKey $userKey */
-        /** @var \amnah\yii2\user\models\forms\ResetForm $model */
 
         // check for valid userKey
         $userKey = Yii::$app->getModule("user")->model("UserKey");
@@ -383,14 +383,21 @@ class DefaultController extends Controller
             return $this->render('reset', ["invalidKey" => true]);
         }
 
-        // load post data and reset user password
+        // get user and set "reset" scenario
         $success = false;
-        $model   = Yii::$app->getModule("user")->model("ResetForm", ["userKey" => $userKey]);
-        if ($model->load(Yii::$app->request->post()) && $model->resetPassword()) {
+        $user = Yii::$app->getModule("user")->model("User");
+        $user = $user::findOne($userKey->user_id);
+        $user->setScenario("reset");
+
+        // load post data and reset user password
+        if ($user->load(Yii::$app->request->post()) && $user->save()) {
+
+            // consume userKey and set success = true
+            $userKey->consume();
             $success = true;
         }
 
         // render
-        return $this->render('reset', compact("model", "success"));
+        return $this->render('reset', compact("user", "success"));
     }
 }

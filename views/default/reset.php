@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var amnah\yii2\user\models\forms\ResetForm $model
+ * @var amnah\yii2\user\models\User $user
  * @var bool $success
  * @var bool $invalidKey
  */
@@ -39,8 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-5">
                 <?php $form = ActiveForm::begin(['id' => 'reset-form']); ?>
 
-                    <?= $form->field($model, 'newPassword')->passwordInput() ?>
-                    <?= $form->field($model, 'newPasswordConfirm')->passwordInput() ?>
+                    <?= $form->field($user, 'newPassword')->passwordInput() ?>
+                    <?= $form->field($user, 'newPasswordConfirm')->passwordInput() ?>
                     <div class="form-group">
                         <?= Html::submitButton('Reset', ['class' => 'btn btn-primary']) ?>
                     </div>

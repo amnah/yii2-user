@@ -57,6 +57,11 @@ class User extends ActiveRecord implements IdentityInterface
     public $newPassword;
 
     /**
+     * @var string New password confirmation - for reset
+     */
+    public $newPasswordConfirm;
+
+    /**
      * @var string Current password - for account page updates
      */
     public $currentPassword;
@@ -86,7 +91,9 @@ class User extends ActiveRecord implements IdentityInterface
             // password rules
             [['newPassword'], 'string', 'min' => 3],
             [['newPassword'], 'filter', 'filter' => 'trim'],
-            [['newPassword'], 'required', 'on' => ['register']],
+            [['newPassword'], 'required', 'on' => ['register', 'reset']],
+            [['newPasswordConfirm'], 'required', 'on' => ['reset']],
+            [['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => 'Passwords do not match'],
 
             // account page
             [['currentPassword'], 'required', 'on' => ['account']],
