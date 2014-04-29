@@ -66,7 +66,7 @@ class Module extends \yii\base\Module {
     /**
      * @var array|string Url to redirect to after logging out
      */
-    public $logoutRedirect = ["@web"];
+    public $logoutRedirect = "@web";
 
     /**
      * @var bool If true, users will have to confirm their email address after registering (= email activation)
