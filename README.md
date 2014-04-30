@@ -150,7 +150,7 @@ For view files, you can use the ```theme``` component.
     'view' => [
         'theme' => [
             'pathMap' => [
-                '@vendor/amnah/yii2-user/views' => '@app/themes/user', // example: @app/themes/user/default/login.php
+                '@vendor/amnah/yii2-user/views' => '@app/views/user', // example: @app/views/user/default/login.php
             ],
         ],
     ],
