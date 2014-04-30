@@ -82,7 +82,15 @@ class DefaultController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-        return $this->redirect(Yii::$app->getModule("user")->logoutRedirect);
+
+        // redirect
+        $logoutRedirect = Yii::$app->getModule("user")->logoutRedirect;
+        if ($logoutRedirect === null) {
+            return $this->goHome();
+        }
+        else {
+            return $this->redirect($logoutRedirect);
+        }
     }
 
     /**

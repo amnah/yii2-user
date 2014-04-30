@@ -59,14 +59,15 @@ class Module extends \yii\base\Module
     public $loginDuration = 2592000; // 1 month
 
     /**
-     * @var array|string Url to redirect to after logging in
+     * @var array|string|null Url to redirect to after logging in. If null, will redirect to home page. Note that
+     *                        AccessControl takes precedence over this (see [[User::loginRequired()]])
      */
-    public $loginRedirect = ["/user"];
+    public $loginRedirect = null;
 
     /**
-     * @var array|string Url to redirect to after logging out
+     * @var array|string|null Url to redirect to after logging out. If null, will redirect to home page
      */
-    public $logoutRedirect = "@web";
+    public $logoutRedirect = null;
 
     /**
      * @var bool If true, users will have to confirm their email address after registering (= email activation)
