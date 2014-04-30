@@ -16,7 +16,7 @@ class Module extends \yii\base\Module
     /**
      * @var string Module version
      */
-    protected $_version = "1.0.0-beta";
+    protected $_version = "2.0.0-alpha";
 
     /**
      * @var string Alias for module
@@ -122,7 +122,7 @@ class Module extends \yii\base\Module
         parent::init();
 
         // check for valid email/username properties
-        $this->checkEmailUsername();
+        $this->checkModuleProperties();
 
         // override modelClasses
         $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
@@ -136,7 +136,7 @@ class Module extends \yii\base\Module
     /**
      * Check for valid email/username properties
      */
-    protected function checkEmailUsername()
+    protected function checkModuleProperties()
     {
         // set use fields based on required fields
         if ($this->requireEmail) {
@@ -178,7 +178,6 @@ class Module extends \yii\base\Module
             'ForgotForm' => 'amnah\yii2\user\models\forms\ForgotForm',
             'LoginForm'  => 'amnah\yii2\user\models\forms\LoginForm',
             'ResendForm' => 'amnah\yii2\user\models\forms\ResendForm',
-            'ResetForm'  => 'amnah\yii2\user\models\forms\ResetForm',
             'UserSearch' => 'amnah\yii2\user\models\search\UserSearch',
         ];
     }
@@ -197,8 +196,12 @@ class Module extends \yii\base\Module
             return $this->_models[$name];
         }
 
-        // create object
-        $className            = $this->modelClasses[ucfirst($name)];
+        // process "Userkey" -> "UserKey" for backwards compatibility
+        if ($name === "Userkey") {
+            $name = "UserKey";
+        }
+        // create model and return it
+        $className = $this->modelClasses[ucfirst($name)];
         $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
         return $this->_models[$name];
     }

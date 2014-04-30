@@ -3,17 +3,25 @@ Yii 2 User
 
 Yii 2 User - User authentication module
 
+## Notes
+**2014/4/28** - I have just released 2.0.0-alpha. This release is basically a code overhaul
+and does not contain any functionality changes.
+
+**IF THIS BROKE YOUR APP**, the quick fix is to limit your version via composer:
+```"amnah/yii2-user": "1.0.0@beta"```. Otherwise, please see the [Upgrade Notes](UPGRADE.md)
+to sync your app with this latest version.
+
 ## Demo
 
-[See here](http://yii2.amnahdev.com/user)
+* [Demo](http://yii2.amnahdev.com/user)
 
 ## Features
 
 * Quick setup - works out of the box so you can see what it does
-* Easily extendable ([instructions below](#how-do-i-extend-this-package))
+* Easily [extendable](#how-do-i-extend-this-package)
 * Registration using email and/or username
 * Login using email and/or username
-* Email confirmation (+resend functionality)
+* Email confirmation (+ resend functionality)
 * Account page
     * Updates email, username, and password
     * Requires current password
@@ -25,7 +33,7 @@ Yii 2 User - User authentication module
 ## Installation
 
 * Install [Yii 2](http://www.yiiframework.com/download) using your preferred method
-* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "dev-master"```
+* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "~2.0"```
 * Update config file *config/web.php* and *config/db.php*
 
 ```php
@@ -48,8 +56,8 @@ return [
 ];
 // app/config/db.php
 return [
-        'class' => 'yii\db\Connection',
-        // set up db info
+    'class' => 'yii\db\Connection',
+    // set up db info
 ];
 ```
 
@@ -77,11 +85,15 @@ return [
 ],
 ```
 
-## Development
+## Release Notes ([Upgrade Notes](UPGRADE.md))
+* 2014/4/28 - Release 2.0.0-alpha
+* 2014/4/17 - Release 1.0.0-beta
+
+## Development Notes
 
 ### How do I check user permissions?
 
-This package contains a very simple permissions system. Every user has a role, and that role has permissions
+This package contains a custom permissions system. Every user has a role, and that role has permissions
 in the form of database columns. It should follow the format: ```can_{permission name}```.
 
 For example, the ```role``` table has a column named ```can_admin``` by default. To check if the user can
@@ -93,7 +105,9 @@ if (!Yii::$app->user->can("admin")) {
 }
 // --- or ----
 $user = User::findOne(1);
-$user->can("admin");
+if ($user->can("admin")) {
+    // do something
+};
 ```
 
 Add more database columns for permissions as needed. If you need something more powerful, look into setting
@@ -104,7 +118,7 @@ that instead of this module's custom ```role``` table.
 
 ### How do I extend this package?
 
-You can extend the classes directly. Depending on which ones you need to extend, set the proper config
+You can extend the classes directly. Depending on which ones you need, set the proper config
 property:
 
 ```php
@@ -123,8 +137,22 @@ property:
         'modelClasses'  => [
             'Profile' => 'app\models\MyProfile',
         ],
-        'viewPath'      => '@app/views/user', // file example: @app/views/user/default/profile.php
-        'emailViewPath' => '@app/mails',      // file example: @app/mails/confirmEmail.php
+        'emailViewPath' => '@app/mail/user', // example: @app/mail/user/confirmEmail.php
+    ],
+],
+```
+
+For view files, you can use the ```theme``` component.
+
+```php
+// app/config/web.php
+'components' => [
+    'view' => [
+        'theme' => [
+            'pathMap' => [
+                '@vendor/amnah/yii2-user/views' => '@app/themes/user', // example: @app/themes/user/default/login.php
+            ],
+        ],
     ],
 ],
 ```
@@ -137,7 +165,7 @@ Or, if you want, you can integrate the package directly into your app by copying
 make it more difficult to get updates, but it also guarantees that your app won't break after running
 ```composer update```.
 
-I've created a helper command to copy the files for you.
+To do so, you can use the helper command ```CopyController```.
 
 * Add the module to your *config/console.php* to gain access to the command (**Note: this is CONSOLE config**)
 
@@ -150,8 +178,8 @@ I've created a helper command to copy the files for you.
 ],
 ```
 
-* Use the ```php yii user/copy``` command. For a [basic]
-(https://github.com/yiisoft/yii2-app-basic) app, you can call the default command without any options
+* Use the ```php yii user/copy``` command. For a [basic app]
+(https://github.com/yiisoft/yii2-app-basic), you can call the default command without any options
 
 ```
 php yii user/copy --from=@vendor/amnah/yii2-user --to=@app/modules/user --namespace=app\\modules\\user
@@ -171,10 +199,7 @@ php yii user/copy --from=@vendor/amnah/yii2-user --to=@app/modules/user --namesp
 **Alternatively,** you can do this manually. Just copy/paste the files wherever you'd like and
 change the namespaces in the files. Replace ```amnah\yii2\user``` with ```app\modules\user```.
 
-### Changelog
-* 2014/4/17 - Release 1.0.0-beta
-
-### Todo
+## Todo
+* il8n
 * Tests
-* Add functionality for user groups (possibly as another package)
 * Issues/requests? Submit a [github issue](https://github.com/amnah/yii2-user/issues)
