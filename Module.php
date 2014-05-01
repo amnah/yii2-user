@@ -57,6 +57,11 @@ class Module extends \yii\base\Module
      * @var int Login duration
      */
     public $loginDuration = 2592000; // 1 month
+    
+    /**
+    * @var int|null After X login attempts the form will require a captcha validation. To disable it set it to NULL.
+    */
+    public $wrongLoginsBeforeCaptcha = 5;
 
     /**
      * @var array|string|null Url to redirect to after logging in. If null, will redirect to home page. Note that
