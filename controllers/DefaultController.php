@@ -13,6 +13,11 @@ use yii\widgets\ActiveForm;
  */
 class DefaultController extends Controller
 {
+	/**
+	* @var string Session key name for login counter
+	*/
+	protected $loginCountSessionKey = 'yii2-user_loginCount';
+	
     /**
      * @inheritdoc
      */
@@ -63,10 +68,20 @@ class DefaultController extends Controller
     public function actionLogin()
     {
         /** @var \amnah\yii2\user\models\forms\LoginForm $model */
-
-        // load post data and login
         $model = Yii::$app->getModule("user")->model("LoginForm");
+
+		// count logins when validation has errors
+		$this->setLoginCount();
+        
+	    // check login count for captcha scenario
+		$wrongLoginsBeforeCaptcha = Yii::$app->getModule("user")->wrongLoginsBeforeCaptcha;
+		if (is_int($wrongLoginsBeforeCaptcha) && $this->getLoginCount() >= $wrongLoginsBeforeCaptcha) {
+			$model->setScenario('loginWithCaptcha');
+		}
+        
+        // load post data and login
         if ($model->load(Yii::$app->request->post()) && $model->login(Yii::$app->getModule("user")->loginDuration)) {
+        	$this->removeLoginCount();
             return $this->goBack(Yii::$app->getModule("user")->loginRedirect);
         }
 
@@ -75,6 +90,44 @@ class DefaultController extends Controller
             'model' => $model,
         ]);
     }
+    
+    /**
+    * Get current login attempts count
+    * 
+    * @todo Get login count from database by request ip
+    * @return int The current login count
+    */
+	protected function getLoginCount()
+	{
+		return (int)Yii::$app->getSession()->get($this->loginCountSessionKey, 0);
+	}
+
+	/**
+	* Set current login count
+	* 
+	* @todo Store login count in database with request ip
+	* @todo Find faster method as double validation
+	*/
+	protected function setLoginCount()
+	{
+		$post = Yii::$app->request->post();
+		if (!empty($post)) {
+			$model = Yii::$app->getModule("user")->model("LoginForm");
+			if ($model->load($post) && !$model->validate()) {
+				Yii::$app->getSession()->set($this->loginCountSessionKey, $this->getLoginCount() + 1);
+			}
+		}
+	}
+	
+	/**
+	* Remove current login count
+	* 
+	* @todo Remove login count from database by request ip
+	*/
+	protected function removeLoginCount()
+	{
+		Yii::$app->getSession()->remove($this->loginCountSessionKey);
+	}
 
     /**
      * Log user out and redirect
