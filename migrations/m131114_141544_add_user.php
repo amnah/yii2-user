@@ -3,7 +3,7 @@
 use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\Role;
 use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Userkey;
+use amnah\yii2\user\models\UserKey;
 
 class m131114_141544_add_user extends \yii\db\Migration {
 
