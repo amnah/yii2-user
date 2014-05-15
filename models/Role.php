@@ -64,15 +64,6 @@ class Role extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsers()
-    {
-        $user = Yii::$app->getModule("user")->model("User");
-        return $this->hasMany($user::className(), ['role_id' => 'id']);
-    }
-
-    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -87,6 +78,15 @@ class Role extends ActiveRecord
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsers()
+    {
+        $user = Yii::$app->getModule("user")->model("User");
+        return $this->hasMany($user::className(), ['role_id' => 'id']);
     }
 
     /**

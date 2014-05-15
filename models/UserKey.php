@@ -79,15 +79,6 @@ class UserKey extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        $user = Yii::$app->getModule("user")->model("User");
-        return $this->hasOne($user::className(), ['id' => 'user_id']);
-    }
-
-    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -102,6 +93,15 @@ class UserKey extends ActiveRecord
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        $user = Yii::$app->getModule("user")->model("User");
+        return $this->hasOne($user::className(), ['id' => 'user_id']);
     }
 
     /**
