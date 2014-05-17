@@ -47,6 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?php ActiveForm::end(); ?>
 
+	<div class="col-lg-offset-2">
+        <?= yii\authclient\widgets\AuthChoice::widget([
+            'baseAuthUrl' => ['/user/auth/login']
+        ]) ?>
+	</div>
+
 	<div class="col-lg-offset-2" style="color:#999;">
 		You may login with <strong>neo/neo</strong>.<br>
 		To modify the username/password, log in first and then <?= HTML::a("update your account", ["/user/account"]) ?>.

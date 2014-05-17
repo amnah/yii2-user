@@ -289,9 +289,10 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @param int    $roleId
      * @param string $userIp
+     * @param string $status
      * @return static
      */
-    public function setRegisterAttributes($roleId, $userIp)
+    public function setRegisterAttributes($roleId, $userIp, $status = null)
     {
         // set default attributes
         $attributes = [
@@ -306,7 +307,10 @@ class User extends ActiveRecord implements IdentityInterface
         $emailConfirmation = Yii::$app->getModule("user")->emailConfirmation;
         $requireEmail      = Yii::$app->getModule("user")->requireEmail;
         $useEmail          = Yii::$app->getModule("user")->useEmail;
-        if ($emailConfirmation && $requireEmail) {
+        if ($status) {
+            $attributes["status"] = $status;
+        }
+        elseif ($emailConfirmation && $requireEmail) {
             $attributes["status"] = static::STATUS_INACTIVE;
         }
         elseif ($emailConfirmation && $useEmail && $this->email) {

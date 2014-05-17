@@ -176,6 +176,7 @@ class Module extends \yii\base\Module
             'Profile'    => 'amnah\yii2\user\models\Profile',
             'Role'       => 'amnah\yii2\user\models\Role',
             'UserKey'    => 'amnah\yii2\user\models\UserKey',
+            'UserAuth'   => 'amnah\yii2\user\models\UserAuth',
             'ForgotForm' => 'amnah\yii2\user\models\forms\ForgotForm',
             'LoginForm'  => 'amnah\yii2\user\models\forms\LoginForm',
             'ResendForm' => 'amnah\yii2\user\models\forms\ResendForm',
@@ -223,7 +224,7 @@ class Module extends \yii\base\Module
     public function createController($route)
     {
         // check valid routes
-        $validRoutes  = [$this->defaultRoute, "admin", "copy"];
+        $validRoutes  = [$this->defaultRoute, "admin", "copy", "auth"];
         $isValidRoute = false;
         foreach ($validRoutes as $validRoute) {
             if (strpos($route, $validRoute) === 0) {
