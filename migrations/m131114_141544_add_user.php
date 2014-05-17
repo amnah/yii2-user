@@ -4,16 +4,17 @@ use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\Role;
 use amnah\yii2\user\models\User;
 use amnah\yii2\user\models\UserKey;
+use yii\helpers\Security;
 
-class m131114_141544_add_user extends \yii\db\Migration {
-
+class m131114_141544_add_user extends \yii\db\Migration
+{
     /**
      * Up
      *
      * @return bool
      */
-    public function up() {
-
+    public function up()
+    {
         // start transaction
         // note that rollback doesn't undo table creations in mysql
         // @see http://dev.mysql.com/doc/refman/5.1/en/implicit-commit.html
@@ -80,9 +81,9 @@ class m131114_141544_add_user extends \yii\db\Migration {
             ]);
 
             // insert admin user: neo/neo
-            $columns = ["id", "role_id", "email", "username", "password", "status", "create_time"];
+            $columns = ["id", "role_id", "email", "username", "password", "status", "create_time", "api_key", "auth_key"];
             $this->batchInsert(User::tableName(), $columns, [
-                [1, Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s")],
+                [1, Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s"), Security::generateRandomKey(), Security::generateRandomKey()],
             ]);
 
             // insert profile data
@@ -102,7 +103,6 @@ class m131114_141544_add_user extends \yii\db\Migration {
         }
 
         return true;
-
     }
 
     /**
@@ -110,8 +110,8 @@ class m131114_141544_add_user extends \yii\db\Migration {
      *
      * @return bool
      */
-    public function down() {
-
+    public function down()
+    {
         $transaction = $this->db->beginTransaction();
         try {
             // drop tables in reverse order (for foreign key constraints)
