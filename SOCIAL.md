@@ -42,6 +42,8 @@ First, we'll need to set up the social accounts by adding the components config:
                 'class' => 'amnah\yii2\user\components\RedditAuth',
                 'clientId' => 'xxxxxxxxxx',
                 'clientSecret' => 'yyyyyyyyyy',
+                'scope' => 'identity', // comma separated string, NO SPACES
+                 // @see https://github.com/reddit/reddit/wiki/OAuth2#authorization
             ],
             // any other social auth
         ],
