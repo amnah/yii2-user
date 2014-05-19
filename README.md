@@ -92,7 +92,7 @@ return [
 ```
 
 ## Release Notes ([Upgrade Notes](UPGRADE.md))
-* 2014/5/16 - Release 2.0.0-beta
+* 2014/5/19 - Release 2.1.0-alpha
 * 2014/4/28 - Release 2.0.0-alpha
 * 2014/4/17 - Release 1.0.0-beta
 
