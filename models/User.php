@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\swiftmailer\Mailer;
+use yii\swiftmailer\Message;
 use yii\helpers\Inflector;
 use yii\helpers\Security;
 use ReflectionClass;
@@ -429,8 +430,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function sendEmailConfirmation($userKey)
     {
-        // modify view path to module views
         /** @var Mailer $mailer */
+        /** @var Message $message */
+
+        // modify view path to module views
         $mailer           = Yii::$app->mail;
         $oldViewPath      = $mailer->viewPath;
         $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
@@ -440,11 +443,15 @@ class User extends ActiveRecord implements IdentityInterface
         $profile = $user->profile;
         $email   = $user->new_email !== null ? $user->new_email : $user->email;
         $subject = Yii::$app->id . " - Email confirmation";
-        $result  = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userKey"))
-            ->setFrom(Yii::$app->params["adminEmail"])
+        $message  = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userKey"))
             ->setTo($email)
-            ->setSubject($subject)
-            ->send();
+            ->setSubject($subject);
+
+        // check for messageConfig before sending (for backwards-compatible purposes)
+        if (empty($mailer->messageConfig["from"])) {
+            $message->setFrom(Yii::$app->params["adminEmail"]);
+        }
+        $result = $message->send();
 
         // restore view path and return result
         $mailer->viewPath = $oldViewPath;

@@ -4,6 +4,8 @@ namespace amnah\yii2\user\models\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\swiftmailer\Mailer;
+use yii\swiftmailer\Message;
 
 /**
  * Forgot password form
@@ -67,6 +69,8 @@ class ForgotForm extends Model
      */
     public function sendForgotEmail()
     {
+        /** @var Mailer $mailer */
+        /** @var Message $message */
         /** @var \amnah\yii2\user\models\UserKey $userKey */
 
         // validate
@@ -90,11 +94,15 @@ class ForgotForm extends Model
 
             // send email
             $subject = Yii::$app->id . " - Forgot password";
-            $result  = $mailer->compose('forgotPassword', compact("subject", "user", "userKey"))
-                ->setFrom(Yii::$app->params["adminEmail"])
+            $message  = $mailer->compose('forgotPassword', compact("subject", "user", "userKey"))
                 ->setTo($user->email)
-                ->setSubject($subject)
-                ->send();
+                ->setSubject($subject);
+
+            // check for messageConfig before sending (for backwards-compatible purposes)
+            if (empty($mailer->messageConfig["from"])) {
+                $message->setFrom(Yii::$app->params["adminEmail"]);
+            }
+            $result = $message->send();
 
             // restore view path and return result
             $mailer->viewPath = $oldViewPath;
