@@ -247,8 +247,11 @@ class AuthController extends Controller
         $profile = Yii::$app->getModule("user")->model("Profile");
 
         $user->email = $attributes["email"];
-        $user->username = $attributes["username"];
         $profile->full_name = $attributes["name"];
+
+        if (!empty($attributes["username"])) {
+            $user->username = $attributes["username"];
+        }
 
         return [$user, $profile];
     }
