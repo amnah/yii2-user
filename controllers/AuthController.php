@@ -19,12 +19,12 @@ class AuthController extends Controller
             'connect' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'connectCallback'],
-                //'successUrl' => Yii::$app->homeUrl . 'site/about',
+                'successUrl' => Yii::$app->homeUrl . 'user/account',
             ],
             'login' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'loginRegisterCallback'],
-                //'successUrl' => Yii::$app->homeUrl . 'site/about',
+                'successUrl' => Yii::$app->homeUrl,
             ],
         ];
     }
