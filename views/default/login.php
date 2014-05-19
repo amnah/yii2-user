@@ -47,11 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?php ActiveForm::end(); ?>
 
-	<div class="col-lg-offset-2">
-        <?= yii\authclient\widgets\AuthChoice::widget([
-            'baseAuthUrl' => ['/user/auth/login']
-        ]) ?>
-	</div>
+    <?php if (Yii::$app->get("authClientCollection", false)): ?>
+        <div class="col-lg-offset-2">
+            <?= yii\authclient\widgets\AuthChoice::widget([
+                'baseAuthUrl' => ['/user/auth/login']
+            ]) ?>
+        </div>
+    <?php endif; ?>
 
 	<div class="col-lg-offset-2" style="color:#999;">
 		You may login with <strong>neo/neo</strong>.<br>
