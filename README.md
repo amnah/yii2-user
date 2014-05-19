@@ -22,6 +22,7 @@ to sync your app with this latest version.
 * Registration using email and/or username
 * Login using email and/or username
 * Email confirmation (+ resend functionality)
+* [Social authentication](SOCIAL.MD) (facebook, twitter, google reddit) *NEW!*
 * Account page
     * Updates email, username, and password
     * Requires current password
@@ -44,7 +45,12 @@ return [
             'class' => 'amnah\yii2\user\components\User',
         ],
         'mail' => [
-            // set up mail for emails
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => true,
+            'messageConfig' => [
+                'from' => ['admin@website.com' => 'Admin'], // this is needed for sending emails
+                'charset' => 'UTF-8',
+            ]
         ]
     ],
     'modules' => [
@@ -86,6 +92,7 @@ return [
 ```
 
 ## Release Notes ([Upgrade Notes](UPGRADE.md))
+* 2014/5/16 - Release 2.0.0-beta
 * 2014/4/28 - Release 2.0.0-alpha
 * 2014/4/17 - Release 1.0.0-beta
 
