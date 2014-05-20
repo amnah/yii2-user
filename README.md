@@ -22,7 +22,7 @@ to sync your app with this latest version.
 * Registration using email and/or username
 * Login using email and/or username
 * Email confirmation (+ resend functionality)
-* [Social authentication](SOCIAL.md) (facebook, twitter, google reddit) *NEW!*
+* [Social authentication](SOCIAL.md) (facebook, twitter, google, reddit) *NEW!*
 * Account page
     * Updates email, username, and password
     * Requires current password
@@ -41,6 +41,9 @@ to sync your app with this latest version.
 // app/config/web.php
 return [
     'components' => [
+        // NOTE: in the yii2-advanced-app, the user component should be updated in
+        // 'frontend/config/main.php' and/or 'backend/config/main.php' (OR you can add it
+        // to 'common/config' if you remove it from frontend/backend)
         'user' => [
             'class' => 'amnah\yii2\user\components\User',
         ],
