@@ -4,6 +4,7 @@ namespace amnah\yii2\user\models\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 /**
  * LoginForm is the model behind the login form.
@@ -24,6 +25,11 @@ class LoginForm extends Model
      * @var bool If true, users will be logged in for $loginDuration
      */
     public $rememberMe = true;
+    
+    /**
+    * @var string Verification Code for captcha
+    */
+    public $verifyCode;
 
     /**
      * @var \amnah\yii2\user\models\User
@@ -41,7 +47,21 @@ class LoginForm extends Model
             ["username", "validateUserStatus"],
             ["password", "validatePassword"],
             ["rememberMe", "boolean"],
+            ['verifyCode', 'required', 'on' => 'loginWithCaptcha', 'message' => 'Because the login was incorrect, please enter this code.'],
+            ['verifyCode', 'captcha', 'captchaAction' => '/site/captcha', 'on' => 'loginWithCaptcha'],
         ];
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function scenarios() {
+		return ArrayHelper::merge(
+			parent::scenarios(),
+			[
+				'loginWithCaptcha' => ['verifyCode'],
+			]
+		);
     }
 
     /**
@@ -142,6 +162,7 @@ class LoginForm extends Model
         $attribute = Yii::$app->getModule("user")->requireEmail ? "Email" : "Username";
         return [
             "username" => $attribute,
+            'verifyCode' => 'Verification Code',
         ];
     }
 
