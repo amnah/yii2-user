@@ -253,7 +253,7 @@ class Module extends \yii\base\Module
             "/{$this->id}/auth/login" => "Register/login via social account",
             "/{$this->id}/auth/connect" => "Connect social account to currently logged in user account",
             "/{$this->id}/account" => "User account page (email, username, password)",
-            "/{$this->id}/profile" => "Profile page (",
+            "/{$this->id}/profile" => "Profile page",
             "/{$this->id}/forgot" => "Forgot password page",
             "/{$this->id}/reset?key=zzzzz" => "Reset password page. Automatically generated from forgot password page",
             "/{$this->id}/resend" => "Resend email confirmation (for both activation and change of email)",
