@@ -34,6 +34,7 @@ use ReflectionClass;
  * @property Profile   $profile
  * @property Role      $role
  * @property UserKey[] $userKeys
+ * @property UserAuth[] $userAuths
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -208,6 +209,14 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $userKey = Yii::$app->getModule("user")->model("UserKey");
         return $this->hasMany($userKey::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserAuths()
+    {
+        return $this->hasMany(UserAuth::className(), ['user_id' => 'id']);
     }
 
     /**
