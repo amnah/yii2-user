@@ -22,7 +22,7 @@ to sync your app with this latest version.
 * Registration using email and/or username
 * Login using email and/or username
 * Email confirmation (+ resend functionality)
-* [Social authentication](SOCIAL.md) (facebook, twitter, google, reddit) *NEW!*
+* [Social authentication](SOCIAL.md) (facebook, twitter, google, linkedin, reddit)
 * Account page
     * Updates email, username, and password
     * Requires current password

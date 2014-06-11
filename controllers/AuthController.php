@@ -311,4 +311,23 @@ class AuthController extends Controller
 
         return [$user, $profile];
     }
+
+    /**
+     * Set info for LinkedIn registration
+     *
+     * @param array $attributes
+     * @return array [$user, $profile]
+     */
+    protected function setInfoLinkedIn($attributes)
+    {
+        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\Profile $profile */
+        $user = Yii::$app->getModule("user")->model("User");
+        $profile = Yii::$app->getModule("user")->model("Profile");
+
+        $user->email = $attributes["email"];
+        $profile->full_name = "{$attributes["first_name"]} {$attributes["last_name"]}";
+
+        return [$user, $profile];
+    }
 }
