@@ -267,7 +267,8 @@ class Module extends \yii\base\Module
             "/{$this->id}/resend-change" => "Resend email change confirmation (quick link on the 'Account' page)",
             "/{$this->id}/cancel" => "Cancel email change confirmation (quick link on the 'Account' page)",
             "/{$this->id}/confirm?key=zzzzz" => "Confirm email address. Automatically generated upon registration/email change",
-
+            "/{$this->id}/auth/login?authclient=zzzzz" => "Register/login via social authentication",
+            "/{$this->id}/auth/connect?authclient=zzzzz" => "Connect social authentication account to currently logged in user",
         ];
     }
 }
