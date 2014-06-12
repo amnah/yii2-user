@@ -9,14 +9,14 @@ use yii\widgets\ActiveForm;
  * @var app\models\LoginForm $model
  */
 
-$this->title = Yii::t('app', 'Login');
+$this->title = Yii::t('user', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-login">
 
 	<h1><?= Html::encode($this->title) ?></h1>
 
-	<p>Please fill out the following fields to login:</p>
+	<p><?= Yii::t("user", "Please fill out the following fields to login:") ?></p>
 
 	<?php $form = ActiveForm::begin([
 		'id' => 'login-form',
@@ -36,12 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-lg-10">
-			<?= Html::submitButton('Login', ['class' => 'btn btn-primary']) ?>
+			<?= Html::submitButton(Yii::t('user', 'Login'), ['class' => 'btn btn-primary']) ?>
 
             <br/><br/>
-            <?= Html::a("Register", ["/user/register"]) ?> /
-            <?= Html::a("Forgot password?", ["/user/forgot"]) ?> /
-            <?= Html::a("Resend confirmation email", ["/user/resend"]) ?>
+            <?= Html::a(Yii::t("user", "Register"), ["/user/register"]) ?> /
+            <?= Html::a(Yii::t("user", "Forgot password") . "?", ["/user/forgot"]) ?> /
+            <?= Html::a(Yii::t("user", "Resend confirmation email"), ["/user/resend"]) ?>
 		</div>
 	</div>
 

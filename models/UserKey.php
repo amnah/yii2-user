@@ -68,13 +68,13 @@ class UserKey extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'           => Yii::t('app', 'ID'),
-            'user_id'      => Yii::t('app', 'User ID'),
-            'type'         => Yii::t('app', 'Type'),
-            'key'          => Yii::t('app', 'Key'),
-            'create_time'  => Yii::t('app', 'Create Time'),
-            'consume_time' => Yii::t('app', 'Consume Time'),
-            'expire_time'  => Yii::t('app', 'Expire Time'),
+            'id'           => Yii::t('user', 'ID'),
+            'user_id'      => Yii::t('user', 'User ID'),
+            'type'         => Yii::t('user', 'Type'),
+            'key'          => Yii::t('user', 'Key'),
+            'create_time'  => Yii::t('user', 'Create Time'),
+            'consume_time' => Yii::t('user', 'Consume Time'),
+            'expire_time'  => Yii::t('user', 'Expire Time'),
         ];
     }
 

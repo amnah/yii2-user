@@ -43,7 +43,7 @@ class ForgotForm extends Model
         // check for valid user
         $this->_user = $this->getUser();
         if (!$this->_user) {
-            $this->addError("email", "Email not found");
+            $this->addError("email", Yii::t("user", "Email not found"));
         }
     }
 
@@ -60,6 +60,16 @@ class ForgotForm extends Model
             $this->_user = $user::findOne(["email" => $this->email]);
         }
         return $this->_user;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            "email" => Yii::t("user", "Email"),
+        ];
     }
 
     /**
@@ -93,7 +103,7 @@ class ForgotForm extends Model
             $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
 
             // send email
-            $subject = Yii::$app->id . " - Forgot password";
+            $subject = Yii::$app->id . " - " . Yii::t("user", "Forgot password");
             $message  = $mailer->compose('forgotPassword', compact("subject", "user", "userKey"))
                 ->setTo($user->email)
                 ->setSubject($subject);

@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
  * @var string $userDisplayName
  */
 
-$this->title = Yii::t('app', 'Register');
+$this->title = Yii::t('user', 'Register');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-register">
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php else: ?>
 
-        <p>Please fill out the following fields to register:</p>
+        <p><?= Yii::t("user", "Please fill out the following fields to register:") ?></p>
 
         <?php $form = ActiveForm::begin([
             'id' => 'register-form',
@@ -54,9 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
-                <?= Html::submitButton('Register', ['class' => 'btn btn-primary']) ?>
+                <?= Html::submitButton(Yii::t('user', 'Register'), ['class' => 'btn btn-primary']) ?>
 
-                or <?= Html::a("Login", ["/user/login"]) ?>
+                <?= Html::a(Yii::t('user', 'Login'), ["/user/login"]) ?>
             </div>
         </div>
 

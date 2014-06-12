@@ -130,9 +130,12 @@ class DefaultController extends Controller
 
                 // set flash
                 // don't use $this->refresh() because user may automatically be logged in and get 403 forbidden
-                $userDisplayName = $user->getDisplayName();
-                $guestText       = Yii::$app->user->isGuest ? " - Please check your email to confirm your account" : "";
-                Yii::$app->session->setFlash("Register-success", "Successfully registered [ $userDisplayName ]" . $guestText);
+                $successText = Yii::t("user", "Successfully registered [ {displayName} ]", ["displayName" => $user->getDisplayName()]);
+                $guestText = "";
+                if (Yii::$app->user->isGuest) {
+                    $guestText = Yii::t("user", " - Please check your email to confirm your account");
+                }
+                Yii::$app->session->setFlash("Register-success", $successText . $guestText);
             }
         }
 
@@ -244,7 +247,7 @@ class DefaultController extends Controller
 
             // save, set flash, and refresh page
             $user->save(false);
-            Yii::$app->session->setFlash("Account-success", "Account updated");
+            Yii::$app->session->setFlash("Account-success", Yii::t("user", "Account updated"));
             return $this->refresh();
         }
 
@@ -274,7 +277,7 @@ class DefaultController extends Controller
         // validate for normal request
         if ($loadedPost && $profile->validate()) {
             $profile->save(false);
-            Yii::$app->session->setFlash("Profile-success", "Profile updated");
+            Yii::$app->session->setFlash("Profile-success", Yii::t("user", "Profile updated"));
             return $this->refresh();
         }
 
@@ -296,7 +299,7 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->sendEmail()) {
 
             // set flash (which will show on the current page)
-            Yii::$app->session->setFlash("Resend-success", "Confirmation email resent");
+            Yii::$app->session->setFlash("Resend-success", Yii::t("user", "Confirmation email resent"));
         }
 
         // render
@@ -321,7 +324,7 @@ class DefaultController extends Controller
 
             // send email and set flash message
             $user->sendEmailConfirmation($userKey);
-            Yii::$app->session->setFlash("Resend-success", "Confirmation email resent");
+            Yii::$app->session->setFlash("Resend-success", Yii::t("user", "Confirmation email resent"));
         }
 
         // redirect to account page
@@ -348,7 +351,7 @@ class DefaultController extends Controller
 
             // expire userKey and set flash message
             $userKey->expire();
-            Yii::$app->session->setFlash("Cancel-success", "Email change cancelled");
+            Yii::$app->session->setFlash("Cancel-success", Yii::t("user", "Email change cancelled"));
         }
 
         // go to account page
@@ -367,7 +370,7 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->sendForgotEmail()) {
 
             // set flash (which will show on the current page)
-            Yii::$app->session->setFlash("Forgot-success", "Instructions to reset your password have been sent");
+            Yii::$app->session->setFlash("Forgot-success", Yii::t("user", "Instructions to reset your password have been sent"));
         }
 
         // render

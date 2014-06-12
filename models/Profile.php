@@ -45,11 +45,11 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'          => Yii::t('app', 'ID'),
-            'user_id'     => Yii::t('app', 'User ID'),
-            'create_time' => Yii::t('app', 'Create Time'),
-            'update_time' => Yii::t('app', 'Update Time'),
-            'full_name'   => Yii::t('app', 'Full Name'),
+            'id'          => Yii::t('user', 'ID'),
+            'user_id'     => Yii::t('user', 'User ID'),
+            'create_time' => Yii::t('user', 'Create Time'),
+            'update_time' => Yii::t('user', 'Update Time'),
+            'full_name'   => Yii::t('user', 'Full Name'),
         ];
     }
 

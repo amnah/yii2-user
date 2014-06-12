@@ -8,10 +8,10 @@ use yii\helpers\Html;
  * @var amnah\yii2\user\models\Profile $profile
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
+$this->title = Yii::t('user', 'Create {modelClass}', [
   'modelClass' => 'User',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-create">

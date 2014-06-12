@@ -9,7 +9,7 @@ use yii\widgets\DetailView;
  */
 
 $this->title = $user->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
@@ -17,22 +17,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $user->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $user->id], [
+        <?= Html::a(Yii::t('user', 'Update'), ['update', 'id' => $user->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('user', 'Delete'), ['delete', 'id' => $user->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('user', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
     </p>
 
-    <?php
-        $attributes = $user->getAttributes();
-        $attributes['full_name'] = $user->profile->full_name;
-    ?>
     <?= DetailView::widget([
-        'model' => $attributes,
+        'model' => $user,
         'attributes' => [
             'id',
             'role_id',
@@ -40,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'new_email:email',
             'username',
-            'full_name',
+            'profile.full_name',
             'password',
             'auth_key',
             'api_key',

@@ -61,7 +61,7 @@ class LoginForm extends Model
             } else {
                 $errorAttribute = "Username";
             }
-            $this->addError("username", "$errorAttribute not found");
+            $this->addError("username", Yii::t("user", "$errorAttribute not found"));
         }
     }
 
@@ -73,7 +73,9 @@ class LoginForm extends Model
         // check for ban status
         $user = $this->getUser();
         if ($user->ban_time) {
-            $this->addError("username", "User is banned - {$user->ban_reason}");
+            $this->addError("username", Yii::t("user", "User is banned - {banReason}", [
+                "banReason" => $user->ban_reason,
+            ]));
         }
 
         // check status and resend email if inactive
@@ -83,7 +85,7 @@ class LoginForm extends Model
             $userKey = Yii::$app->getModule("user")->model("UserKey");
             $userKey = $userKey::generate($user->id, $userKey::TYPE_EMAIL_ACTIVATE);
             $user->sendEmailConfirmation($userKey);
-            $this->addError("username", "Email confirmation resent");
+            $this->addError("username", Yii::t("user", "Confirmation email resent"));
         }
     }
 
@@ -101,7 +103,7 @@ class LoginForm extends Model
         /** @var \amnah\yii2\user\models\User $user */
         $user = $this->getUser();
         if (!$user->verifyPassword($this->password)) {
-            $this->addError("password", "Incorrect password");
+            $this->addError("password", Yii::t("user", "Incorrect password"));
         }
     }
 
@@ -139,9 +141,11 @@ class LoginForm extends Model
     public function attributeLabels()
     {
         // calculate attribute label for "username"
-        $attribute = Yii::$app->getModule("user")->requireEmail ? "Email" : "Username";
+        $attribute = Yii::$app->getModule("user")->requireEmail ? Yii::t("user", "Email") : Yii::t("user", "Username");
         return [
             "username" => $attribute,
+            "password" => Yii::t("user", "Password"),
+            "rememberMe" => Yii::t("user", "Remember Me"),
         ];
     }
 

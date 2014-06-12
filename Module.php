@@ -125,6 +125,13 @@ class Module extends \yii\base\Module
         // check for valid email/username properties
         $this->checkModuleProperties();
 
+        // set up i8n
+        Yii::$app->i18n->translations['user'] = [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'basePath' => __DIR__ . '/messages',
+            //'forceTranslation' => true,
+        ];
+
         // override modelClasses
         $this->modelClasses = array_merge($this->getDefaultModelClasses(), $this->modelClasses);
 

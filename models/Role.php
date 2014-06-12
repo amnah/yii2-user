@@ -55,11 +55,11 @@ class Role extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'          => Yii::t('app', 'ID'),
-            'name'        => Yii::t('app', 'Name'),
-            'create_time' => Yii::t('app', 'Create Time'),
-            'update_time' => Yii::t('app', 'Update Time'),
-            'can_admin'   => Yii::t('app', 'Can Admin'),
+            'id'          => Yii::t('user', 'ID'),
+            'name'        => Yii::t('user', 'Name'),
+            'create_time' => Yii::t('user', 'Create Time'),
+            'update_time' => Yii::t('user', 'Update Time'),
+            'can_admin'   => Yii::t('user', 'Can Admin'),
         ];
     }
 

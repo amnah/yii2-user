@@ -6,7 +6,7 @@ use yii\helpers\Html;
  * @var array $actions
  */
 
-$this->title = Yii::t('app', 'Yii 2 User');
+$this->title = Yii::t('user', 'Yii 2 User');
 ?>
 <div class="user-default-index">
 

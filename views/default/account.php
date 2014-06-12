@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
  * @var amnah\yii2\user\models\User $user
  */
 
-$this->title = Yii::t('app', 'Account');
+$this->title = Yii::t('user', 'Account');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-account">
@@ -59,14 +59,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?php if ($user->new_email !== null): ?>
 
-                <p class="small">Pending email confirmation: [ <?= $user->new_email ?> ]</p>
+                <p class="small"><?= Yii::t('user', "Pending email confirmation: [ {newEmail} ]", ["newEmail" => $user->new_email]) ?></p>
                 <p class="small">
-                    <?= Html::a("resend", ["/user/resend-change"]) ?> or <?= Html::a("cancel", ["/user/cancel"]) ?>
+                    <?= Html::a(Yii::t("user", "Resend"), ["/user/resend-change"]) ?> or <?= Html::a(Yii::t("user", "Cancel"), ["/user/cancel"]) ?>
                 </p>
 
             <?php elseif (Yii::$app->getModule("user")->emailConfirmation): ?>
 
-                <p class="small">Changing your email requires email confirmation</p>
+                <p class="small"><?= Yii::t('user', 'Changing your email requires email confirmation') ?></p>
 
             <?php endif; ?>
 
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
-            <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton(Yii::t('user', 'Update'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 

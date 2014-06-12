@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
  * @var bool $invalidKey
  */
 
-$this->title = Yii::t('app', 'Reset');
+$this->title = Yii::t('user', 'Reset');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-reset">
@@ -22,15 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="alert alert-success">
 
-            <p>Password has been reset</p>
-            <p><?= Html::a("Log in here", ["/user/login"]) ?></p>
+            <p><?= Yii::t("user", "Password has been reset") ?></p>
+            <p><?= Html::a(Yii::t("user", "Log in here"), ["/user/login"]) ?></p>
 
         </div>
 
     <?php elseif (!empty($invalidKey)): ?>
 
         <div class="alert alert-danger">
-            <p>Invalid key</p>
+            <p><?= Yii::t("user", "Invalid key") ?></p>
         </div>
 
 	<?php else: ?>
@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($user, 'newPassword')->passwordInput() ?>
                     <?= $form->field($user, 'newPasswordConfirm')->passwordInput() ?>
                     <div class="form-group">
-                        <?= Html::submitButton('Reset', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton(Yii::t("user", "Reset"), ['class' => 'btn btn-primary']) ?>
                     </div>
                 <?php ActiveForm::end(); ?>
             </div>

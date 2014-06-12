@@ -13,7 +13,7 @@ $role = Yii::$app->getModule("user")->model("Role");
  * @var amnah\yii2\user\models\Role $role
  */
 
-$this->title = Yii::t('app', 'Users');
+$this->title = Yii::t('user', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -23,9 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create {modelClass}', [
-  'modelClass' => 'User',
-]), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('user', 'Create {modelClass}', [
+          'modelClass' => 'User',
+        ]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'attribute' => 'role_id',
-                'label' => 'Role',
+                'label' => Yii::t('user', 'Role'),
                 'filter' => $role::dropdown(),
                 'value' => function($model, $index, $dataColumn) use ($role) {
                     $roleDropdown = $role::dropdown();
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'status',
-                'label' => 'Status',
+                'label' => Yii::t('user', 'Status'),
                 'filter' => $user::statusDropdown(),
                 'value' => function($model, $index, $dataColumn) use ($user) {
                     $statusDropdown = $user::statusDropdown();

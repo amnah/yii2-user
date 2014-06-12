@@ -136,22 +136,25 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'id'          => Yii::t('app', 'ID'),
-            'role_id'     => Yii::t('app', 'Role ID'),
-            'status'      => Yii::t('app', 'Status'),
-            'email'       => Yii::t('app', 'Email'),
-            'new_email'   => Yii::t('app', 'New Email'),
-            'username'    => Yii::t('app', 'Username'),
-            'password'    => Yii::t('app', 'Password'),
-            'auth_key'    => Yii::t('app', 'Auth Key'),
-            'api_key'     => Yii::t('app', 'Api Key'),
-            'login_ip'    => Yii::t('app', 'Login Ip'),
-            'login_time'  => Yii::t('app', 'Login Time'),
-            'create_ip'   => Yii::t('app', 'Create Ip'),
-            'create_time' => Yii::t('app', 'Create Time'),
-            'update_time' => Yii::t('app', 'Update Time'),
-            'ban_time'    => Yii::t('app', 'Ban Time'),
-            'ban_reason'  => Yii::t('app', 'Ban Reason'),
+            'id'          => Yii::t('user', 'ID'),
+            'role_id'     => Yii::t('user', 'Role ID'),
+            'status'      => Yii::t('user', 'Status'),
+            'email'       => Yii::t('user', 'Email'),
+            'new_email'   => Yii::t('user', 'New Email'),
+            'username'    => Yii::t('user', 'Username'),
+            'password'    => Yii::t('user', 'Password'),
+            'auth_key'    => Yii::t('user', 'Auth Key'),
+            'api_key'     => Yii::t('user', 'Api Key'),
+            'login_ip'    => Yii::t('user', 'Login Ip'),
+            'login_time'  => Yii::t('user', 'Login Time'),
+            'create_ip'   => Yii::t('user', 'Create Ip'),
+            'create_time' => Yii::t('user', 'Create Time'),
+            'update_time' => Yii::t('user', 'Update Time'),
+            'ban_time'    => Yii::t('user', 'Ban Time'),
+            'ban_reason'  => Yii::t('user', 'Ban Reason'),
+
+            'currentPassword' => Yii::t('user', 'Current Password'),
+            'newPassword'     => Yii::t('user', 'New Password'),
         ];
     }
 
@@ -451,7 +454,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user    = $this;
         $profile = $user->profile;
         $email   = $user->new_email !== null ? $user->new_email : $user->email;
-        $subject = Yii::$app->id . " - Email confirmation";
+        $subject = Yii::$app->id . " - " . Yii::t("user", "Email Confirmation");
         $message  = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userKey"))
             ->setTo($email)
             ->setSubject($subject);

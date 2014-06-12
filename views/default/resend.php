@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
  * @var amnah\yii2\user\models\forms\ResendForm $model
  */
 
-$this->title = Yii::t('app', 'Resend');
+$this->title = Yii::t('user', 'Resend');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-resend">
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php $form = ActiveForm::begin(['id' => 'resend-form']); ?>
                     <?= $form->field($model, 'email') ?>
                     <div class="form-group">
-                        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton(Yii::t('user', 'Submit'), ['class' => 'btn btn-primary']) ?>
                     </div>
                 <?php ActiveForm::end(); ?>
             </div>

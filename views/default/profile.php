@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
  * @var amnah\yii2\user\models\Profile $profile
  */
 
-$this->title = Yii::t('app', 'Profile');
+$this->title = Yii::t('user', 'Profile');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-profile">
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
-            <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton(Yii::t('user', 'Update'), ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 

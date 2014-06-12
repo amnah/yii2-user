@@ -52,13 +52,13 @@ class UserAuth extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'provider' => Yii::t('app', 'Provider'),
-            'provider_id' => Yii::t('app', 'Provider ID'),
-            'provider_attributes' => Yii::t('app', 'Provider Attributes'),
-            'create_time' => Yii::t('app', 'Create Time'),
-            'update_time' => Yii::t('app', 'Update Time'),
+            'id'                  => Yii::t('user', 'ID'),
+            'user_id'             => Yii::t('user', 'User ID'),
+            'provider'            => Yii::t('user', 'Provider'),
+            'provider_id'         => Yii::t('user', 'Provider ID'),
+            'provider_attributes' => Yii::t('user', 'Provider Attributes'),
+            'create_time'         => Yii::t('user', 'Create Time'),
+            'update_time'         => Yii::t('user', 'Update Time'),
         ];
     }
 
