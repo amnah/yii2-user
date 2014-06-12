@@ -127,6 +127,12 @@ up [RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/authorization.
 **Note:** If you set up an ```authManager``` component for RBAC, then ```Yii::$app->user->can()``` will use
 that instead of this module's custom ```role``` table.
 
+### How do I add captcha to the forms?
+
+Check out this great 3-step [guide](http://yii2-user.readthedocs.org/en/latest/howto/adding-captcha.html)
+by [dektrium](https://github.com/dektrium). (Please note that the scenarios
+for the validation rules will depend on your project requirements.)
+
 ### How do I extend this package?
 
 You can extend the classes directly. Depending on which ones you need, set the proper config
