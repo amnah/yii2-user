@@ -20,7 +20,8 @@ class AdminController extends Controller
     public function init()
     {
         // check for admin permission (`tbl_role.can_admin`)
-        if (!Yii::$app->user->can("admin")) {
+        // note: check for Yii::$app->user first because it doesn't exist in console commands (throws exception)
+        if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin")) {
             throw new ForbiddenHttpException('You are not allowed to perform this action.');
         }
 
