@@ -149,7 +149,7 @@ return [
             'translations' => [
                 'user' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@app/messages',
+                    'basePath' => '@app/messages', // example: @app/messages/fr/user.php
                 ]
             ],
         ],
