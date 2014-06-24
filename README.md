@@ -60,7 +60,7 @@ return [
                 'from' => ['admin@website.com' => 'Admin'], // this is needed for sending emails
                 'charset' => 'UTF-8',
             ]
-        ]
+        ],
     ],
     'modules' => [
         'user' => [
@@ -138,6 +138,24 @@ that instead of this module's custom ```role``` table.
 Check out this great 3-step [guide](http://yii2-user.readthedocs.org/en/latest/howto/adding-captcha.html)
 by [dektrium](https://github.com/dektrium). (Please note that the scenarios
 for the validation rules will depend on your project requirements.)
+
+### How do I add i18n?
+
+```php
+// app/config/web.php
+return [
+    'components' => [
+        'i18n' => [
+            'translations' => [
+                'user' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                ]
+            ],
+        ],
+    ],
+];
+```
 
 ### How do I extend this package?
 
@@ -223,6 +241,5 @@ php yii user/copy --from=@vendor/amnah/yii2-user --to=@app/modules/user --namesp
 change the namespaces in the files. Replace ```amnah\yii2\user``` with ```app\modules\user```.
 
 ## Todo
-* il8n
 * Tests
 * Issues/requests? Submit a [github issue](https://github.com/amnah/yii2-user/issues)
