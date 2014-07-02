@@ -4,18 +4,16 @@ Yii 2 User
 Yii 2 User - User authentication module
 
 ## Notes
+**2014/6/29** - Yii 2 has changed the ```Security``` class into a component via
+```Yii::$app->security```. Additionally, ```Yii::$app->mail``` has been renamed to
+```Yii::$app->mailer```. Both of these breaking changes have been addressed in the latest
+version of this module.
+
 **2014/6/14** - Yii 2 has recently implemented a breaking change which may affect the logout
 functionality. If you are getting a "Method Not Allowed - #405", you will need to add
 ```<?= Html::csrfMetaTags() ?>``` to the ```<head>``` section in your main layout file. See
 [here](http://www.yiiframework.com/forum/index.php/topic/55255-logout-error/) and
 [here](https://github.com/yiisoft/yii2/issues/3358).
-
-**2014/4/28** - I have just released 2.0.0-alpha. This release is basically a code overhaul
-and does not contain any functionality changes.
-
-**IF THIS BROKE YOUR APP**, the quick fix is to limit your version via composer:
-```"amnah/yii2-user": "1.0.0@beta"```. Otherwise, please see the [Upgrade Notes](UPGRADE.md)
-to sync your app with this latest version.
 
 ## Demo
 

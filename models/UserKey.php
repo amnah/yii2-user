@@ -4,7 +4,6 @@ namespace amnah\yii2\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\helpers\Security;
 
 /**
  * This is the model class for table "tbl_user_key".
@@ -126,7 +125,7 @@ class UserKey extends ActiveRecord
         $model->type        = $type;
         $model->create_time = date("Y-m-d H:i:s");
         $model->expire_time = $expireTime;
-        $model->key         = Security::generateRandomKey();
+        $model->key         = Yii::$app->security->generateRandomKey();
         $model->save(false);
         return $model;
     }

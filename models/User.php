@@ -8,7 +8,6 @@ use yii\web\IdentityInterface;
 use yii\swiftmailer\Mailer;
 use yii\swiftmailer\Message;
 use yii\helpers\Inflector;
-use yii\helpers\Security;
 use ReflectionClass;
 
 /**
@@ -270,7 +269,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function verifyPassword($password)
     {
-        return Security::validatePassword($password, $this->password);
+        return Yii::$app->security->validatePassword($password, $this->password);
     }
 
     /**
@@ -280,7 +279,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         // hash new password if set
         if ($this->newPassword) {
-            $this->password = Security::generatePasswordHash($this->newPassword);
+            $this->password = Yii::$app->security->generatePasswordHash($this->newPassword);
         }
 
         // convert ban_time checkbox to date
@@ -311,8 +310,8 @@ class User extends ActiveRecord implements IdentityInterface
         $attributes = [
             "role_id"   => $roleId,
             "create_ip" => $userIp,
-            "auth_key"  => Security::generateRandomKey(),
-            "api_key"   => Security::generateRandomKey(),
+            "auth_key"  => Yii::$app->security->generateRandomKey(),
+            "api_key"   => Yii::$app->security->generateRandomKey(),
             "status"    => static::STATUS_ACTIVE,
         ];
 
@@ -446,7 +445,7 @@ class User extends ActiveRecord implements IdentityInterface
         /** @var Message $message */
 
         // modify view path to module views
-        $mailer           = Yii::$app->mail;
+        $mailer           = Yii::$app->mailer;
         $oldViewPath      = $mailer->viewPath;
         $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
 

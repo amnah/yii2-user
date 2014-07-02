@@ -98,7 +98,7 @@ class ForgotForm extends Model
             $userKey    = $userKey::generate($user->id, $userKey::TYPE_PASSWORD_RESET, $expireTime);
 
             // modify view path to module views
-            $mailer           = Yii::$app->mail;
+            $mailer           = Yii::$app->mailer;
             $oldViewPath      = $mailer->viewPath;
             $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
 
