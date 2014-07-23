@@ -36,7 +36,9 @@ First, we'll need to set up the social accounts by adding the components config:
                 'consumerSecret' => 'yyyyyyyyyy',
             ],
             'google' => [
-                'class' => 'yii\authclient\clients\GoogleOpenId'
+                'class' => 'yii\authclient\clients\GoogleOAuth',
+                'clientId' => 'xxxxxxxxxx',
+                'clientSecret' => 'yyyyyyyyyy',
             ],
             'reddit' => [
                 'class' => 'amnah\yii2\user\components\RedditAuth',
@@ -133,3 +135,16 @@ Reddit authentication is supported by default, but is a little strict. Specifica
 take care and set the app's *redirect uri* setting properly.
 
 * http://localhost/yii2-app/web/user/auth/login?authclient=reddit
+
+## Google
+
+Unfortunately, Google has shut down its OpenID authentication. We'll need to use GoogleOAuth
+instead, so here are the steps to getting it work:
+
+1. Create a project at https://console.developers.google.com/project
+2. Apis & Auth -> Credentials -> Create a new Client ID
+3. Apis & Auth -> APIs -> Enable **Contacts API** and **Google+ API**
+4. If you still get a 403 error, try restarting your computer to refresh the token
+(restarting the browser didn't work for me)
+
+See [issue](https://github.com/amnah/yii2-user/issues/25) for more details.
