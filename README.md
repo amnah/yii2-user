@@ -4,6 +4,9 @@ Yii 2 User
 Yii 2 User - User authentication module
 
 ## Notes
+**2014/8/1** - Yii 2 has changed the ```Security``` class - ```generateRandomKey()```
+to ```generateRandomString()```. See [here](https://github.com/yiisoft/yii2/issues/4538)
+
 **2014/6/29** - Yii 2 has changed the ```Security``` class into a component via
 ```Yii::$app->security```. Additionally, ```Yii::$app->mail``` has been renamed to
 ```Yii::$app->mailer```. Both of these breaking changes have been addressed in the latest
@@ -99,6 +102,7 @@ return [
 ```
 
 ## Release Notes
+* 2014/8/1  - Release 2.1.0-alpha4
 * 2014/6/29 - Release 2.1.0-alpha3
 * 2014/6/12 - Release 2.1.0-alpha2
 * 2014/5/19 - Release 2.1.0-alpha
