@@ -310,8 +310,8 @@ class User extends ActiveRecord implements IdentityInterface
         $attributes = [
             "role_id"   => $roleId,
             "create_ip" => $userIp,
-            "auth_key"  => Yii::$app->security->generateRandomKey(),
-            "api_key"   => Yii::$app->security->generateRandomKey(),
+            "auth_key"  => Yii::$app->security->generateRandomString(),
+            "api_key"   => Yii::$app->security->generateRandomString(),
             "status"    => static::STATUS_ACTIVE,
         ];
 

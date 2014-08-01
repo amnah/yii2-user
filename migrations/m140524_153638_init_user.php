@@ -73,7 +73,7 @@ class m140524_153638_init_user extends \yii\db\Migration
         $security = Yii::$app->security;
         $columns = ["id", "role_id", "email", "username", "password", "status", "create_time", "api_key", "auth_key"];
         $this->batchInsert(User::tableName(), $columns, [
-            [1, Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s"), $security->generateRandomKey(), $security->generateRandomKey()],
+            [1, Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s"), $security->generateRandomString(), $security->generateRandomString()],
         ]);
 
         // insert profile data
