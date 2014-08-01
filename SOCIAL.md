@@ -18,6 +18,9 @@ Both ways are supported in this module, but take a bit of extra work to set up.
 
 First, we'll need to set up the social accounts by adding the components config:
 
+**Note: you can use any of the [predefined]
+(https://github.com/yiisoft/yii2-authclient#predefined-auth-clients) auth clients**
+
 ```php
 // @app/config/web.php
 'components' => [
