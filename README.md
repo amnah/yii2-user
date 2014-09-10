@@ -131,7 +131,7 @@ if ($user->can("admin")) {
 ```
 
 Add more database columns for permissions as needed. If you need something more powerful, look into setting
-up [RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/authorization.md).
+up [RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/security-authorization.md#role-based-access-control-rbac).
 
 **Note:** If you set up an ```authManager``` component for RBAC, then ```Yii::$app->user->can()``` will use
 that instead of this module's custom ```role``` table.
