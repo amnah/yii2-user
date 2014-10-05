@@ -4,53 +4,59 @@ use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\Role;
 use amnah\yii2\user\models\User;
 use amnah\yii2\user\models\UserKey;
+use yii\db\Schema;
 
 class m140524_153638_init_user extends \yii\db\Migration
 {
     public function safeUp()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+        
         // create tables. note the specific order
         $this->createTable(Role::tableName(), [
-            "id" => "int unsigned not null auto_increment primary key",
-            "name" => "varchar(255) not null",
-            "create_time" => "timestamp null default null",
-            "update_time" => "timestamp null default null",
-            "can_admin" => "tinyint not null default 0",
-        ]);
+            "id" => Schema::TYPE_PK,
+            "name" => Schema::TYPE_STRING . ' not null',
+            "create_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "update_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "can_admin" => Schema::TYPE_SMALLINT . ' not null default 0',
+        ], $tableOptions);
         $this->createTable(User::tableName(), [
-            "id" => "int unsigned not null auto_increment primary key",
-            "role_id" => "int unsigned not null",
-            "status" => "tinyint not null",
-            "email" => "varchar(255) null default null",
-            "new_email" => "varchar(255) null default null",
-            "username" => "varchar(255) null default null",
-            "password" => "varchar(255) null default null",
-            "auth_key" => "varchar(255) null default null",
-            "api_key" => "varchar(255) null default null",
-            "login_ip" => "varchar(45) null default null",
-            "login_time" => "timestamp null default null",
-            "create_ip" => "varchar(45) null default null",
-            "create_time" => "timestamp null default null",
-            "update_time" => "timestamp null default null",
-            "ban_time" => "timestamp null default null",
-            "ban_reason" => "varchar(255) null default null",
-        ]);
+            "id" => Schema::TYPE_PK,
+            "role_id" => Schema::TYPE_INTEGER . ' not null',
+            "status" => Schema::TYPE_SMALLINT . ' not null',
+            "email" => Schema::TYPE_STRING . ' null default null',
+            "new_email" => Schema::TYPE_STRING . ' null default null',
+            "username" => Schema::TYPE_STRING . ' null default null',
+            "password" => Schema::TYPE_STRING . ' null default null',
+            "auth_key" => Schema::TYPE_STRING . ' null default null',
+            "api_key" => Schema::TYPE_STRING . ' null default null',
+            "login_ip" => Schema::TYPE_STRING . ' null default null',
+            "login_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "create_ip" => Schema::TYPE_STRING . ' null default null',
+            "create_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "update_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "ban_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "ban_reason" => Schema::TYPE_STRING . ' null default null',
+        ], $tableOptions);
         $this->createTable(UserKey::tableName(), [
-            "id" => "int unsigned not null auto_increment primary key",
-            "user_id" => "int unsigned not null",
-            "type" => "tinyint not null",
-            "key" => "varchar(255) not null",
-            "create_time" => "timestamp null default null",
-            "consume_time" => "timestamp null default null",
-            "expire_time" => "timestamp null default null",
-        ]);
+            "id" => Schema::TYPE_PK,
+            "user_id" => Schema::TYPE_INTEGER . ' not null',
+            "type" => Schema::TYPE_SMALLINT . ' not null',
+            "key" => Schema::TYPE_STRING . ' not null',
+            "create_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "consume_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "expire_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+        ], $tableOptions);
         $this->createTable(Profile::tableName(), [
-            "id" => "int unsigned not null auto_increment primary key",
-            "user_id" => "int unsigned not null",
-            "create_time" => "timestamp null default null",
-            "update_time" => "timestamp null default null",
-            "full_name" => "varchar(255) null default null",
-        ]);
+            "id" => Schema::TYPE_PK,
+            "user_id" => Schema::TYPE_INTEGER . ' not null',
+            "create_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "update_time" => Schema::TYPE_TIMESTAMP . ' null default null',
+            "full_name" => Schema::TYPE_STRING . ' null default null',
+        ], $tableOptions);
 
         // add indexes for performance optimization
         $this->createIndex(UserKey::tableName() . "_key", UserKey::tableName(), "key", true);
