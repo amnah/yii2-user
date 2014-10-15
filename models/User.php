@@ -68,6 +68,11 @@ class User extends ActiveRecord implements IdentityInterface
     public $currentPassword;
 
     /**
+     * @var array Permission cache array
+     */
+    protected $_access = [];
+    
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -400,29 +405,30 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Check if user can do specified $permission
      *
-     * @param string $permission
+     * @param string    $permissionName
+     * @param array     $params
+     * @param bool      $allowCaching
      * @return bool
      */
-	 public function can($permissionName, $params = [], $allowCaching = true)
-	{
-		 // check for auth manager to call parent
-		$auth = Yii::$app->getAuthManager();
-		if ($auth)
-		{
-			if ($allowCaching && empty($params) && isset($this->_access[$permissionName])) {
-				return $this->_access[$permissionName];
-			}
-			$access = $auth->checkAccess($this->getId(), $permissionName, $params);
-			if ($allowCaching && empty($params)) {
-				$this->_access[$permissionName] = $access;
-			}
+    public function can($permissionName, $params = [], $allowCaching = true)
+    {
+         // check for auth manager rbac
+        $auth = Yii::$app->getAuthManager();
+        if ($auth) {
+            if ($allowCaching && empty($params) && isset($this->_access[$permissionName])) {
+                return $this->_access[$permissionName];
+            }
+            $access = $auth->checkAccess($this->getId(), $permissionName, $params);
+            if ($allowCaching && empty($params)) {
+                $this->_access[$permissionName] = $access;
+            }
 
-			return $access;
-		}
+            return $access;
+        }
 
-		// otherwise use our own custom permission (via the role table)
-		return $this->role->checkPermission($permissionName);
-	}
+        // otherwise use our own custom permission (via the role table)
+        return $this->role->checkPermission($permissionName);
+    }
 
     /**
      * Get display name for the user
