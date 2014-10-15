@@ -403,10 +403,26 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $permission
      * @return bool
      */
-    public function can($permission)
-    {
-        return $this->role->checkPermission($permission);
-    }
+	 public function can($permissionName, $params = [], $allowCaching = true)
+	{
+		 // check for auth manager to call parent
+		$auth = Yii::$app->getAuthManager();
+		if ($auth)
+		{
+			if ($allowCaching && empty($params) && isset($this->_access[$permissionName])) {
+				return $this->_access[$permissionName];
+			}
+			$access = $auth->checkAccess($this->getId(), $permissionName, $params);
+			if ($allowCaching && empty($params)) {
+				$this->_access[$permissionName] = $access;
+			}
+
+			return $access;
+		}
+
+		// otherwise use our own custom permission (via the role table)
+		return $this->role->checkPermission($permissionName);
+	}
 
     /**
      * Get display name for the user
