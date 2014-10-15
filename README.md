@@ -3,21 +3,6 @@ Yii 2 User
 
 Yii 2 User - User authentication module
 
-## Notes
-**2014/8/1** - Yii 2 has changed the ```Security``` class - ```generateRandomKey()```
-to ```generateRandomString()```. See [here](https://github.com/yiisoft/yii2/issues/4538)
-
-**2014/6/29** - Yii 2 has changed the ```Security``` class into a component via
-```Yii::$app->security```. Additionally, ```Yii::$app->mail``` has been renamed to
-```Yii::$app->mailer```. Both of these breaking changes have been addressed in the latest
-version of this module.
-
-**2014/6/14** - Yii 2 has recently implemented a breaking change which may affect the logout
-functionality. If you are getting a "Method Not Allowed - #405", you will need to add
-```<?= Html::csrfMetaTags() ?>``` to the ```<head>``` section in your main layout file. See
-[here](http://www.yiiframework.com/forum/index.php/topic/55255-logout-error/) and
-[here](https://github.com/yiisoft/yii2/issues/3358).
-
 ## Demo
 
 * [Demo](http://yii2.amnahdev.com/user)
@@ -54,7 +39,7 @@ return [
         'user' => [
             'class' => 'amnah\yii2\user\components\User',
         ],
-        'mail' => [
+        'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'useFileTransport' => true,
             'messageConfig' => [
@@ -102,6 +87,7 @@ return [
 ```
 
 ## Release Notes
+* 2014/10/13  - Release 2.1.0-RC
 * 2014/8/1  - Release 2.1.0-alpha4
 * 2014/6/29 - Release 2.1.0-alpha3
 * 2014/6/12 - Release 2.1.0-alpha2
