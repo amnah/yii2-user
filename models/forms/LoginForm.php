@@ -141,9 +141,14 @@ class LoginForm extends Model
     public function attributeLabels()
     {
         // calculate attribute label for "username"
-        $attribute = Yii::$app->getModule("user")->requireEmail ? Yii::t("user", "Email") : Yii::t("user", "Username");
+//        $attribute = Yii::$app->getModule("user")->requireEmail ? Yii::t("user", "Email") : Yii::t("user", "Username");
+        if(Yii::$app->getModule("user")->loginEmail && Yii::$app->getModule("user")->loginUsername)
+            $attribute = "Email / Username";
+        else
+            $attribute = Yii::$app->getModule("user")->loginEmail ? "Email" : "Username";
+
         return [
-            "username" => $attribute,
+            "username" => Yii::t("user", $attribute),
             "password" => Yii::t("user", "Password"),
             "rememberMe" => Yii::t("user", "Remember Me"),
         ];
