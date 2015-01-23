@@ -132,11 +132,15 @@ class AuthController extends Controller
             return true;
         }
 
+        // Fix Existing google plus users login error as google provide email in emails array
+        $function = "setInfo" . ucfirst($client->name); 
+        list ($user, $profile) = $this->$function($attributes);
+
         // attempt to find user by email
-        if (!empty($attributes["email"])) {
+        if (!empty($user["email"])) {
 
             // check if any user has `new_email` set and clear it
-            $email = trim($attributes["email"]);
+            $email = trim($user["email"]);
             $this->clearNewEmail($email);
 
             // find user and create user provider for match
