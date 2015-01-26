@@ -28,7 +28,8 @@ return [
     'Ban Reason' => '封号原因',
     'Current Password' => '当前密码',
     'New Password' => '新密码',
-    'Email Confirmation' => '确认邮件',
+    'New Password Confirm' => '确认新密码',
+    'Email Confirmation' => '验证邮件',
 
     'Provider' => 'Provider',
     'Provider ID' => 'Provider ID',
@@ -36,13 +37,13 @@ return [
 
     'Type' => '类型',
     'Key' => 'Key',
-    'Consume Time' => '耗时',
-    'Expire Time' => '超时',
+    'Consume Time' => '使用时间',
+    'Expire Time' => '超时时间',
 
     // models/forms
-    'Email / Username' => 'Email / 用户名',
-    'Email not found' => '该Email尚未注册',
-    'Email/username not found' => 'Email/用户名 不存在',
+    'Email / Username' => '邮箱/用户名',
+    'Email not found' => '该邮箱尚未注册',
+    'Email/username not found' => '邮箱/用户名 不存在',
     'Username not found' => '该用户名尚未注册',
     'User is banned - {banReason}' => '用户已封 - {banReason}',
     'Incorrect password' => '错误的密码',
@@ -55,8 +56,11 @@ return [
     'Account updated' => '账号已更新',
     'Profile updated' => '个人资料已更新',
     'Confirmation email resent' => '验证邮件已发送',
-    'Email change cancelled' => 'Email已取消更改',
+    'Email change cancelled' => '已取消更改邮箱地址得请求',
     'Instructions to reset your password have been sent' => '重置密码邮件已发送',
+    'Passwords do not match' => '两个密码不一致',
+    'can contain only letters, numbers, and \'_\'.' => '只能包含字母、数字和下划线_',
+
 
     // mail
     'Please confirm your email address by clicking the link below:' => '请点击下面链接以认证您的邮箱地址：',
@@ -76,10 +80,10 @@ return [
 
     // default views
     'Account' => '账号',
-    'Pending email confirmation: [ {newEmail} ]' => 'Pending email confirmation: [ {newEmail} ]',
+    'Pending email confirmation: [ {newEmail} ]' => '等待邮件验证: [ {newEmail} ]',
     'Cancel' => '取消',
     'Changing your email requires email confirmation' => '更改邮箱地址，需要重新邮件验证',
-    'Confirmed' => '确认',
+    'Confirmed' => '验证',
     'Error' => '错误',
     'Your email [ {email} ] has been confirmed' => '恭喜！你的邮箱地址 [ {email} ] 已经激活成功！',
     'Go to my account' => '点击进入我的账户',
@@ -98,4 +102,6 @@ return [
     'Please fill out the following fields to register:' => '请输入下面信息注册',
     'Resend' => '重新发送验证邮件',
     'Password has been reset' => '已重置密码',
+    'or' => '或者',
+
 ];
