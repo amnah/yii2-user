@@ -132,8 +132,10 @@ class AuthController extends Controller
             return true;
         }
 
-        // Fix Existing google plus users login error as google provide email in emails array
-        $function = "setInfo" . ucfirst($client->name); 
+        // call "setInfo{clientName}" function to ensure that we get email consistently
+        // this is mainly used for google auth, which returns the email in an array
+        // @see setInfoGoogle()
+        $function = "setInfo" . ucfirst($client->name);
         list ($user, $profile) = $this->$function($attributes);
 
         // attempt to find user by email
@@ -250,12 +252,21 @@ class AuthController extends Controller
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
 
-        $user->email = $attributes["email"];
-        $profile->full_name = $attributes["name"];
-
+        // set email/username if they are set
+        // note: email may be missing if user signed up using a phone number
+        if (!empty($attributes["email"])) {
+            $user->email = $attributes["email"];
+        }
         if (!empty($attributes["username"])) {
             $user->username = $attributes["username"];
         }
+
+        // use facebook name as username as fallback
+        if (empty($attributes["email"]) && empty($attributes["username"])) {
+            $user->username = str_replace(" ", "_", $attributes["name"]);
+        }
+
+        $profile->full_name = $attributes["name"];
 
         return [$user, $profile];
     }
