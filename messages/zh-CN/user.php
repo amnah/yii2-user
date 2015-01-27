@@ -59,7 +59,7 @@ return [
     'Email change cancelled' => '已取消更改邮箱地址得请求',
     'Instructions to reset your password have been sent' => '重置密码邮件已发送',
     'Passwords do not match' => '两个密码不一致',
-    'can contain only letters, numbers, and \'_\'.' => '只能包含字母、数字和下划线_',
+    'can contain only letters, numbers, and \'_\'' => '只能包含字母、数字和下划线_',
 
 
     // mail

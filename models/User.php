@@ -92,7 +92,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['email', 'username'], 'unique'],
             [['email', 'username'], 'filter', 'filter' => 'trim'],
             [['email'], 'email'],
-            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => "{attribute} " . \Yii::t('user', "can contain only letters, numbers, and '_'.")],
+            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => "{attribute} " . \Yii::t('user', "can contain only letters, numbers, and '_'")],
 
 
             // password rules

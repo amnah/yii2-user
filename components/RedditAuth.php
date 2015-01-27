@@ -41,7 +41,7 @@ class RedditAuth extends OAuth2
     public $duration = 'temporary';
 
     /**
-     * @var string Twitter state - anything you want. According to Reddit, you should use
+     * @var string Token state - anything you want. According to Reddit, you should use
      *             this to verify authorization requests by checking that it matches
      * @see https://github.com/reddit/reddit/wiki/OAuth2#authorization
      */
