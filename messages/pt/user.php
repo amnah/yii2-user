@@ -42,8 +42,8 @@ return [
 
     // models/forms
     'Email not found' => 'Correio eletrónico não encontrado',
-    'Email/Username' => 'Correio eletrónico/Nome de utilizador',
-    'Email/Username not found' => 'Correio eletrónico/Nome de utilizador não encontrado',
+    'Email / Username' => 'Correio eletrónico / Nome de utilizador',
+    'Email / Username not found' => 'Correio eletrónico / Nome de utilizador não encontrado',
     'Username not found' => 'Nome de utilizador não encontrado',
     'User is banned - {banReason}' => 'Utilizador está banido - {banReason}',
     'Incorrect password' => 'Senha Incorreta',

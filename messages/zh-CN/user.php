@@ -42,8 +42,8 @@ return [
 
     // models/forms
     'Email not found' => '该邮箱尚未注册',
-    'Email/Username' => '邮箱/用户名',
-    'Email/Username not found' => '邮箱/用户名 不存在',
+    'Email / Username' => '邮箱 / 用户名',
+    'Email / Username not found' => '邮箱 / 用户名 不存在',
     'Username not found' => '该用户名尚未注册',
     'User is banned - {banReason}' => '用户已封 - {banReason}',
     'Incorrect password' => '错误的密码',

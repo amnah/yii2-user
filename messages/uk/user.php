@@ -42,8 +42,8 @@ return [
 
     // models/forms
     'Email not found' => 'E-mail не знайдено',
-    'Email/Username' => 'E-mail/ім\'я користувача',
-    'Email/Username not found' => 'E-mail/ім\'я користувача не знайдено',
+    'Email / Username' => 'E-mail / ім\'я користувача',
+    'Email / Username not found' => 'E-mail / ім\'я користувача не знайдено',
     'Username not found' => 'Користувач не знайдений',
     'User is banned - {banReason}' => 'Користувача блоковано - {banReason}',
     'Incorrect password' => 'Невірний пароль',
