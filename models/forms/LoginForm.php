@@ -52,16 +52,12 @@ class LoginForm extends Model
         // check for valid user
         $user = $this->getUser();
         if (!$user) {
-
-            // calculate error message
             if (Yii::$app->getModule("user")->loginEmail && Yii::$app->getModule("user")->loginUsername) {
-                $errorAttribute = "Email/username";
-            } elseif (Yii::$app->getModule("user")->loginEmail) {
-                $errorAttribute = "Email";
+                $attribute = "Email/Username";
             } else {
-                $errorAttribute = "Username";
+                $attribute = Yii::$app->getModule("user")->loginEmail ? "Email" : "Username";
             }
-            $this->addError("username", Yii::t("user", "$errorAttribute not found"));
+            $this->addError("username", Yii::t("user", "$attribute not found"));
         }
     }
 
@@ -72,12 +68,6 @@ class LoginForm extends Model
     {
         // check for ban status
         $user = $this->getUser();
-
-        if (!$user)
-        {
-            return;
-        }
-
         if ($user->ban_time) {
             $this->addError("username", Yii::t("user", "User is banned - {banReason}", [
                 "banReason" => $user->ban_reason,
@@ -148,7 +138,7 @@ class LoginForm extends Model
     {
         // calculate attribute label for "username"
         if (Yii::$app->getModule("user")->loginEmail && Yii::$app->getModule("user")->loginUsername) {
-            $attribute = "Email / Username";
+            $attribute = "Email/Username";
         } else {
             $attribute = Yii::$app->getModule("user")->loginEmail ? "Email" : "Username";
         }

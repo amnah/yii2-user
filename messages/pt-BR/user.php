@@ -1,15 +1,18 @@
 <?php
 
 return [
+
 	// models
 	'ID' => 'Código',
 	'User ID' => 'Código do Usuário',
 	'Create Time' => 'Data de Criação',
 	'Update Time' => 'Data de Atualização',
 	'Full Name' => 'Nome Completo',
-	'Name' => 'Nome',
+
+    'Name' => 'Nome',
 	'Can Admin' => 'Permite Administrar',
-	'Role' => 'Cargo',
+
+    'Role' => 'Cargo',
 	'Role ID' => 'Código do cargo',
 	'Status' => 'Situação',
 	'Email' => 'E-mail',
@@ -25,22 +28,30 @@ return [
 	'Ban Reason' => 'Motivo de Suspensão',
 	'Current Password' => 'Senha Atual',
 	'New Password' => 'Nova Senha',
+//    'New Password Confirm' => '',
 	'Email Confirmation' => 'E-mail de Confirmação',
+
 	'Provider' => 'Provedor',
 	'Provider ID' => 'Código do Provedor',
 	'Provider Attributes' => 'Atributos do Provedor',
-	'Type' => 'Tipo',
+
+    'Type' => 'Tipo',
 	'Key' => 'Chave',
 	'Consume Time' => 'Tempo Consumido',
 	'Expire Time' => 'Tempo de Expiração',
+
 	// models/forms
 	'Email not found' => 'E-mail não encontrado',
-	'Email/username not found' => 'E-mail/Usuário não encontrado',
+    'Email/Username' => 'E-mail/Usuário',
+    'Email/Username not found' => 'E-mail/Usuário não encontrado',
 	'Username not found' => 'Usuário não encontrado',
 	'User is banned - {banReason}' => 'Usuário banido - {banReason}',
 	'Incorrect password' => 'Senha Incorreta',
 	'Remember Me' => 'Lembrar-me',
 	'Email is already active' => 'E-mail já está ativo',
+//    'Passwords do not match' => '',
+//    '{attribute} can contain only letters, numbers, and "_"' => '',
+
 	// controllers
 	'Successfully registered [ {displayName} ]' => 'Registrado com sucesso [ {displayName} ]',
 	' - Please check your email to confirm your account' => ' - Por favor verifique o seu e-mail para confirmar a sua conta',
@@ -49,9 +60,11 @@ return [
 	'Confirmation email resent' => 'E-mail de confirmação reenviado',
 	'Email change cancelled' => 'Alteração de e-mail cancelada',
 	'Instructions to reset your password have been sent' => 'Intruções para reiniciar a sua senha foram enviadas',
+
 	// mail
 	'Please confirm your email address by clicking the link below:' => 'Por favor confirme o seu e-mail clicando no endereço abaixo:',
 	'Please use this link to reset your password:' => 'Por favor utilize este enderenço para reiniciar a sua senha:',
+
 	// admin views
 	'Users' => 'Usuários',
 	'Banned' => 'Banido',
@@ -63,6 +76,7 @@ return [
 	'Create {modelClass}' => 'Criar {modelClass}',
 	'Update {modelClass}: ' => 'Atualizar {modelClass}: ',
 	'Are you sure you want to delete this item?' => 'Tem a certeza que deseja excluir?',
+
 	// default views
 	'Account' => 'Conta',
 	'Pending email confirmation: [ {newEmail} ]' => 'Confirmação de e-mail pendente: [ {newEmail} ]',

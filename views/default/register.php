@@ -56,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-lg-offset-2 col-lg-10">
                 <?= Html::submitButton(Yii::t('user', 'Register'), ['class' => 'btn btn-primary']) ?>
 
+                <br/><br/>
                 <?= Html::a(Yii::t('user', 'Login'), ["/user/login"]) ?>
             </div>
         </div>

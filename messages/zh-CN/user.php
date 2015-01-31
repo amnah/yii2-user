@@ -41,14 +41,16 @@ return [
     'Expire Time' => '超时时间',
 
     // models/forms
-    'Email / Username' => '邮箱/用户名',
     'Email not found' => '该邮箱尚未注册',
-    'Email/username not found' => '邮箱/用户名 不存在',
+    'Email/Username' => '邮箱/用户名',
+    'Email/Username not found' => '邮箱/用户名 不存在',
     'Username not found' => '该用户名尚未注册',
     'User is banned - {banReason}' => '用户已封 - {banReason}',
     'Incorrect password' => '错误的密码',
     'Remember Me' => '记住登陆状态',
     'Email is already active' => '该邮箱已经被激活，无需再激活',
+    'Passwords do not match' => '两个密码不一致',
+    '{attribute} can contain only letters, numbers, and "_"' => '{attribute} 只能包含字母、数字和下划线_',
 
     // controllers
     'Successfully registered [ {displayName} ]' => '[ {displayName} ] 注册成功！',
@@ -58,9 +60,6 @@ return [
     'Confirmation email resent' => '验证邮件已发送',
     'Email change cancelled' => '已取消更改邮箱地址得请求',
     'Instructions to reset your password have been sent' => '重置密码邮件已发送',
-    'Passwords do not match' => '两个密码不一致',
-    'can contain only letters, numbers, and \'_\'' => '只能包含字母、数字和下划线_',
-
 
     // mail
     'Please confirm your email address by clicking the link below:' => '请点击下面链接以认证您的邮箱地址：',
@@ -102,6 +101,4 @@ return [
     'Please fill out the following fields to register:' => '请输入下面信息注册',
     'Resend' => '重新发送验证邮件',
     'Password has been reset' => '已重置密码',
-    'or' => '或者',
-
 ];
