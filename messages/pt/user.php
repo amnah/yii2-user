@@ -28,6 +28,7 @@ return [
     'Ban Reason' => 'Razão de Suspensão',
     'Current Password' => 'Atual Senha',
     'New Password' => 'Nova Senha',
+//    'New Password Confirm' => '',
     'Email Confirmation' => 'Correio eletrónico de Confirmação',
 
     'Provider' => 'Provedor',
@@ -41,12 +42,15 @@ return [
 
     // models/forms
     'Email not found' => 'Correio eletrónico não encontrado',
-    'Email/username not found' => 'Correio eletrónico/Nome de utilizador não encontrado',
+    'Email / Username' => 'Correio eletrónico / Nome de utilizador',
+    'Email / Username not found' => 'Correio eletrónico / Nome de utilizador não encontrado',
     'Username not found' => 'Nome de utilizador não encontrado',
     'User is banned - {banReason}' => 'Utilizador está banido - {banReason}',
     'Incorrect password' => 'Senha Incorreta',
     'Remember Me' => 'Lembrar-me',
     'Email is already active' => 'Correio eletrónico já em uso',
+//    'Passwords do not match' => '',
+//    '{attribute} can contain only letters, numbers, and "_"' => '',
 
     // controllers
     'Successfully registered [ {displayName} ]' => 'Registado com sucesso [ {displayName} ]',

@@ -53,6 +53,11 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_UNCONFIRMED_EMAIL = 2;
 
     /**
+     * @var string Current password - for account page updates
+     */
+    public $currentPassword;
+
+    /**
      * @var string New password - for registration and changing password
      */
     public $newPassword;
@@ -61,11 +66,6 @@ class User extends ActiveRecord implements IdentityInterface
      * @var string New password confirmation - for reset
      */
     public $newPasswordConfirm;
-
-    /**
-     * @var string Current password - for account page updates
-     */
-    public $currentPassword;
 
     /**
      * @var array Permission cache array
@@ -92,14 +92,14 @@ class User extends ActiveRecord implements IdentityInterface
             [['email', 'username'], 'unique'],
             [['email', 'username'], 'filter', 'filter' => 'trim'],
             [['email'], 'email'],
-            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => "{attribute} can contain only letters, numbers, and '_'."],
+            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('user', '{attribute} can contain only letters, numbers, and "_"')],
 
             // password rules
             [['newPassword'], 'string', 'min' => 3],
             [['newPassword'], 'filter', 'filter' => 'trim'],
             [['newPassword'], 'required', 'on' => ['register', 'reset']],
             [['newPasswordConfirm'], 'required', 'on' => ['reset']],
-            [['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => 'Passwords do not match'],
+            [['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user','Passwords do not match')],
 
             // account page
             [['currentPassword'], 'required', 'on' => ['account']],
@@ -159,6 +159,8 @@ class User extends ActiveRecord implements IdentityInterface
 
             'currentPassword' => Yii::t('user', 'Current Password'),
             'newPassword'     => Yii::t('user', 'New Password'),
+            'newPasswordConfirm' => Yii::t('user', 'New Password Confirm'),
+
         ];
     }
 

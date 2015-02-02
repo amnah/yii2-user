@@ -26,7 +26,7 @@ Yii 2 User - User authentication module
 ## Installation
 
 * Install [Yii 2](http://www.yiiframework.com/download) using your preferred method
-* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "~2.0"```
+* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "dev-master"```
 * Update config file *config/web.php* and *config/db.php*
 
 ```php
@@ -87,6 +87,7 @@ return [
 ```
 
 ## Release Notes
+* 2014/11/28  - Release 2.1.0
 * 2014/10/13  - Release 2.1.0-RC
 * 2014/8/1  - Release 2.1.0-alpha4
 * 2014/6/29 - Release 2.1.0-alpha3

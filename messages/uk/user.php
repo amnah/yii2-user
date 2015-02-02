@@ -28,6 +28,7 @@ return [
     'Ban Reason' => 'Причина блокування',
     'Current Password' => 'Поточний пароль',
     'New Password' => 'Новий пароль',
+//    'New Password Confirm' => '',
     'Email Confirmation' => 'E-mail підтвердження',
 
     'Provider' => 'Запрошення',
@@ -41,12 +42,15 @@ return [
 
     // models/forms
     'Email not found' => 'E-mail не знайдено',
-    'Email/username not found' => 'E-mail/ім\'я користувача не знайдено',
+    'Email / Username' => 'E-mail / ім\'я користувача',
+    'Email / Username not found' => 'E-mail / ім\'я користувача не знайдено',
     'Username not found' => 'Користувач не знайдений',
     'User is banned - {banReason}' => 'Користувача блоковано - {banReason}',
     'Incorrect password' => 'Невірний пароль',
     'Remember Me' => 'Запам\'ятати мене',
     'Email is already active' => 'E-mail вже активний',
+//    'Passwords do not match' => '',
+//    '{attribute} can contain only letters, numbers, and "_"' => '',
 
     // controllers
     'Successfully registered [ {displayName} ]' => 'Успішно зареєстрований [ {displayName} ]',
