@@ -1,12 +1,14 @@
 <?php
 
+use amnah\yii2\user\models\User;
+use amnah\yii2\user\models\UserAuth;
 use amnah\yii2\user\models\Profile;
 use amnah\yii2\user\models\Role;
-use amnah\yii2\user\models\User;
 use amnah\yii2\user\models\UserKey;
 use yii\db\Schema;
+use yii\db\Migration;
 
-class m140524_153638_init_user extends \yii\db\Migration
+class m150214_044831_init_user extends Migration
 {
     public function safeUp()
     {
@@ -14,7 +16,7 @@ class m140524_153638_init_user extends \yii\db\Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
-        
+
         // create tables. note the specific order
         $this->createTable(Role::tableName(), [
             "id" => Schema::TYPE_PK,
@@ -77,16 +79,32 @@ class m140524_153638_init_user extends \yii\db\Migration
 
         // insert admin user: neo/neo
         $security = Yii::$app->security;
-        $columns = ["id", "role_id", "email", "username", "password", "status", "create_time", "api_key", "auth_key"];
+        $columns = ["role_id", "email", "username", "password", "status", "create_time", "api_key", "auth_key"];
         $this->batchInsert(User::tableName(), $columns, [
-            [1, Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s"), $security->generateRandomString(), $security->generateRandomString()],
+            [Role::ROLE_ADMIN, "neo@neo.com", "neo", '$2y$10$WYB666j7MmxuW6b.kFTOde/eGCLijWa6BFSjAAiiRbSAqpC1HCmrC', User::STATUS_ACTIVE, date("Y-m-d H:i:s"), $security->generateRandomString(), $security->generateRandomString()],
         ]);
 
         // insert profile data
-        $columns = ["id", "user_id", "full_name", "create_time"];
+        $columns = ["user_id", "full_name", "create_time"];
         $this->batchInsert(Profile::tableName(), $columns, [
-            [1, 1, "the one", date("Y-m-d H:i:s")],
+            [1, "the one", date("Y-m-d H:i:s")],
         ]);
+
+        $this->createTable(UserAuth::tableName(), [
+            'id' => Schema::TYPE_PK,
+            'user_id' => Schema::TYPE_INTEGER . ' not null',
+            'provider' => Schema::TYPE_STRING . ' not null',
+            'provider_id' => Schema::TYPE_STRING . ' not null',
+            'provider_attributes' => Schema::TYPE_TEXT . ' not null',
+            'create_time' => Schema::TYPE_TIMESTAMP . ' null default null',
+            'update_time' => Schema::TYPE_TIMESTAMP . ' null default null'
+        ], $tableOptions);
+
+        // add indexes for performance optimization
+        $this->createIndex(UserAuth::tableName() . "_provider_id", UserAuth::tableName(), "provider_id", false);
+
+        // add foreign keys for data integrity
+        $this->addForeignKey(UserAuth::tableName() . "_user_id", UserAuth::tableName(), "user_id", User::tableName(), "id");
     }
 
     public function safeDown()
