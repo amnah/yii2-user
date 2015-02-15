@@ -18,7 +18,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * @var string Module version
      */
-    protected $_version = "2.1.1";
+    protected $_version = "2.1.2";
 
     /**
      * @var string Alias for module
