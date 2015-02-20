@@ -200,8 +200,6 @@ class AuthController extends Controller
         /** @var \amnah\yii2\user\models\Role    $role */
         $role = Yii::$app->getModule("user")->model("Role");
 
-        \Yii::trace(['userAuth' => $userAuth->attributes, 'client' => $client->userAttributes]);
-        
         // set user and profile info
         $attributes = $client->getUserAttributes();
         $function = "setInfo" . ucfirst($client->name); // "setInfoFacebook()"
