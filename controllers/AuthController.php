@@ -266,7 +266,7 @@ class AuthController extends Controller
             $user->username = str_replace(" ", "_", $attributes["name"]);
         }
 
-        $profile->full_name = $attributes["name"];
+        $profile->full_name = $attributes["first_name"].' '.$attributes["last_name"];
 
         return [$user, $profile];
     }
