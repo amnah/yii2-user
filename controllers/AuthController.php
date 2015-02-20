@@ -200,6 +200,8 @@ class AuthController extends Controller
         /** @var \amnah\yii2\user\models\Role    $role */
         $role = Yii::$app->getModule("user")->model("Role");
 
+        \Yii::trace(['userAuth' => $userAuth->attributes, 'client' => $client->userAttributes]);
+        
         // set user and profile info
         $attributes = $client->getUserAttributes();
         $function = "setInfo" . ucfirst($client->name); // "setInfoFacebook()"
@@ -345,4 +347,43 @@ class AuthController extends Controller
 
         return [$user, $profile];
     }
+
+    /**
+     * Set info for vkontakte registration
+     *
+     * @author Ilya Sheershoff <sheershoff@gmail.com>
+     * @param array $attributes
+     * @return array [$user, $profile]
+     */
+    protected function setInfoVkontakte($attributes)
+    {
+        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\Profile $profile */
+        $user = Yii::$app->getModule("user")->model("User");
+        $profile = Yii::$app->getModule("user")->model("Profile");
+        
+        foreach($_SESSION as $k=>$v){
+            if(is_object($v)&&get_class($v)=='yii\authclient\OAuthToken')
+                $user->email = $v->getParam('email');
+        }
+        
+        // set email/username if they are set
+        // note: email may be missing if user signed up using a phone number
+        if (!empty($attributes["email"])) {
+            $user->email = $attributes["email"];
+        }
+        if (!empty($attributes["first_name"])&&!empty($attributes["last_name"])) {
+            $user->username = $attributes["first_name"].' '.$attributes["last_name"];
+        }
+
+        // use vkontakte_id name as username as fallback
+        if (empty($attributes["email"]) && empty($attributes["username"])) {
+            $user->username =  'vkontakte_'.$attributes["id"];
+        }
+
+        $profile->full_name = $attributes["name"];
+
+        return [$user, $profile];
+    }
+    
 }
