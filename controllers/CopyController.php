@@ -32,7 +32,7 @@ class CopyController extends Controller
     public function init()
     {
         // allow console requests only
-        if (!\Yii::$app->request->isConsoleRequest) {
+        if (!Yii::$app->request->isConsoleRequest) {
             throw new HttpException(404, 'The requested page does not exist.');
         }
 

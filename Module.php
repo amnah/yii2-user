@@ -3,20 +3,22 @@
 namespace amnah\yii2\user;
 
 use Yii;
-use yii\db\ActiveRecord;
+use yii\base\BootstrapInterface;
 use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
+use yii\web\GroupUrlRule;
 
 /**
  * User module
  *
  * @author amnah <amnah.dev@gmail.com>
  */
-class Module extends \yii\base\Module
+class Module extends \yii\base\Module implements BootstrapInterface
 {
     /**
      * @var string Module version
      */
-    protected $_version = "2.1.1";
+    protected $_version = "2.1.2";
 
     /**
      * @var string Alias for module
@@ -60,7 +62,7 @@ class Module extends \yii\base\Module
 
     /**
      * @var array|string|null Url to redirect to after logging in. If null, will redirect to home page. Note that
-     *                        AccessControl takes precedence over this (see [[User::loginRequired()]])
+     *                        AccessControl takes precedence over this (see [[yii\web\User::loginRequired()]])
      */
     public $loginRedirect = null;
 
@@ -172,6 +174,14 @@ class Module extends \yii\base\Module
             $msg = "{$className}: \$useEmail must be true if \$email(Change)Confirmation is true";
             throw new InvalidConfigException($msg);
         }
+
+        // ensure that the "user" component is set properly
+        // this typically causes problems in the yii2-advanced app
+        // when people set it in "common/config" instead of "frontend/config" and/or "backend/config"
+        //   -> this results in users failing to login without any feedback/error message
+        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->get("user") instanceof \amnah\yii2\user\components\User) {
+            throw new InvalidConfigException('Yii::$app->user is not set properly. It needs to extend \amnah\yii2\user\components\User');
+        }
     }
 
     /**
@@ -179,7 +189,6 @@ class Module extends \yii\base\Module
      */
     protected function getDefaultModelClasses()
     {
-        // use single quotes so nothing gets escaped
         return [
             'User'       => 'amnah\yii2\user\models\User',
             'Profile'    => 'amnah\yii2\user\models\Profile',
@@ -218,6 +227,26 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * @inheritdoc
+     * NOTE: THIS IS NOT CURRENTLY USED.
+     *       This is here for future versions and will need to be bootstrapped via config file
+     *
+     */
+    public function bootstrap($app)
+    {
+        // add rules for admin/copy/auth controllers
+        $groupUrlRule = new GroupUrlRule([
+            'prefix' => $this->id,
+            'rules' => [
+                '<controller:(admin|copy|auth)>' => '<controller>',
+                '<controller:(admin|copy|auth)>/<action:\w+>' => '<controller>/<action>',
+                '<action:\w+>' => 'default/<action>',
+            ],
+        ]);
+        $app->getUrlManager()->addRules($groupUrlRule->rules, false);
+    }
+
+    /**
      * Modify createController() to handle routes in the default controller
      *
      * This is a temporary hack until they add in url management via modules
@@ -252,15 +281,14 @@ class Module extends \yii\base\Module
      */
     public function getActions()
     {
-
         return [
             "/{$this->id}" => "This 'actions' list. Appears only when <strong>YII_DEBUG</strong>=true, otherwise redirects to /login or /account",
             "/{$this->id}/admin" => "Admin CRUD",
             "/{$this->id}/login" => "Login page",
             "/{$this->id}/logout" => "Logout page",
             "/{$this->id}/register" => "Register page",
-            "/{$this->id}/auth/login" => "Register/login via social account",
-            "/{$this->id}/auth/connect" => "Connect social account to currently logged in user account",
+            "/{$this->id}/auth/login?authclient=facebook" => "Register/login via social account",
+            "/{$this->id}/auth/connect?authclient=facebook" => "Connect social account to currently logged in user",
             "/{$this->id}/account" => "User account page (email, username, password)",
             "/{$this->id}/profile" => "Profile page",
             "/{$this->id}/forgot" => "Forgot password page",
@@ -269,8 +297,6 @@ class Module extends \yii\base\Module
             "/{$this->id}/resend-change" => "Resend email change confirmation (quick link on the 'Account' page)",
             "/{$this->id}/cancel" => "Cancel email change confirmation (quick link on the 'Account' page)",
             "/{$this->id}/confirm?key=zzzzz" => "Confirm email address. Automatically generated upon registration/email change",
-            "/{$this->id}/auth/login?authclient=zzzzz" => "Register/login via social authentication",
-            "/{$this->id}/auth/connect?authclient=zzzzz" => "Connect social authentication account to currently logged in user",
         ];
     }
 }

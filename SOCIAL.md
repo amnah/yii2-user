@@ -50,6 +50,12 @@ First, we'll need to set up the social accounts by adding the components config:
                 'scope' => 'identity', // comma separated string, NO SPACES
                  // @see https://github.com/reddit/reddit/wiki/OAuth2#authorization
             ],
+            'vkontakte' => [
+                'class' => 'yii\authclient\clients\VKontakte',
+                'clientId' => 'xxxxxxxxxx',
+                'clientSecret' => 'yyyyyyyyyy', // @deploy - set in main-local.php
+                'scope' => '4194304', // 4194304 in vk API bit masks means 'email'
+            ],
             // any other social auth
         ],
     ],

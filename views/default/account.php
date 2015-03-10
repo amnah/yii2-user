@@ -87,4 +87,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php ActiveForm::end(); ?>
 
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+            <?php foreach ($user->userAuths as $userAuth): ?>
+                <p>Linked Social Account: <?= ucfirst($userAuth->provider) ?> / <?= $userAuth->provider_id ?></p>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
 </div>
