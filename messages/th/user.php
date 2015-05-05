@@ -1,13 +1,17 @@
 <?php
+
 return [
+
     // models
     'ID' => 'รหัส',
     'User ID' => 'รหัสผู้ใช้',
     'Create Time' => 'เวลาสร้าง',
     'Update Time' => 'เวลาปรับปรุง',
     'Full Name' => 'ชื่อเต็ม',
+
     'Name' => 'ชื่อ',
     'Can Admin' => 'เป็นผู้ดูแลระบบ',
+
     'Role' => 'กฏ',
     'Role ID' => 'รหัสกฏ',
     'Status' => 'สถานะ',
@@ -26,13 +30,16 @@ return [
     'New Password' => 'รหัสผ่านใหม่',
     'New Password Confirm' => 'ยืนยันรหัสผ่านใหม่',
     'Email Confirmation' => 'ยืนยันอีเมลล์',
+
     'Provider' => 'ผู้ให้บริการ',
     'Provider ID' => 'รหัสผู้ให้บริการ',
     'Provider Attributes' => 'รายการผู้ให้บริการ',
+
     'Type' => 'ประเภท',
     'Key' => 'คีย์',
     'Consume Time' => 'ใช้เวลา',
     'Expire Time' => 'เวลาหมดอายุ',
+
     // models/forms
     'Email not found' => 'ไม่พบอีเมลล์',
     'Email / Username' => 'อีเมลล์/ชื่อผู้ใช้',
@@ -44,6 +51,7 @@ return [
     'Email is already active' => 'อีเมลล์นี้พร้อมใช้งานแล้ว',
     'Passwords do not match' => 'รหัสผ่านไม่ตรงกัน',
     '{attribute} can contain only letters, numbers, and "_"' => '{attribute} กำหนดให้มีตัวอักษร ตัวเลข และ "_"',
+
     // controllers
     'Successfully registered [ {displayName} ]' => 'การลงทะเบียนเสร็จสมบูรณ์ [ {displayName} ]',
     ' - Please check your email to confirm your account' => ' - กรุณาตรวจสอบอีเมลล์เพื่อยืนยันบัญชี',
@@ -52,9 +60,11 @@ return [
     'Confirmation email resent' => 'ส่งข้อมูลการยืนยันที่อีเมลล์อีกครั้ง',
     'Email change cancelled' => 'การเปลี่ยนอีเมลล์ถูกยกเลิก',
     'Instructions to reset your password have been sent' => 'คำสั่งการรีเซ็ตรหัสผ่านของคุณถูกส่ง',
+
     // mail
     'Please confirm your email address by clicking the link below:' => 'กรุณายืนยันอีเมลล์โดยคลิกลิ้งด้านล่าง:',
     'Please use this link to reset your password:' => 'กรุณาใช้ลิ้งค์นี้เพื่อรีเซ็ตรหัสผ่านของคุณ:',
+
     // admin views
     'Users' => 'ผู้ใช้งาน',
     'Banned' => 'ถูกแบน',
@@ -66,6 +76,7 @@ return [
     'Create {modelClass}' => 'สร้าง {modelClass}',
     'Update {modelClass}: ' => 'ปรับปรุง {modelClass}: ',
     'Are you sure you want to delete this item?' => 'คุณแน่ใจนะว่าต้องการลบสิ่งนี้?',
+
     // default views
     'Account' => 'บัญชี',
     'Pending email confirmation: [ {newEmail} ]' => 'ยังไม่มีการยืนยันอีเมลล์: [ {newEmail} ]',
@@ -83,7 +94,7 @@ return [
     'Yii 2 User' => 'Yii 2 User',
     'Login' => 'เข้าสู่ระบบ',
     'Register' => 'ลงทะเบียน',
-    'Logout' => 'ออกจากระบบ', // i dont think this is used ...
+    'Logout' => 'ออกจากระบบ',
     'Resend confirmation email' => 'ส่งอีเมลล์ยืนยันอีกครั้ง',
     'Profile' => 'ข้อมูลผู้ใช้',
     'Please fill out the following fields to login:' => 'กรุณากรอกข้อมูลการเข้าสู่ระบบ:',
