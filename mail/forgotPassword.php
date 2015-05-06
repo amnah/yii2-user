@@ -13,4 +13,4 @@ use yii\helpers\Url;
 
 <p><?= Yii::t("user", "Please use this link to reset your password:") ?></p>
 
-<p><?= Url::toRoute(["/user/reset", "key" => $userKey->key], true); ?></p>
+<p><?= Url::toRoute(["/user/reset", "key" => $userKey->key_value], true); ?></p>

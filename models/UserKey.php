@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property integer $user_id
  * @property integer $type
- * @property string  $key
+ * @property string  $key_value
  * @property string  $create_time
  * @property string  $consume_time
  * @property string  $expire_time
@@ -52,11 +52,11 @@ class UserKey extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'type', 'key'], 'required'],
+            [['user_id', 'type', 'key_value'], 'required'],
             [['user_id', 'type'], 'integer'],
             [['create_time', 'consume_time', 'expire_time'], 'safe'],
-            [['key'], 'string', 'max' => 255],
-            [['key'], 'unique']
+            [['key_value'], 'string', 'max' => 255],
+            [['key_value'], 'unique']
         ];
     }
     */
@@ -70,7 +70,7 @@ class UserKey extends ActiveRecord
             'id'           => Yii::t('user', 'ID'),
             'user_id'      => Yii::t('user', 'User ID'),
             'type'         => Yii::t('user', 'Type'),
-            'key'          => Yii::t('user', 'Key'),
+            'key_value'    => Yii::t('user', 'Key'),
             'create_time'  => Yii::t('user', 'Create Time'),
             'consume_time' => Yii::t('user', 'Consume Time'),
             'expire_time'  => Yii::t('user', 'Expire Time'),
@@ -125,7 +125,7 @@ class UserKey extends ActiveRecord
         $model->type        = $type;
         $model->create_time = date("Y-m-d H:i:s");
         $model->expire_time = $expireTime;
-        $model->key         = Yii::$app->security->generateRandomString();
+        $model->key_value   = Yii::$app->security->generateRandomString();
         $model->save(false);
         return $model;
     }
@@ -162,7 +162,7 @@ class UserKey extends ActiveRecord
         $now = date("Y-m-d H:i:s");
         return static::find()
             ->where([
-                "key"          => $key,
+                "key_value"    => $key,
                 "type"         => $type,
                 "consume_time" => null,
             ])
