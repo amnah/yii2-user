@@ -75,6 +75,12 @@ These are the module properties and their default values
     public $emailViewPath = "@user/mail";
 
     /**
+     * @var bool If true, the module will add url rules in the bootstrap phase. Disable this 
+     *           if don't want users to visit the /user pages (eg, if you're building an api)
+     */
+    public $addUrlRules = true;
+
+    /**
      * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]
      * Usage:
      *   $user = Yii::$app->getModule("user")->model("User", $config);

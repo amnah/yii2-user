@@ -32,6 +32,10 @@ Yii 2 User - User authentication module
 ```php
 // app/config/web.php
 return [
+    'bootstrap' => [
+        'log',
+        function () { return Yii::$app->getModule("user"); }, // to set up /user routes
+    ],
     'components' => [
         // NOTE: in the yii2-advanced-app, the user component should be updated in
         // 'frontend/config/main.php' and/or 'backend/config/main.php' (OR you can add it
@@ -167,6 +171,7 @@ property:
             'default' => 'app\controllers\MyDefaultController',
         ],
         'modelClasses'  => [
+            'User' => 'app\models\MyUser', // note: don't forget user::identityClass above 
             'Profile' => 'app\models\MyProfile',
         ],
         'emailViewPath' => '@app/mail/user', // example: @app/mail/user/confirmEmail.php
