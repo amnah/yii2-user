@@ -126,6 +126,26 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * @inheritdoc
      */
+    public function bootstrap($app)
+    {
+        // add rules for admin/copy/auth controllers
+        if ($this->addUrlRules) {
+
+            $groupUrlRule = new GroupUrlRule([
+                'prefix' => $this->id,
+                'rules' => [
+                    '<controller:(admin|copy|auth)>' => '<controller>',
+                    '<controller:(admin|copy|auth)>/<action:\w+>' => '<controller>/<action>',
+                    '<action>' => 'default/<action>',
+                ],
+            ]);
+            $app->getUrlManager()->addRules($groupUrlRule->rules, false);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
@@ -230,26 +250,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $className = $this->modelClasses[ucfirst($name)];
         $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
         return $this->_models[$name];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function bootstrap($app)
-    {
-        // add rules for admin/copy/auth controllers
-        if ($this->addUrlRules) {
-
-            $groupUrlRule = new GroupUrlRule([
-                'prefix' => $this->id,
-                'rules' => [
-                    '<controller:(admin|copy|auth)>' => '<controller>',
-                    '<controller:(admin|copy|auth)>/<action:\w+>' => '<controller>/<action>',
-                    '<action:\w+>' => 'default/<action>',
-                ],
-            ]);
-            $app->getUrlManager()->addRules($groupUrlRule->rules, false);
-        }
     }
 
     /**
