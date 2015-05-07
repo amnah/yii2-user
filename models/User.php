@@ -157,10 +157,10 @@ class User extends ActiveRecord implements IdentityInterface
             'ban_time'    => Yii::t('user', 'Ban Time'),
             'ban_reason'  => Yii::t('user', 'Ban Reason'),
 
+            // virtual attributes set above
             'currentPassword' => Yii::t('user', 'Current Password'),
             'newPassword'     => Yii::t('user', 'New Password'),
             'newPasswordConfirm' => Yii::t('user', 'New Password Confirm'),
-
         ];
     }
 
