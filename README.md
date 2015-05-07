@@ -3,6 +3,13 @@ Yii 2 User
 
 Yii 2 User - User authentication module
 
+## New version released 5/7/2015
+
+This release has some minor updates, but unfortunately contains backwards-compatibility 
+breaking changes. Thus I've had to [bump up the version](http://semver.org/).
+
+[Upgrade Notes](UPGRADE.md)
+
 ## Demo
 
 * [Demo](http://yii2.amnahdev.com/user)
@@ -89,16 +96,6 @@ return [
             'linkOptions' => ['data-method' => 'post']],
 ],
 ```
-
-## Release Notes
-* 2014/11/28  - Release 2.1.0
-* 2014/10/13  - Release 2.1.0-RC
-* 2014/8/1  - Release 2.1.0-alpha4
-* 2014/6/29 - Release 2.1.0-alpha3
-* 2014/6/12 - Release 2.1.0-alpha2
-* 2014/5/19 - Release 2.1.0-alpha
-* 2014/4/28 - Release 2.0.0-alpha ([Upgrade Notes](UPGRADE.md))
-* 2014/4/17 - Release 1.0.0-beta
 
 ## Development Notes
 
