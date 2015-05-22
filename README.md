@@ -39,10 +39,6 @@ breaking changes. Thus I've had to [bump up the version](http://semver.org/).
 ```php
 // app/config/web.php
 return [
-    'bootstrap' => [
-        'log',
-        function () { return Yii::$app->getModule("user"); }, // to set up /user routes
-    ],
     'components' => [
         // NOTE: in the yii2-advanced-app, the user component should be updated in
         // 'frontend/config/main.php' and/or 'backend/config/main.php' (OR you can add it
