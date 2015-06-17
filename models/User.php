@@ -284,7 +284,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function beforeSave($insert)
     {
-        if ($this->getDirtyAttributes())
+        // check if we're setting $this->password directly
+        // handle it by setting $this->newPassword instead
+        $dirtyAttributes = $this->getDirtyAttributes();
+        if (isset($dirtyAttributes["password"])) {
+            $this->newPassword = $dirtyAttributes["password"];
+        }
+
         // hash new password if set
         if ($this->newPassword) {
             $this->password = Yii::$app->security->generatePasswordHash($this->newPassword);
