@@ -28,7 +28,7 @@ return [
     'Ban Reason' => 'Razón de Expulsión',
     'Current Password' => 'Contraseña Actual',
     'New Password' => 'Nueva Contraseña',
-//    'New Password Confirm' => '',
+    'New Password Confirm' => 'Confirmación de nueva contraseña',
     'Email Confirmation' => 'Confirmación de correo',
 
     'Provider' => 'Proveedor',
@@ -49,8 +49,8 @@ return [
     'Incorrect password' => 'Contraseña incorrecta',
     'Remember Me' => 'Recuérdame',
     'Email is already active' => 'El correo ya está activo',
-//    'Passwords do not match' => '',
-//    '{attribute} can contain only letters, numbers, and "_"' => '',
+    'Passwords do not match' => 'Las contraseñas no coinciden',
+    '{attribute} can contain only letters, numbers, and "_"' => '{attribute} puede contener tan solo letras, números y "_"',
 
     // controllers
     'Successfully registered [ {displayName} ]' => 'Registrado con éxito [ {displayName} ]',
