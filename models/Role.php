@@ -41,12 +41,22 @@ class Role extends ActiveRecord
      */
     public function rules()
     {
-        return [
+        $rules = [
             [['name'], 'required'],
-            //            [['create_time', 'update_time'], 'safe'],
-            [['can_admin'], 'integer'],
             [['name'], 'string', 'max' => 255]
+//            [['can_admin'], 'integer'],
+//            [['create_time', 'update_time'], 'safe'],
         ];
+
+        // add can_ rules
+        foreach ($this->attributes() as $attribute) {
+            if (strpos($attribute, 'can_') === 0) {
+                $rules[] = [[$attribute], 'integer'];
+            }
+        }
+
+        return $rules;
+
     }
 
     /**

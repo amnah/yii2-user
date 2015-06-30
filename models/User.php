@@ -129,7 +129,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validateCurrentPassword()
     {
-        if (!$this->verifyPassword($this->currentPassword)) {
+        if (!$this->validatePassword($this->currentPassword)) {
             $this->addError("currentPassword", "Current password incorrect");
         }
     }
@@ -157,10 +157,10 @@ class User extends ActiveRecord implements IdentityInterface
             'ban_time'    => Yii::t('user', 'Ban Time'),
             'ban_reason'  => Yii::t('user', 'Ban Reason'),
 
+            // virtual attributes set above
             'currentPassword' => Yii::t('user', 'Current Password'),
             'newPassword'     => Yii::t('user', 'New Password'),
             'newPasswordConfirm' => Yii::t('user', 'New Password Confirm'),
-
         ];
     }
 
@@ -274,7 +274,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $password
      * @return bool
      */
-    public function verifyPassword($password)
+    public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
@@ -284,6 +284,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function beforeSave($insert)
     {
+        // check if we're setting $this->password directly
+        // handle it by setting $this->newPassword instead
+        $dirtyAttributes = $this->getDirtyAttributes();
+        if (isset($dirtyAttributes["password"])) {
+            $this->newPassword = $dirtyAttributes["password"];
+        }
+
         // hash new password if set
         if ($this->newPassword) {
             $this->password = Yii::$app->security->generatePasswordHash($this->newPassword);

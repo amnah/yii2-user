@@ -95,10 +95,15 @@ class LoginForm extends Model
             return;
         }
 
-        // check password
         /** @var \amnah\yii2\user\models\User $user */
+
+        // check if 1) user registered using social auth and 2) password is correct
         $user = $this->getUser();
-        if (!$user->verifyPassword($this->password)) {
+        if (!$user->password && $user->userAuths) {
+            $userAuths = $user->userAuths;
+            $userAuth = reset($userAuths);
+            $this->addError("userAuth", $userAuth->provider);
+        } elseif (!$user->validatePassword($this->password)) {
             $this->addError("password", Yii::t("user", "Incorrect password"));
         }
     }

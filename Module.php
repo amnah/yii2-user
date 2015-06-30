@@ -3,22 +3,20 @@
 namespace amnah\yii2\user;
 
 use Yii;
-use yii\base\BootstrapInterface;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
-use yii\web\GroupUrlRule;
 
 /**
  * User module
  *
  * @author amnah <amnah.dev@gmail.com>
  */
-class Module extends \yii\base\Module implements BootstrapInterface
+class Module extends \yii\base\Module
 {
     /**
      * @var string Module version
      */
-    protected $_version = "2.1.2";
+    protected $_version = "3.0.0-RC";
 
     /**
      * @var string Alias for module
@@ -227,34 +225,16 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @inheritdoc
-     * NOTE: THIS IS NOT CURRENTLY USED.
-     *       This is here for future versions and will need to be bootstrapped via config file
-     *
-     */
-    public function bootstrap($app)
-    {
-        // add rules for admin/copy/auth controllers
-        $groupUrlRule = new GroupUrlRule([
-            'prefix' => $this->id,
-            'rules' => [
-                '<controller:(admin|copy|auth)>' => '<controller>',
-                '<controller:(admin|copy|auth)>/<action:\w+>' => '<controller>/<action>',
-                '<action:\w+>' => 'default/<action>',
-            ],
-        ]);
-        $app->getUrlManager()->addRules($groupUrlRule->rules, false);
-    }
-
-    /**
      * Modify createController() to handle routes in the default controller
      *
-     * This is a temporary hack until they add in url management via modules
+     * This is needed because of the way we map actions to "user/default/<action>".
+     * We can't use module bootstrapping because that doesn't work when
+     * `urlManager.enablePrettyUrl` = false.
+     * Additionally, this requires one less step during installation
      *
-     * @link https://github.com/yiisoft/yii2/issues/810
-     * @link http://www.yiiframework.com/forum/index.php/topic/21884-module-and-url-management/
+     * @link https://github.com/amnah/yii2-user/issues/94
      *
-     * "user", "user/default", "user/admin", and "user/copy" work like normal
+     * "user", "user/default", "user/admin", "user/copy", and "user/auth" work like normal
      * any other "user/xxx" gets changed to "user/default/xxx"
      *
      * @inheritdoc

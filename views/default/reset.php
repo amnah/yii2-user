@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-reset">
 
-	<h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <?php if (!empty($success)): ?>
 
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <p><?= Yii::t("user", "Invalid key") ?></p>
         </div>
 
-	<?php else: ?>
+    <?php else: ?>
 
         <div class="row">
             <div class="col-lg-5">
@@ -48,6 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
-	<?php endif; ?>
+    <?php endif; ?>
 
 </div>

@@ -77,6 +77,13 @@ class DefaultController extends Controller
             return $this->goBack(Yii::$app->getModule("user")->loginRedirect);
         }
 
+        // check if user registered using social auth. if so, redirect to social auth site
+        if ($model->hasErrors("userAuth")) {
+            $provider = $model->getErrors("userAuth");
+            $provider = reset($provider);
+            return $this->redirect(["/user/auth/login", "authclient" => $provider]);
+        }
+
         // render
         return $this->render('login', [
             'model' => $model,

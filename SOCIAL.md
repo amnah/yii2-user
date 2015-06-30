@@ -1,7 +1,7 @@
 Yii 2 User - Social authentication
 =========
 
-Yii 2 User now supports social authentication. It is based on
+Yii 2 User supports social authentication. It is based on
 [yii2-authclient](https://github.com/yiisoft/yii2-authclient), so it works very easily with
 the built-in clients[](https://github.com/yiisoft/yii2-authclient#predefined-auth-clients).
 In addition, this module also supports social authentication via
@@ -9,8 +9,8 @@ In addition, this module also supports social authentication via
 
 In general, there are two main ways to use social authentication:
 
-* Connecting social accounts to existing user account
-* Registration/login using social auth
+* [Connecting social accounts to existing user account](#connecting-social-accounts)
+* [Registration/login using social auth](#registrationlogin-using-social-auth)
 
 Both ways are supported in this module, but take a bit of extra work to set up.
 
@@ -19,7 +19,8 @@ Both ways are supported in this module, but take a bit of extra work to set up.
 First, we'll need to set up the social accounts by adding the components config:
 
 **Note: you can use any of the [predefined]
-(https://github.com/yiisoft/yii2-authclient#predefined-auth-clients) auth clients**
+(http://www.yiiframework.com/doc-2.0/ext-authclient-index.html#predefined-auth-clients) 
+auth clients**
 
 ```php
 // @app/config/web.php

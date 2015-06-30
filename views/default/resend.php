@@ -14,15 +14,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-resend">
 
-	<h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 
-	<?php if ($flash = Yii::$app->session->getFlash('Resend-success')): ?>
+    <?php if ($flash = Yii::$app->session->getFlash('Resend-success')): ?>
 
         <div class="alert alert-success">
             <p><?= $flash ?></p>
         </div>
 
-	<?php else: ?>
+    <?php else: ?>
 
         <div class="row">
             <div class="col-lg-5">
@@ -35,6 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
-	<?php endif; ?>
+    <?php endif; ?>
 
 </div>
