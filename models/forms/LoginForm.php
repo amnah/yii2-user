@@ -49,15 +49,17 @@ class LoginForm extends Model
      */
     public function validateUser()
     {
-        // check for valid user
+        // check for valid user or if user registered using social auth
         $user = $this->getUser();
-        if (!$user) {
+        if (!$user || !$user->password) {
             if (Yii::$app->getModule("user")->loginEmail && Yii::$app->getModule("user")->loginUsername) {
                 $attribute = "Email / Username";
             } else {
                 $attribute = Yii::$app->getModule("user")->loginEmail ? "Email" : "Username";
             }
             $this->addError("username", Yii::t("user", "$attribute not found"));
+
+            // do we need to check $user->userAuths ???
         }
     }
 
@@ -97,13 +99,9 @@ class LoginForm extends Model
 
         /** @var \amnah\yii2\user\models\User $user */
 
-        // check if 1) user registered using social auth and 2) password is correct
+        // check if password is correct
         $user = $this->getUser();
-        if (!$user->password && $user->userAuths) {
-            $userAuths = $user->userAuths;
-            $userAuth = reset($userAuths);
-            $this->addError("userAuth", $userAuth->provider);
-        } elseif (!$user->validatePassword($this->password)) {
+        if (!$user->validatePassword($this->password)) {
             $this->addError("password", Yii::t("user", "Incorrect password"));
         }
     }
