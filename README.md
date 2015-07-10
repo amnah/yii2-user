@@ -3,12 +3,12 @@ Yii 2 User
 
 Yii 2 User - User authentication module
 
-## New version released 5/7/2015
+## New version released 7/10/2015
 
-This release has some minor updates, but unfortunately contains backwards-compatibility 
+This release has some minor updates, but unfortunately contains backwards-compatibility
 breaking changes. Thus I've had to [bump up the version](http://semver.org/).
 
-[Upgrade Notes](UPGRADE.md)
+[Upgrade Notes](https://github.com/amnah/yii2-user/blob/master/UPGRADE.md).
 
 ## Demo
 
@@ -164,7 +164,7 @@ property:
             'default' => 'app\controllers\MyDefaultController',
         ],
         'modelClasses'  => [
-            'User' => 'app\models\MyUser', // note: don't forget user::identityClass above 
+            'User' => 'app\models\MyUser', // note: don't forget user::identityClass above
             'Profile' => 'app\models\MyProfile',
         ],
         'emailViewPath' => '@app/mail/user', // example: @app/mail/user/confirmEmail.php

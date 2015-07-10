@@ -1,27 +1,14 @@
 Yii 2 User - Upgrade notes
 =========
 
-## Upgrading from ~2.0 to 3.0.0-RC
+## Upgrading from ~2.0 to 3.0.0
 
-This release just has some minor updates, but unfortunately contains backwards-compatibility 
+This release just has some minor updates, but unfortunately contains backwards-compatibility
 breaking changes.
 
 To update to this version:
 
 * Change table column ```tbl_user_key.key``` to ```tbl_user_key.key_value``` in your sql database
- 
-* Add module to bootstrap config
- 
-```php
-// app/config/web.php
-return [
-    'bootstrap' => [
-        'log',
-        function () { return Yii::$app->getModule("user"); }, // to set up /user routes
-    ],
-    ...
-]
-```
 
 ## Upgrading from 1.0.0-beta to 2.0.0-alpha
 
