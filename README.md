@@ -33,7 +33,7 @@ breaking changes. Thus I've had to [bump up the version](http://semver.org/).
 ## Installation
 
 * Install [Yii 2](http://www.yiiframework.com/download) using your preferred method
-* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "dev-master"```
+* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "~3.0"```
 * Update config file *config/web.php* and *config/db.php*
 
 ```php
