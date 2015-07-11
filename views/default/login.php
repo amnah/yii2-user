@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::t('user', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-default-login">
+<div class="user-default-login" style="height: 650px;">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
