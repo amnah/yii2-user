@@ -48,9 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($user, 'newPassword')->passwordInput() ?>
 
-        <?php /* uncomment if you want to add profile fields here
+        <?php /* uncomment if you want to add profile fields here */ ?>
         <?= $form->field($profile, 'full_name') ?>
-        */ ?>
+        <?php /**/ ?>
 
         <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
