@@ -198,7 +198,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getProfile()
     {
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        /** @var Module $userModule */
+        $userModule = Yii::$app->getModule("user");
+        $profile = $userModule->model("Profile");
         return $this->hasOne($profile::className(), ['user_id' => 'id']);
     }
 
@@ -207,7 +209,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getRole()
     {
-        $role = Yii::$app->getModule("user")->model("Role");
+        /** @var Module $userModule */
+        $userModule = Yii::$app->getModule("user");
+        $role = $userModule->model("Role");
         return $this->hasOne($role::className(), ['id' => 'role_id']);
     }
 
@@ -216,7 +220,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getUserKeys()
     {
-        $userKey = Yii::$app->getModule("user")->model("UserKey");
+        /** @var Module $userModule */
+        $userModule = Yii::$app->getModule("user");
+        $userKey = $userModule->model("UserKey");
         return $this->hasMany($userKey::className(), ['user_id' => 'id']);
     }
 
