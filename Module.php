@@ -31,7 +31,7 @@ class Module extends \yii\base\Module
     /**
      * @var bool If true, users are required to enter a username
      */
-    public $requireUsername = false;
+    public $requireUsername = true;
 
     /**
      * @var bool If true, users can enter an email. This is automatically set to true if $requireEmail = true
