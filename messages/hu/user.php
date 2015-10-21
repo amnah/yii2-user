@@ -5,8 +5,8 @@ return [
     // models
     'ID' => 'ID',
     'User ID' => 'Felhasználó ID',
-    'Create Time' => 'Létrehozás ideje',
-    'Update Time' => 'Szerkesztés ideje',
+    'Created At' => 'Létrehozás ideje',
+    'Updated At' => 'Szerkesztés ideje',
     'Full Name' => 'Teljes név',
 
     'Name' => 'Név',

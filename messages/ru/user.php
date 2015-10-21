@@ -5,8 +5,8 @@ return [
     // models
     'ID' => 'Номер',
     'User ID' => 'Номер пользователя',
-    'Create Time' => 'Дата создания',
-    'Update Time' => 'Дата обновления',
+    'Created At' => 'Дата создания',
+    'Updated At' => 'Дата обновления',
     'Full Name' => 'Полное имя',
 
     'Name' => 'Имя',

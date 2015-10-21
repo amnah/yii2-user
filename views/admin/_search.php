@@ -35,19 +35,19 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'api_key') ?>
 
-    <?php // echo $form->field($model, 'login_ip') ?>
+    <?php // echo $form->field($model, 'logged_in_ip') ?>
 
-    <?php // echo $form->field($model, 'login_time') ?>
+    <?php // echo $form->field($model, 'logged_in_at') ?>
 
     <?php // echo $form->field($model, 'create_ip') ?>
 
-    <?php // echo $form->field($model, 'create_time') ?>
+    <?php // echo $form->field($model, 'created_at') ?>
 
-    <?php // echo $form->field($model, 'update_time') ?>
+    <?php // echo $form->field($model, 'updated_at') ?>
 
-    <?php // echo $form->field($model, 'ban_time') ?>
+    <?php // echo $form->field($model, 'banned_at') ?>
 
-    <?php // echo $form->field($model, 'ban_reason') ?>
+    <?php // echo $form->field($model, 'banned_reason') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('user', 'Search'), ['class' => 'btn btn-primary']) ?>

@@ -34,7 +34,7 @@ class User extends \yii\web\User
         // check if user is banned. if so, log user out and redirect home
         /** @var \amnah\yii2\user\models\User $user */
         $user = $this->getIdentity();
-        if ($user && $user->ban_time) {
+        if ($user && $user->banned_at) {
             $this->logout();
             Yii::$app->getResponse()->redirect(['/'])->send();
             return;

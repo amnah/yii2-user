@@ -5,8 +5,8 @@ return [
     // models
     'ID' => 'ID',
     'User ID' => '用户 ID',
-    'Create Time' => '创建时间',
-    'Update Time' => '更新时间',
+    'Created At' => '创建时间',
+    'Updated At' => '更新时间',
     'Full Name' => '全名',
 
     'Name' => '名称',

@@ -10,8 +10,8 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string  $create_time
- * @property string  $update_time
+ * @property string  $created_at
+ * @property string  $updated_at
  * @property string  $full_name
  *
  * @property User    $user
@@ -34,11 +34,11 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'          => Yii::t('user', 'ID'),
-            'user_id'     => Yii::t('user', 'User ID'),
-            'create_time' => Yii::t('user', 'Create Time'),
-            'update_time' => Yii::t('user', 'Update Time'),
-            'full_name'   => Yii::t('user', 'Full Name'),
+            'id'         => Yii::t('user', 'ID'),
+            'user_id'    => Yii::t('user', 'User ID'),
+            'created_at' => Yii::t('user', 'Created At'),
+            'updated_at' => Yii::t('user', 'Updated At'),
+            'full_name'  => Yii::t('user', 'Full Name'),
         ];
     }
 
@@ -49,12 +49,8 @@ class Profile extends ActiveRecord
     {
         return [
             'timestamp' => [
-                'class'      => 'yii\behaviors\TimestampBehavior',
-                'value'      => function () { return date("Y-m-d H:i:s"); },
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
-                ],
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'value' => function () { return date("Y-m-d H:i:s"); },
             ],
         ];
     }

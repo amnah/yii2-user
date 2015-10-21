@@ -28,14 +28,14 @@ $role = Yii::$app->getModule("user")->model("Role");
 
     <?= $form->field($user, 'status')->dropDownList($user::statusDropdown()); ?>
 
-    <?php // use checkbox for ban_time ?>
-    <?php // convert `ban_time` to int so that the checkbox gets set properly ?>
-    <?php $user->ban_time = $user->ban_time ? 1 : 0 ?>
-    <?= Html::activeLabel($user, 'ban_time', ['label' => Yii::t('user', 'Banned')]); ?>
-    <?= Html::activeCheckbox($user, 'ban_time'); ?>
-    <?= Html::error($user, 'ban_time'); ?>
+    <?php // use checkbox for banned_at ?>
+    <?php // convert `banned_at` to int so that the checkbox gets set properly ?>
+    <?php $user->banned_at = $user->banned_at ? 1 : 0 ?>
+    <?= Html::activeLabel($user, 'banned_at', ['label' => Yii::t('user', 'Banned')]); ?>
+    <?= Html::activeCheckbox($user, 'banned_at'); ?>
+    <?= Html::error($user, 'banned_at'); ?>
 
-    <?= $form->field($user, 'ban_reason'); ?>
+    <?= $form->field($user, 'banned_reason'); ?>
 
     <div class="form-group">
         <?= Html::submitButton($user->isNewRecord ? Yii::t('user', 'Create') : Yii::t('user', 'Update'), ['class' => $user->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

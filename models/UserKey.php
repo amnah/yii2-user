@@ -12,9 +12,9 @@ use yii\db\ActiveRecord;
  * @property integer $user_id
  * @property integer $type
  * @property string  $key_value
- * @property string  $create_time
- * @property string  $consume_time
- * @property string  $expire_time
+ * @property string  $created_at
+ * @property string  $consumed_at
+ * @property string  $expired_at
  *
  * @property User    $user
  */
@@ -45,9 +45,10 @@ class UserKey extends ActiveRecord
             'user_id'      => Yii::t('user', 'User ID'),
             'type'         => Yii::t('user', 'Type'),
             'key_value'    => Yii::t('user', 'Key'),
-            'create_time'  => Yii::t('user', 'Create Time'),
-            'consume_time' => Yii::t('user', 'Consume Time'),
-            'expire_time'  => Yii::t('user', 'Expire Time'),
+            'created_at'   => Yii::t('user', 'Created At'),
+            'updated_at'   => Yii::t('user', 'Updated At'),
+            'consumed_at' => Yii::t('user', 'Consume Time'),
+            'expired_at'  => Yii::t('user', 'Expire Time'),
         ];
     }
 
@@ -58,12 +59,8 @@ class UserKey extends ActiveRecord
     {
         return [
             'timestamp' => [
-                'class'      => 'yii\behaviors\TimestampBehavior',
-                'value'      => function () { return date("Y-m-d H:i:s"); },
-                'attributes' => [
-                    // set only create_time because there is no update_time
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
-                ],
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'value' => function () { return date("Y-m-d H:i:s"); },
             ],
         ];
     }
@@ -97,8 +94,8 @@ class UserKey extends ActiveRecord
         // set/update data
         $model->user_id     = $userId;
         $model->type        = $type;
-        $model->create_time = date("Y-m-d H:i:s");
-        $model->expire_time = $expireTime;
+        $model->created_at = date("Y-m-d H:i:s");
+        $model->expired_at = $expireTime;
         $model->key_value   = Yii::$app->security->generateRandomString();
         $model->save(false);
         return $model;
@@ -116,11 +113,11 @@ class UserKey extends ActiveRecord
         $now = date("Y-m-d H:i:s");
         return static::find()
             ->where([
-                "user_id"      => $userId,
-                "type"         => $type,
-                "consume_time" => null,
+                "user_id"     => $userId,
+                "type"        => $type,
+                "consumed_at" => null,
             ])
-            ->andWhere("([[expire_time]] >= '$now' or [[expire_time]] is NULL)")
+            ->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)")
             ->one();
     }
 
@@ -138,9 +135,9 @@ class UserKey extends ActiveRecord
             ->where([
                 "key_value"    => $key,
                 "type"         => $type,
-                "consume_time" => null,
+                "consumed_at" => null,
             ])
-            ->andWhere("([[expire_time]] >= '$now' or [[expire_time]] is NULL)")
+            ->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)")
             ->one();
     }
 
@@ -151,7 +148,7 @@ class UserKey extends ActiveRecord
      */
     public function consume()
     {
-        $this->consume_time = date("Y-m-d H:i:s");
+        $this->consumed_at = date("Y-m-d H:i:s");
         $this->save(false);
         return $this;
     }
@@ -163,7 +160,7 @@ class UserKey extends ActiveRecord
      */
     public function expire()
     {
-        $this->expire_time = date("Y-m-d H:i:s");
+        $this->expired_at = date("Y-m-d H:i:s");
         $this->save(false);
         return $this;
     }

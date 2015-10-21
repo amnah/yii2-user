@@ -10,8 +10,8 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property string  $name
- * @property string  $create_time
- * @property string  $update_time
+ * @property string  $created_at
+ * @property string  $updated_at
  * @property integer $can_admin
  *
  * @property User[]  $users
@@ -56,11 +56,11 @@ class Role extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'          => Yii::t('user', 'ID'),
-            'name'        => Yii::t('user', 'Name'),
-            'create_time' => Yii::t('user', 'Create Time'),
-            'update_time' => Yii::t('user', 'Update Time'),
-            'can_admin'   => Yii::t('user', 'Can Admin'),
+            'id'         => Yii::t('user', 'ID'),
+            'name'       => Yii::t('user', 'Name'),
+            'created_at' => Yii::t('user', 'Created At'),
+            'updated_at' => Yii::t('user', 'Updated At'),
+            'can_admin'  => Yii::t('user', 'Can Admin'),
         ];
     }
 
@@ -71,12 +71,8 @@ class Role extends ActiveRecord
     {
         return [
             'timestamp' => [
-                'class'      => 'yii\behaviors\TimestampBehavior',
-                'value'      => function () { return date("Y-m-d H:i:s"); },
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
-                ],
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'value' => function () { return date("Y-m-d H:i:s"); },
             ],
         ];
     }

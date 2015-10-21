@@ -130,7 +130,7 @@ class AuthController extends Controller
             $user = $user::findOne($userAuth->user_id);
 
             // check if user is banned
-            if ($user && $user->ban_time) {
+            if ($user && $user->banned_at) {
                 return false;
             }
 

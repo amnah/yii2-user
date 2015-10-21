@@ -19,7 +19,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'role_id', 'status'], 'integer'],
-            [['email', 'new_email', 'username', 'password', 'auth_key', 'api_key', 'login_ip', 'login_time', 'create_ip', 'create_time', 'update_time', 'ban_time', 'ban_reason', 'profile.full_name'], 'safe'],
+            [['email', 'new_email', 'username', 'password', 'auth_key', 'api_key', 'logged_in_ip', 'logged_in_at', 'create_ip', 'created_at', 'updated_at', 'banned_at', 'banned_reason', 'profile.full_name'], 'safe'],
         ];
     }
 
@@ -94,13 +94,13 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'password', $this->password])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'api_key', $this->api_key])
-            ->andFilterWhere(['like', 'login_ip', $this->login_ip])
+            ->andFilterWhere(['like', 'logged_in_ip', $this->logged_in_ip])
             ->andFilterWhere(['like', 'create_ip', $this->create_ip])
-            ->andFilterWhere(['like', 'ban_reason', $this->ban_reason])
-            ->andFilterWhere(['like', 'login_time', $this->login_time])
-            ->andFilterWhere(['like', "{$userTable}.create_time", $this->create_time])
-            ->andFilterWhere(['like', "{$userTable}.update_time", $this->update_time])
-            ->andFilterWhere(['like', 'ban_time', $this->ban_time])
+            ->andFilterWhere(['like', 'banned_reason', $this->banned_reason])
+            ->andFilterWhere(['like', 'logged_in_at', $this->logged_in_at])
+            ->andFilterWhere(['like', "{$userTable}.created_at", $this->created_at])
+            ->andFilterWhere(['like', "{$userTable}.updated_at", $this->updated_at])
+            ->andFilterWhere(['like', 'banned_at', $this->banned_at])
             ->andFilterWhere(['like', 'profile.full_name', $this->getAttribute('profile.full_name')]);
 
         return $dataProvider;

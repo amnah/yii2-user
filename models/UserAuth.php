@@ -13,12 +13,12 @@ use yii\db\ActiveRecord;
  * @property string $provider
  * @property string $provider_id
  * @property string $provider_attributes
- * @property string $create_time
- * @property string $update_time
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @property User $user
  */
-class UserAuth extends \yii\db\ActiveRecord
+class UserAuth extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -31,8 +31,8 @@ class UserAuth extends \yii\db\ActiveRecord
             'provider'            => Yii::t('user', 'Provider'),
             'provider_id'         => Yii::t('user', 'Provider ID'),
             'provider_attributes' => Yii::t('user', 'Provider Attributes'),
-            'create_time'         => Yii::t('user', 'Create Time'),
-            'update_time'         => Yii::t('user', 'Update Time'),
+            'created_at'          => Yii::t('user', 'Created At'),
+            'updated_at'          => Yii::t('user', 'Updated At'),
         ];
     }
 
@@ -43,12 +43,8 @@ class UserAuth extends \yii\db\ActiveRecord
     {
         return [
             'timestamp' => [
-                'class'      => 'yii\behaviors\TimestampBehavior',
-                'value'      => function () { return date("Y-m-d H:i:s"); },
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
-                ],
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'value' => function () { return date("Y-m-d H:i:s"); },
             ],
         ];
     }

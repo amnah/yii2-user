@@ -5,8 +5,8 @@ return [
     // models
     'ID' => 'Código',
     'User ID' => 'Código de Usuario',
-    'Create Time' => 'Fecha de Creación',
-    'Update Time' => 'Fecha de Actualización',
+    'Created At' => 'Fecha de Creación',
+    'Updated At' => 'Fecha de Actualización',
     'Full Name' => 'Nombre completo',
 
     'Name' => 'Nombre',
