@@ -25,18 +25,18 @@ class DefaultController extends Controller
                 'rules' => [
                     [
                         'actions' => ['index', 'confirm', 'resend'],
-                        'allow'   => true,
-                        'roles'   => ['?', '@'],
+                        'allow' => true,
+                        'roles' => ['?', '@'],
                     ],
                     [
                         'actions' => ['account', 'profile', 'resend-change', 'cancel', 'logout'],
-                        'allow'   => true,
-                        'roles'   => ['@'],
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
                     [
                         'actions' => ['login', 'register', 'forgot', 'reset'],
-                        'allow'   => true,
-                        'roles'   => ['?'],
+                        'allow' => true,
+                        'roles' => ['?'],
                     ],
                 ],
             ],
@@ -102,8 +102,7 @@ class DefaultController extends Controller
         $logoutRedirect = Yii::$app->getModule("user")->logoutRedirect;
         if ($logoutRedirect === null) {
             return $this->goHome();
-        }
-        else {
+        } else {
             return $this->redirect($logoutRedirect);
         }
     }
@@ -113,12 +112,12 @@ class DefaultController extends Controller
      */
     public function actionRegister()
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        /** @var \amnah\yii2\user\models\Role    $role */
+        /** @var \amnah\yii2\user\models\Role $role */
 
         // set up new user/profile objects
-        $user    = Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
+        $user = Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
         $profile = Yii::$app->getModule("user")->model("Profile");
 
         // load post data
@@ -156,7 +155,7 @@ class DefaultController extends Controller
 
         // render
         return $this->render("register", [
-            'user'    => $user,
+            'user' => $user,
             'profile' => $profile,
         ]);
     }
@@ -328,11 +327,11 @@ class DefaultController extends Controller
      */
     public function actionResendChange()
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\UserKey $userKey */
 
         // find userKey of type email change
-        $user    = Yii::$app->user->identity;
+        $user = Yii::$app->user->identity;
         $userKey = Yii::$app->getModule("user")->model("UserKey");
         $userKey = $userKey::findActiveByUser($user->id, $userKey::TYPE_EMAIL_CHANGE);
         if ($userKey) {
@@ -351,11 +350,11 @@ class DefaultController extends Controller
      */
     public function actionCancel()
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\UserKey $userKey */
 
         // find userKey of type email change
-        $user    = Yii::$app->user->identity;
+        $user = Yii::$app->user->identity;
         $userKey = Yii::$app->getModule("user")->model("UserKey");
         $userKey = $userKey::findActiveByUser($user->id, $userKey::TYPE_EMAIL_CHANGE);
         if ($userKey) {
@@ -399,7 +398,7 @@ class DefaultController extends Controller
      */
     public function actionReset($key)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\UserKey $userKey */
 
         // check for valid userKey

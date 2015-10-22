@@ -91,7 +91,7 @@ class ResendForm extends Model
 
             // get user
             /** @var \amnah\yii2\user\models\UserKey $userKey */
-            $user    = $this->getUser();
+            $user = $this->getUser();
             $userKey = Yii::$app->getModule("user")->model("UserKey");
 
             // calculate type

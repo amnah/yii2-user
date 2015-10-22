@@ -114,11 +114,10 @@ class RedditAuth extends OAuth2
         $curlOptions = parent::composeRequestCurlOptions($method, $url, $params);
 
         // add HTTP Basic Authorization headers for getting access token
+        // or add Bearer token for api requests
         if ($url == $this->tokenUrl) {
-            $curlOptions[CURLOPT_HTTPHEADER][] = 'Authorization: Basic '. base64_encode("{$params["client_id"]}:{$params["client_secret"]}");
-        }
-        // add Bearer token for api requests
-        elseif (strpos($url, $this->apiBaseUrl) !== false) {
+            $curlOptions[CURLOPT_HTTPHEADER][] = 'Authorization: Basic ' . base64_encode("{$params["client_id"]}:{$params["client_secret"]}");
+        } elseif (strpos($url, $this->apiBaseUrl) !== false) {
             $curlOptions[CURLOPT_HTTPHEADER][] = 'Authorization: Bearer ' . $params['access_token'];
         }
         return $curlOptions;

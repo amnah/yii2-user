@@ -53,14 +53,14 @@ class UserSearch extends User
         /** @var \amnah\yii2\user\models\Profile $profile */
 
         // get models
-        $user         = Yii::$app->getModule("user")->model("User");
-        $profile      = Yii::$app->getModule("user")->model("Profile");
-        $userTable    = $user::tableName();
+        $user = Yii::$app->getModule("user")->model("User");
+        $profile = Yii::$app->getModule("user")->model("Profile");
+        $userTable = $user::tableName();
         $profileTable = $profile::tableName();
 
         // set up query with relation to `profile.full_name`
         $query = $user::find();
-        $query->joinWith(['profile' => function($query) use ($profileTable) {
+        $query->joinWith(['profile' => function ($query) use ($profileTable) {
             $query->from(['profile' => $profileTable]);
         }]);
 
@@ -73,8 +73,8 @@ class UserSearch extends User
         $addSortAttributes = ["profile.full_name"];
         foreach ($addSortAttributes as $addSortAttribute) {
             $dataProvider->sort->attributes[$addSortAttribute] = [
-                'asc'   => [$addSortAttribute => SORT_ASC],
-                'desc'  => [$addSortAttribute => SORT_DESC],
+                'asc' => [$addSortAttribute => SORT_ASC],
+                'desc' => [$addSortAttribute => SORT_DESC],
             ];
         }
 
@@ -84,8 +84,8 @@ class UserSearch extends User
 
         $query->andFilterWhere([
             "{$userTable}.id" => $this->id,
-            'role_id'         => $this->role_id,
-            'status'          => $this->status,
+            'role_id' => $this->role_id,
+            'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'email', $this->email])

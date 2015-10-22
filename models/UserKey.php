@@ -11,12 +11,13 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property integer $user_id
  * @property integer $type
- * @property string  $key_value
- * @property string  $created_at
- * @property string  $consumed_at
- * @property string  $expired_at
+ * @property string $key_value
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $consumed_at
+ * @property string $expired_at
  *
- * @property User    $user
+ * @property User $user
  */
 class UserKey extends ActiveRecord
 {
@@ -41,14 +42,14 @@ class UserKey extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'           => Yii::t('user', 'ID'),
-            'user_id'      => Yii::t('user', 'User ID'),
-            'type'         => Yii::t('user', 'Type'),
-            'key_value'    => Yii::t('user', 'Key'),
-            'created_at'   => Yii::t('user', 'Created At'),
-            'updated_at'   => Yii::t('user', 'Updated At'),
+            'id' => Yii::t('user', 'ID'),
+            'user_id' => Yii::t('user', 'User ID'),
+            'type' => Yii::t('user', 'Type'),
+            'key_value' => Yii::t('user', 'Key'),
+            'created_at' => Yii::t('user', 'Created At'),
+            'updated_at' => Yii::t('user', 'Updated At'),
             'consumed_at' => Yii::t('user', 'Consume Time'),
-            'expired_at'  => Yii::t('user', 'Expire Time'),
+            'expired_at' => Yii::t('user', 'Expire Time'),
         ];
     }
 
@@ -60,7 +61,9 @@ class UserKey extends ActiveRecord
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function () { return date("Y-m-d H:i:s"); },
+                'value' => function () {
+                    return date("Y-m-d H:i:s");
+                },
             ],
         ];
     }
@@ -77,8 +80,8 @@ class UserKey extends ActiveRecord
     /**
      * Generate/reuse a userKey
      *
-     * @param int    $userId
-     * @param int    $type
+     * @param int $userId
+     * @param int $type
      * @param string $expireTime
      * @return static
      */
@@ -92,11 +95,11 @@ class UserKey extends ActiveRecord
         }
 
         // set/update data
-        $model->user_id     = $userId;
-        $model->type        = $type;
+        $model->user_id = $userId;
+        $model->type = $type;
         $model->created_at = date("Y-m-d H:i:s");
         $model->expired_at = $expireTime;
-        $model->key_value   = Yii::$app->security->generateRandomString();
+        $model->key_value = Yii::$app->security->generateRandomString();
         $model->save(false);
         return $model;
     }
@@ -104,7 +107,7 @@ class UserKey extends ActiveRecord
     /**
      * Find an active userKey by userId
      *
-     * @param int       $userId
+     * @param int $userId
      * @param array|int $type
      * @return static
      */
@@ -113,8 +116,8 @@ class UserKey extends ActiveRecord
         $now = date("Y-m-d H:i:s");
         return static::find()
             ->where([
-                "user_id"     => $userId,
-                "type"        => $type,
+                "user_id" => $userId,
+                "type" => $type,
                 "consumed_at" => null,
             ])
             ->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)")
@@ -124,7 +127,7 @@ class UserKey extends ActiveRecord
     /**
      * Find an active userKey by key
      *
-     * @param string    $key
+     * @param string $key
      * @param array|int $type
      * @return static
      */
@@ -133,8 +136,8 @@ class UserKey extends ActiveRecord
         $now = date("Y-m-d H:i:s");
         return static::find()
             ->where([
-                "key_value"    => $key,
-                "type"         => $type,
+                "key_value" => $key,
+                "type" => $type,
                 "consumed_at" => null,
             ])
             ->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)")

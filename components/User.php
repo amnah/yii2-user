@@ -80,8 +80,8 @@ class User extends \yii\web\User
      * Otherwise, it will use our custom permission system
      *
      * @param string $permissionName
-     * @param array  $params
-     * @param bool   $allowCaching
+     * @param array $params
+     * @param bool $allowCaching
      * @return bool
      */
     public function can($permissionName, $params = [], $allowCaching = true)

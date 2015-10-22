@@ -9,12 +9,12 @@ use yii\db\ActiveRecord;
  * This is the model class for table "tbl_role".
  *
  * @property integer $id
- * @property string  $name
- * @property string  $created_at
- * @property string  $updated_at
+ * @property string $name
+ * @property string $created_at
+ * @property string $updated_at
  * @property integer $can_admin
  *
- * @property User[]  $users
+ * @property User[] $users
  */
 class Role extends ActiveRecord
 {
@@ -56,11 +56,11 @@ class Role extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'         => Yii::t('user', 'ID'),
-            'name'       => Yii::t('user', 'Name'),
+            'id' => Yii::t('user', 'ID'),
+            'name' => Yii::t('user', 'Name'),
             'created_at' => Yii::t('user', 'Created At'),
             'updated_at' => Yii::t('user', 'Updated At'),
-            'can_admin'  => Yii::t('user', 'Can Admin'),
+            'can_admin' => Yii::t('user', 'Can Admin'),
         ];
     }
 
@@ -72,7 +72,9 @@ class Role extends ActiveRecord
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function () { return date("Y-m-d H:i:s"); },
+                'value' => function () {
+                    return date("Y-m-d H:i:s");
+                },
             ],
         ];
     }

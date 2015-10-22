@@ -10,11 +10,11 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string  $created_at
- * @property string  $updated_at
- * @property string  $full_name
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $full_name
  *
- * @property User    $user
+ * @property User $user
  */
 class Profile extends ActiveRecord
 {
@@ -34,11 +34,11 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'         => Yii::t('user', 'ID'),
-            'user_id'    => Yii::t('user', 'User ID'),
+            'id' => Yii::t('user', 'ID'),
+            'user_id' => Yii::t('user', 'User ID'),
             'created_at' => Yii::t('user', 'Created At'),
             'updated_at' => Yii::t('user', 'Updated At'),
-            'full_name'  => Yii::t('user', 'Full Name'),
+            'full_name' => Yii::t('user', 'Full Name'),
         ];
     }
 
@@ -50,7 +50,9 @@ class Profile extends ActiveRecord
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function () { return date("Y-m-d H:i:s"); },
+                'value' => function () {
+                    return date("Y-m-d H:i:s");
+                },
             ],
         ];
     }

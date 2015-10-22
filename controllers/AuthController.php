@@ -73,7 +73,7 @@ class AuthController extends Controller
             return;
         }
 
-         // register a new user
+        // register a new user
         $userAuth = $this->initUserAuth($client);
         $this->registerAndLoginUser($client, $userAuth);
     }
@@ -115,9 +115,9 @@ class AuthController extends Controller
      */
     protected function attemptLogin($client)
     {
-        /** @var \amnah\yii2\user\models\User     $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\UserAuth $userAuth */
-        $user         = Yii::$app->getModule("user")->model("User");
+        $user = Yii::$app->getModule("user")->model("User");
         $userAuth = Yii::$app->getModule("user")->model("UserAuth");
 
         // attempt to find userAuth in database by id and name
@@ -173,7 +173,7 @@ class AuthController extends Controller
      */
     protected function clearNewEmail($email)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\UserKey $userKey */
         $user = Yii::$app->getModule("user")->model("User");
         $userKey = Yii::$app->getModule("user")->model("UserKey");
@@ -201,9 +201,9 @@ class AuthController extends Controller
      */
     protected function registerAndLoginUser($client, $userAuth)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        /** @var \amnah\yii2\user\models\Role    $role */
+        /** @var \amnah\yii2\user\models\Role $role */
         $role = Yii::$app->getModule("user")->model("Role");
 
         // set user and profile info
@@ -253,7 +253,7 @@ class AuthController extends Controller
      */
     protected function setInfoFacebook($attributes)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
@@ -285,7 +285,7 @@ class AuthController extends Controller
      */
     protected function setInfoTwitter($attributes)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
@@ -304,7 +304,7 @@ class AuthController extends Controller
      */
     protected function setInfoGoogle($attributes)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
@@ -323,7 +323,7 @@ class AuthController extends Controller
      */
     protected function setInfoReddit($attributes)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
@@ -341,7 +341,7 @@ class AuthController extends Controller
      */
     protected function setInfoLinkedIn($attributes)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
@@ -361,33 +361,33 @@ class AuthController extends Controller
      */
     protected function setInfoVkontakte($attributes)
     {
-        /** @var \amnah\yii2\user\models\User    $user */
+        /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
-        
-        foreach($_SESSION as $k=>$v){
-            if(is_object($v)&&get_class($v)=='yii\authclient\OAuthToken')
+
+        foreach ($_SESSION as $k => $v) {
+            if (is_object($v) && get_class($v) == 'yii\authclient\OAuthToken')
                 $user->email = $v->getParam('email');
         }
-        
+
         // set email/username if they are set
         // note: email may be missing if user signed up using a phone number
         if (!empty($attributes["email"])) {
             $user->email = $attributes["email"];
         }
-        if (!empty($attributes["first_name"])&&!empty($attributes["last_name"])) {
-            $user->username = $attributes["first_name"].' '.$attributes["last_name"];
+        if (!empty($attributes["first_name"]) && !empty($attributes["last_name"])) {
+            $user->username = $attributes["first_name"] . ' ' . $attributes["last_name"];
         }
 
         // use vkontakte_id name as username as fallback
         if (empty($attributes["email"]) && empty($attributes["username"])) {
-            $user->username =  'vkontakte_'.$attributes["id"];
+            $user->username = 'vkontakte_' . $attributes["id"];
         }
 
-        $profile->full_name = $attributes["first_name"].' '.$attributes["last_name"];
+        $profile->full_name = $attributes["first_name"] . ' ' . $attributes["last_name"];
 
         return [$user, $profile];
     }
-    
+
 }

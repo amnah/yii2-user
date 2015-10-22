@@ -65,14 +65,14 @@ class CopyController extends Controller
         // confirm copy
         $confirm = $this->prompt($confirmMsg, [
             "required" => true,
-            "default"  => "no",
+            "default" => "no",
         ]);
 
         // process copy
         if (strncasecmp($confirm, "y", 1) === 0) {
             // handle aliases and copy files
             $fromPath = Yii::getAlias($this->from);
-            $toPath   = Yii::getAlias($this->to);
+            $toPath = Yii::getAlias($this->to);
             $this->copyFiles($fromPath, $toPath, $this->namespace);
         } // display cancellation + usage
         else {
@@ -97,7 +97,7 @@ class CopyController extends Controller
     {
         // trim paths
         $fromPath = rtrim($fromPath, "/\\");
-        $toPath   = rtrim($toPath, "/\\");
+        $toPath = rtrim($toPath, "/\\");
 
         // get files recursively
         $filePaths = $this->glob_recursive($fromPath . "/*");
@@ -112,7 +112,7 @@ class CopyController extends Controller
             }
 
             // calculate new file path and relative file
-            $newFilePath  = str_replace($fromPath, $toPath, $file);
+            $newFilePath = str_replace($fromPath, $toPath, $file);
             $relativeFile = str_replace($fromPath, "", $file);
 
             // get file content and replace namespace
@@ -123,7 +123,7 @@ class CopyController extends Controller
             if (file_exists($newFilePath)) {
                 $results[$relativeFile] = "File already exists ... skipping";
             } else {
-                $result                 = $this->save($newFilePath, $content);
+                $result = $this->save($newFilePath, $content);
                 $results[$relativeFile] = ($result === true ? "success" : $result);
             }
         }
@@ -138,7 +138,7 @@ class CopyController extends Controller
      * @link http://php.net/glob#106595
      *
      * @param string $pattern
-     * @param int    $flags
+     * @param int $flags
      * @return array
      */
     protected function glob_recursive($pattern, $flags = 0)
@@ -162,12 +162,12 @@ class CopyController extends Controller
      */
     protected function save($path, $content)
     {
-        $newDirMode  = 0755;
+        $newDirMode = 0755;
         $newFileMode = 0644;
 
         $dir = dirname($path);
         if (!is_dir($dir)) {
-            $mask   = @umask(0);
+            $mask = @umask(0);
             $result = @mkdir($dir, $newDirMode, true);
             @umask($mask);
             if (!$result) {

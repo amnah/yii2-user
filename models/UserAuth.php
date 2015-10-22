@@ -26,13 +26,13 @@ class UserAuth extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'                  => Yii::t('user', 'ID'),
-            'user_id'             => Yii::t('user', 'User ID'),
-            'provider'            => Yii::t('user', 'Provider'),
-            'provider_id'         => Yii::t('user', 'Provider ID'),
+            'id' => Yii::t('user', 'ID'),
+            'user_id' => Yii::t('user', 'User ID'),
+            'provider' => Yii::t('user', 'Provider'),
+            'provider_id' => Yii::t('user', 'Provider ID'),
             'provider_attributes' => Yii::t('user', 'Provider Attributes'),
-            'created_at'          => Yii::t('user', 'Created At'),
-            'updated_at'          => Yii::t('user', 'Updated At'),
+            'created_at' => Yii::t('user', 'Created At'),
+            'updated_at' => Yii::t('user', 'Updated At'),
         ];
     }
 
@@ -44,7 +44,9 @@ class UserAuth extends ActiveRecord
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function () { return date("Y-m-d H:i:s"); },
+                'value' => function () {
+                    return date("Y-m-d H:i:s");
+                },
             ],
         ];
     }
