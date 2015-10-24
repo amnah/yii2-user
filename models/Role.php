@@ -31,21 +31,12 @@ class Role extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return static::getDb()->tablePrefix . "role";
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         $rules = [
             [['name'], 'required'],
-            [['name'], 'string', 'max' => 255]
-//            [['can_admin'], 'integer'],
-//            [['create_time', 'update_time'], 'safe'],
+            [['name'], 'string', 'max' => 255],
+            [['can_admin'], 'integer'],
         ];
 
         // add can_ rules

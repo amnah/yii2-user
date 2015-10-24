@@ -23,32 +23,6 @@ class UserAuth extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return static::getDb()->tablePrefix . "user_auth";
-    }
-
-    /**
-     * No inputs are used for userAuths
-     *
-     * @inheritdoc
-     */
-    /*
-    public function rules()
-    {
-        return [
-            [['user_id', 'provider', 'provider_id', 'provider_attributes'], 'required'],
-            [['user_id'], 'integer'],
-            [['provider_attributes'], 'string'],
-            [['create_time', 'update_time'], 'safe'],
-            [['provider_id', 'provider'], 'string', 'max' => 255]
-        ];
-    }
-    */
-
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [

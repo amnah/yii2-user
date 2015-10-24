@@ -75,14 +75,6 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return static::getDb()->tablePrefix . "user";
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         // set initial rules

@@ -38,32 +38,6 @@ class UserKey extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return static::getDb()->tablePrefix . "user_key";
-    }
-
-    /**
-     * No inputs are used for userKeys
-     *
-     * @inheritdoc
-     */
-    /*
-    public function rules()
-    {
-        return [
-            [['user_id', 'type', 'key_value'], 'required'],
-            [['user_id', 'type'], 'integer'],
-            [['create_time', 'consume_time', 'expire_time'], 'safe'],
-            [['key_value'], 'string', 'max' => 255],
-            [['key_value'], 'unique']
-        ];
-    }
-    */
-
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
