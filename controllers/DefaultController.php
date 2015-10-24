@@ -74,7 +74,15 @@ class DefaultController extends Controller
         // load post data and login
         $model = Yii::$app->getModule("user")->model("LoginForm");
         if ($model->load(Yii::$app->request->post()) && $model->login(Yii::$app->getModule("user")->loginDuration)) {
-            return $this->goBack(Yii::$app->getModule("user")->loginRedirect);
+
+            // check for a valid returnUrl (to prevent a weird login bug)
+            //   https://github.com/amnah/yii2-user/issues/115
+            $loginRedirect = Yii::$app->getModule("user")->loginRedirect;
+            $returnUrl = Yii::$app->user->getReturnUrl($loginRedirect);
+            if (strpos($returnUrl, "user/login") !== false) {
+                $returnUrl = null;
+            }
+            return $this->redirect($returnUrl);
         }
 
         // render
