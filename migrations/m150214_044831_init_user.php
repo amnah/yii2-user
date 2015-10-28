@@ -31,7 +31,7 @@ class m150214_044831_init_user extends Migration
             'username' => Schema::TYPE_STRING . ' null default null',
             'password' => Schema::TYPE_STRING . ' null default null',
             'auth_key' => Schema::TYPE_STRING . ' null default null',
-            'api_key' => Schema::TYPE_STRING . ' null default null',
+            'access_token' => Schema::TYPE_STRING . ' null default null',
             'logged_in_ip' => Schema::TYPE_STRING . ' null default null',
             'logged_in_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'created_ip' => Schema::TYPE_STRING . ' null default null',
@@ -88,7 +88,7 @@ class m150214_044831_init_user extends Migration
 
         // insert admin user: neo/neo
         $security = Yii::$app->security;
-        $columns = ['role_id', 'email', 'username', 'password', 'status', 'created_at', 'api_key', 'auth_key'];
+        $columns = ['role_id', 'email', 'username', 'password', 'status', 'created_at', 'access_token', 'auth_key'];
         $this->batchInsert('{{%user}}', $columns, [
             [
                 Role::ROLE_ADMIN,

@@ -20,7 +20,7 @@ return [
     'Username' => 'Логин пользователя',
     'Password' => 'Пароль',
     'Auth Key' => 'Ключ авторизации',
-    'Api Key' => 'Ключ API',
+//    'Access Token' => 'Ключ API',
     'Login Ip' => 'IP авторизации',
     'Login Time' => 'Дата авторизации',
     'Create Ip' => 'IP создания',

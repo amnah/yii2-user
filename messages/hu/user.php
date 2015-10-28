@@ -20,7 +20,7 @@ return [
     'Username' => 'Felhasználónév',
     'Password' => 'Jelszó',
     'Auth Key' => '',
-    'Api Key' => 'Api kulcs',
+//    'Access Token' => 'Api kulcs',
     'Login Ip' => 'Bejelentkezési Ip',
     'Login Time' => 'Bejelentkezés ideje',
     'Create Ip' => 'Regisztrációs Ip',
@@ -94,7 +94,7 @@ return [
     'Yii 2 User' => 'Yii 2 Felhasználó',
     'Login' => 'Bejelentkezés',
     'Register' => 'Regisztráció',
-    'Logout' => 'Kijelentkezés', // i dont think this is used ...
+    'Logout' => 'Kijelentkezés',
     'Resend confirmation email' => 'Megerősítő e-mail újraküldése',
     'Profile' => 'Profil',
     'Please fill out the following fields to login:' => 'A bejelentkezéshez kérem töltse ki az alábbi mezőket:',

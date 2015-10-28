@@ -20,7 +20,7 @@ return [
     'Username' => 'ชื่อผู้ใช้',
     'Password' => 'รหัสผ่าน',
     'Auth Key' => 'รหัส Auth',
-    'Api Key' => 'รหัส API',
+//    'Access Token' => 'รหัส API',
     'Login Ip' => 'IP เข้าระบบ',
     'Login Time' => 'เวลาเข้าระบบ',
     'Create Ip' => 'IP ที่สร้าง',

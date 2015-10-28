@@ -19,8 +19,8 @@ return [
     'New Email' => '新邮箱',
     'Username' => '用户名',
     'Password' => '密码',
-    'Auth Key' => 'Auth Key',
-    'Api Key' => 'Api Key',
+//    'Auth Key' => 'Auth Key',
+//    'Access Token' => 'Api Key',
     'Login Ip' => '登陆 IP',
     'Login Time' => '登陆时间',
     'Create Ip' => '创建 IP',
@@ -31,9 +31,9 @@ return [
     'New Password Confirm' => '确认新密码',
     'Email Confirmation' => '验证邮件',
 
-    'Provider' => 'Provider',
-    'Provider ID' => 'Provider ID',
-    'Provider Attributes' => 'Provider Attributes',
+//    'Provider' => 'Provider',
+//    'Provider ID' => 'Provider ID',
+//    'Provider Attributes' => 'Provider Attributes',
 
     'Type' => '类型',
     'Key' => 'Key',
@@ -94,7 +94,7 @@ return [
     'Yii 2 User' => 'Yii 2 用户',
     'Login' => '登陆',
     'Register' => '注册',
-    'Logout' => '退出', // i dont think this is used ...
+    'Logout' => '退出',
     'Resend confirmation email' => '重新发送验证邮件',
     'Profile' => '个人资料',
     'Please fill out the following fields to login:' => '请输入下面信息登陆',

@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'profile.full_name',
             'password',
             'auth_key',
-            'api_key',
+            'access_token',
             'logged_in_ip',
             'logged_in_at',
             'create_ip',

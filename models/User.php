@@ -21,7 +21,7 @@ use ReflectionClass;
  * @property string $username
  * @property string $password
  * @property string $auth_key
- * @property string $api_key
+ * @property string $access_token
  * @property string $logged_in_ip
  * @property string $logged_in_at
  * @property string $create_ip
@@ -140,7 +140,7 @@ class User extends ActiveRecord implements IdentityInterface
             'username' => Yii::t('user', 'Username'),
             'password' => Yii::t('user', 'Password'),
             'auth_key' => Yii::t('user', 'Auth Key'),
-            'api_key' => Yii::t('user', 'Api Key'),
+            'access_token' => Yii::t('user', 'Access Token'),
             'logged_in_ip' => Yii::t('user', 'Login Ip'),
             'logged_in_at' => Yii::t('user', 'Login Time'),
             'create_ip' => Yii::t('user', 'Create Ip'),
@@ -231,7 +231,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(["api_key" => $token]);
+        return static::findOne(["access_token" => $token]);
     }
 
     /**
@@ -315,7 +315,7 @@ class User extends ActiveRecord implements IdentityInterface
             "role_id" => $roleId,
             "create_ip" => $userIp,
             "auth_key" => Yii::$app->security->generateRandomString(),
-            "api_key" => Yii::$app->security->generateRandomString(),
+            "access_token" => Yii::$app->security->generateRandomString(),
             "status" => static::STATUS_ACTIVE,
         ];
 

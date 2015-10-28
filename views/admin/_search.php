@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'auth_key') ?>
 
-    <?php // echo $form->field($model, 'api_key') ?>
+    <?php // echo $form->field($model, 'access_token') ?>
 
     <?php // echo $form->field($model, 'logged_in_ip') ?>
 

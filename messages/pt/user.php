@@ -20,7 +20,7 @@ return [
     'Username' => 'Nome de Utilizador',
     'Password' => 'Senha',
     'Auth Key' => 'Chave de Autorização',
-    'Api Key' => 'Chave da API',
+//    'Access Token' => 'Chave da API',
     'Login Ip' => 'IP de Conexão',
     'Login Time' => 'Data de Conexão',
     'Create Ip' => 'IP de Criação',

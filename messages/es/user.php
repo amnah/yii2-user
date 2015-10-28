@@ -20,7 +20,7 @@ return [
     'Username' => 'Nombre de Usuario',
     'Password' => 'Contraseña',
     'Auth Key' => 'Clave de Autorización',
-    'Api Key' => 'Clave de la API',
+//    'Access Token' => 'Clave de la API',
     'Login Ip' => 'IP de Conexión',
     'Login Time' => 'Fecha de Conexión',
     'Create Ip' => 'IP de Creación',
@@ -94,7 +94,7 @@ return [
     'Yii 2 User' => 'Usuario de Yii 2',
     'Login' => 'Entrar',
     'Register' => 'Registro',
-    'Logout' => 'Salir', // i dont think this is used ...
+    'Logout' => 'Salir',
     'Resend confirmation email' => 'Reenviar correo de confirmación',
     'Profile' => 'Perfil',
     'Please fill out the following fields to login:' => 'Por favor, rellena los siguientes campos para poder iniciar sesión:',
