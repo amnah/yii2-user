@@ -80,9 +80,9 @@ class Module extends \yii\base\Module
     public $emailChangeConfirmation = true;
 
     /**
-     * @var string Time before userKeys expire (currently only used for password resets)
+     * @var string Time before userTokens expire (for reset password)
      */
-    public $resetKeyExpiration = "48 hours";
+    public $resetExpireTime = "+2 days";
 
     /**
      * @var string Email view path
@@ -191,7 +191,7 @@ class Module extends \yii\base\Module
             'User'       => 'amnah\yii2\user\models\User',
             'Profile'    => 'amnah\yii2\user\models\Profile',
             'Role'       => 'amnah\yii2\user\models\Role',
-            'UserKey'    => 'amnah\yii2\user\models\UserKey',
+            'UserToken'  => 'amnah\yii2\user\models\UserToken',
             'UserAuth'   => 'amnah\yii2\user\models\UserAuth',
             'ForgotForm' => 'amnah\yii2\user\models\forms\ForgotForm',
             'LoginForm'  => 'amnah\yii2\user\models\forms\LoginForm',
@@ -214,10 +214,6 @@ class Module extends \yii\base\Module
             return $this->_models[$name];
         }
 
-        // process "Userkey" -> "UserKey" for backwards compatibility
-        if ($name === "Userkey") {
-            $name = "UserKey";
-        }
         // create model and return it
         $className = $this->modelClasses[ucfirst($name)];
         $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));

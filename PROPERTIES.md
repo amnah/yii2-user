@@ -65,9 +65,9 @@ These are the module properties and their default values
     public $emailChangeConfirmation = true;
 
     /**
-     * @var string Time before userKeys expire (currently only used for password resets)
+     * @var string Time before userTokens expire (for reset password)
      */
-    public $resetKeyExpiration = "48 hours";
+    public $resetExpireTime = "+2 days";
 
     /**
      * @var string Email view path

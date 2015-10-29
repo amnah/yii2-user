@@ -1,7 +1,5 @@
 <?php
 
-use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\Role;
 use yii\db\Schema;
 use yii\db\Migration;
 
@@ -40,14 +38,12 @@ class m150214_044831_init_user extends Migration
             'banned_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'banned_reason' => Schema::TYPE_STRING . ' null default null',
         ], $tableOptions);
-        $this->createTable('{{%user_key}}', [
+        $this->createTable('{{%user_token}}', [
             'id' => Schema::TYPE_PK,
             'user_id' => Schema::TYPE_INTEGER . ' not null',
             'type' => Schema::TYPE_SMALLINT . ' not null',
-            'key_value' => Schema::TYPE_STRING . ' not null',
+            'token' => Schema::TYPE_STRING . ' not null',
             'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'updated_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'consumed_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'expired_at' => Schema::TYPE_TIMESTAMP . ' null default null',
         ], $tableOptions);
         $this->createTable('{{%profile}}', [
@@ -70,13 +66,13 @@ class m150214_044831_init_user extends Migration
         // add indexes for performance optimization
         $this->createIndex('{{%user_email}}', '{{%user}}', 'email', true);
         $this->createIndex('{{%user_username}}', '{{%user}}', 'username', true);
-        $this->createIndex('{{%user_key_key_value}}', '{{%user_key}}', 'key_value', true);
+        $this->createIndex('{{%user_token_token}}', '{{%user_token}}', 'token', true);
         $this->createIndex('{{%user_auth_provider_id}}', '{{%user_auth}}', 'provider_id', false);
 
         // add foreign keys for data integrity
         $this->addForeignKey('{{%user_role_id}}', '{{%user}}', 'role_id', '{{%role}}', 'id');
         $this->addForeignKey('{{%profile_user_id}}', '{{%profile}}', 'user_id', '{{%user}}', 'id');
-        $this->addForeignKey('{{%user_key_user_id}}', '{{%user_key}}', 'user_id', '{{%user}}', 'id');
+        $this->addForeignKey('{{%user_token_user_id}}', '{{%user_token}}', 'user_id', '{{%user}}', 'id');
         $this->addForeignKey('{{%user_auth_user_id}}', '{{%user_auth}}', 'user_id', '{{%user}}', 'id');
 
         // insert role data
@@ -91,11 +87,11 @@ class m150214_044831_init_user extends Migration
         $columns = ['role_id', 'email', 'username', 'password', 'status', 'created_at', 'access_token', 'auth_key'];
         $this->batchInsert('{{%user}}', $columns, [
             [
-                Role::ROLE_ADMIN,
+                1, // Role::ROLE_ADMIN
                 'neo@neo.com',
                 'neo',
                 '$2y$13$dyVw4WkZGkABf2UrGWrhHO4ZmVBv.K4puhOL59Y9jQhIdj63TlV.O', // neo
-                User::STATUS_ACTIVE,
+                1, // User::STATUS_ACTIVE
                 date('Y-m-d H:i:s'),
                 $security->generateRandomString(),
                 $security->generateRandomString(),
@@ -114,7 +110,7 @@ class m150214_044831_init_user extends Migration
         // drop tables in reverse order (for foreign key constraints)
         $this->dropTable('{{%user_auth}}');
         $this->dropTable('{{%profile}}');
-        $this->dropTable('{{%user_key}}');
+        $this->dropTable('{{%user_token}}');
         $this->dropTable('{{%user}}');
         $this->dropTable('{{%role}}');
     }

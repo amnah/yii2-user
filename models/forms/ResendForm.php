@@ -90,23 +90,23 @@ class ResendForm extends Model
         if ($this->validate()) {
 
             // get user
-            /** @var \amnah\yii2\user\models\UserKey $userKey */
+            /** @var \amnah\yii2\user\models\UserToken $userToken */
             $user = $this->getUser();
-            $userKey = Yii::$app->getModule("user")->model("UserKey");
+            $userToken = Yii::$app->getModule("user")->model("UserToken");
 
             // calculate type
             if ($user->status == $user::STATUS_INACTIVE) {
-                $type = $userKey::TYPE_EMAIL_ACTIVATE;
+                $type = $userToken::TYPE_EMAIL_ACTIVATE;
             } //elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {
             else {
-                $type = $userKey::TYPE_EMAIL_CHANGE;
+                $type = $userToken::TYPE_EMAIL_CHANGE;
             }
 
-            // generate userKey
-            $userKey = $userKey::generate($user->id, $type);
+            // generate userToken
+            $userToken = $userToken::generate($user->id, $type);
 
             // send email confirmation
-            return $user->sendEmailConfirmation($userKey);
+            return $user->sendEmailConfirmation($userToken);
         }
 
         return false;

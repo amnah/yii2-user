@@ -174,9 +174,9 @@ class AuthController extends Controller
     protected function clearNewEmail($email)
     {
         /** @var \amnah\yii2\user\models\User $user */
-        /** @var \amnah\yii2\user\models\UserKey $userKey */
+        /** @var \amnah\yii2\user\models\UserToken $userToken */
         $user = Yii::$app->getModule("user")->model("User");
-        $userKey = Yii::$app->getModule("user")->model("UserKey");
+        $userToken = Yii::$app->getModule("user")->model("UserToken");
 
         // attempt to find user with new_email and remove it
         $user = $user::findOne(["new_email" => $email]);
@@ -185,10 +185,10 @@ class AuthController extends Controller
             $user->new_email = null;
             $user->save(false);
 
-            // find userKey and consume it
-            $userKey = $userKey::findActiveByUser($user->id, $userKey::TYPE_EMAIL_CHANGE);
-            if ($userKey) {
-                $userKey->consume();
+            // find userToken and delete it
+            $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
+            if ($userToken) {
+                $userToken->delete();
             }
         }
     }

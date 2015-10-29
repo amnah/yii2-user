@@ -6,20 +6,19 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "tbl_user_key".
+ * This is the model class for table "{{%user_token}}".
  *
  * @property integer $id
  * @property integer $user_id
  * @property integer $type
- * @property string $key_value
+ * @property string $token
+ * @property string $data
  * @property string $created_at
- * @property string $updated_at
- * @property string $consumed_at
  * @property string $expired_at
  *
  * @property User $user
  */
-class UserKey extends ActiveRecord
+class UserToken extends ActiveRecord
 {
     /**
      * @var int Key for email activations (for registrations)
@@ -45,11 +44,9 @@ class UserKey extends ActiveRecord
             'id' => Yii::t('user', 'ID'),
             'user_id' => Yii::t('user', 'User ID'),
             'type' => Yii::t('user', 'Type'),
-            'key_value' => Yii::t('user', 'Key'),
+            'token' => Yii::t('user', 'Token'),
             'created_at' => Yii::t('user', 'Created At'),
-            'updated_at' => Yii::t('user', 'Updated At'),
-            'consumed_at' => Yii::t('user', 'Consume Time'),
-            'expired_at' => Yii::t('user', 'Expire Time'),
+            'expired_at' => Yii::t('user', 'Expired At'),
         ];
     }
 
@@ -61,6 +58,7 @@ class UserKey extends ActiveRecord
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
+                'updatedAtAttribute' => false,
                 'value' => function () {
                     return date("Y-m-d H:i:s");
                 },
@@ -78,7 +76,7 @@ class UserKey extends ActiveRecord
     }
 
     /**
-     * Generate/reuse a userKey
+     * Generate/reuse a userToken
      *
      * @param int $userId
      * @param int $type
@@ -89,7 +87,8 @@ class UserKey extends ActiveRecord
     {
         // attempt to find existing record
         // otherwise create new
-        $model = static::findActiveByUser($userId, $type);
+        $checkExpiration = false;
+        $model = static::findByUser($userId, $type, $checkExpiration);
         if (!$model) {
             $model = new static();
         }
@@ -99,72 +98,56 @@ class UserKey extends ActiveRecord
         $model->type = $type;
         $model->created_at = date("Y-m-d H:i:s");
         $model->expired_at = $expireTime;
-        $model->key_value = Yii::$app->security->generateRandomString();
-        $model->save(false);
+        $model->token = Yii::$app->security->generateRandomString();
+        $model->save();
         return $model;
     }
 
     /**
-     * Find an active userKey by userId
+     * Find an active userToken by userId
      *
      * @param int $userId
      * @param array|int $type
+     * @param bool $checkExpiration
      * @return static
      */
-    public static function findActiveByUser($userId, $type)
+    public static function findByUser($userId, $type, $checkExpiration = true)
     {
-        $now = date("Y-m-d H:i:s");
-        return static::find()
+        $query = static::find()
             ->where([
                 "user_id" => $userId,
                 "type" => $type,
-                "consumed_at" => null,
-            ])
-            ->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)")
-            ->one();
+            ]);
+
+        if ($checkExpiration) {
+            $now = date("Y-m-d H:i:s");
+            $query->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)");
+        }
+
+        return $query->one();
     }
 
     /**
-     * Find an active userKey by key
+     * Find an active userToken by token
      *
-     * @param string $key
+     * @param string $token
      * @param array|int $type
+     * @param bool $checkExpiration
      * @return static
      */
-    public static function findActiveByKey($key, $type)
+    public static function findByToken($token, $type, $checkExpiration = true)
     {
-        $now = date("Y-m-d H:i:s");
-        return static::find()
+        $query = static::find()
             ->where([
-                "key_value" => $key,
+                "token" => $token,
                 "type" => $type,
-                "consumed_at" => null,
-            ])
-            ->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)")
-            ->one();
-    }
+            ]);
 
-    /**
-     * Consume userKey record
-     *
-     * @return static
-     */
-    public function consume()
-    {
-        $this->consumed_at = date("Y-m-d H:i:s");
-        $this->save(false);
-        return $this;
-    }
+        if ($checkExpiration) {
+            $now = date("Y-m-d H:i:s");
+            $query->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)");
+        }
 
-    /**
-     * Expire userKey record
-     *
-     * @return static
-     */
-    public function expire()
-    {
-        $this->expired_at = date("Y-m-d H:i:s");
-        $this->save(false);
-        return $this;
+        return $query->one();
     }
 }

@@ -32,7 +32,7 @@ use ReflectionClass;
  *
  * @property Profile $profile
  * @property Role $role
- * @property UserKey[] $userKeys
+ * @property UserToken[] $userTokens
  * @property UserAuth[] $userAuths
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -204,10 +204,10 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserKeys()
+    public function getUserTokens()
     {
-        $userKey = Yii::$app->getModule("user")->model("UserKey");
-        return $this->hasMany($userKey::className(), ['user_id' => 'id']);
+        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        return $this->hasMany($userToken::className(), ['user_id' => 'id']);
     }
 
     /**
@@ -455,10 +455,10 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Send email confirmation to user
      *
-     * @param UserKey $userKey
+     * @param UserToken $userToken
      * @return int
      */
-    public function sendEmailConfirmation($userKey)
+    public function sendEmailConfirmation($userToken)
     {
         /** @var Mailer $mailer */
         /** @var Message $message */
@@ -473,7 +473,7 @@ class User extends ActiveRecord implements IdentityInterface
         $profile = $user->profile;
         $email = $user->new_email !== null ? $user->new_email : $user->email;
         $subject = Yii::$app->id . " - " . Yii::t("user", "Email Confirmation");
-        $message = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userKey"))
+        $message = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userToken"))
             ->setTo($email)
             ->setSubject($subject);
 
