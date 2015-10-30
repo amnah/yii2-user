@@ -405,7 +405,7 @@ class DefaultController extends Controller
         $userToken = Yii::$app->getModule("user")->model("UserToken");
         $userToken = $userToken::findByToken($token, $userToken::TYPE_PASSWORD_RESET);
         if (!$userToken) {
-            return $this->render('reset', ["invalidKey" => true]);
+            return $this->render('reset', ["invalidToken" => true]);
         }
 
         // get user and set "reset" scenario

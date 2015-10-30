@@ -20,7 +20,7 @@ return [
     'Username' => 'Nombre de Usuario',
     'Password' => 'Contraseña',
     'Auth Key' => 'Clave de Autorización',
-//    'Access Token' => 'Clave de la API',
+    'Access Token' => 'Token de Acceso',
     'Login Ip' => 'IP de Conexión',
     'Login Time' => 'Fecha de Conexión',
     'Create Ip' => 'IP de Creación',
@@ -36,9 +36,8 @@ return [
     'Provider Attributes' => 'Atributos de proveedor',
 
     'Type' => 'Tipo',
-    'Key' => 'Clave',
-    'Consume Time' => 'Fecha de Consumición',
-    'Expire Time' => 'Fecha de Expiración',
+    'Token' => 'Token',
+    'Expired At' => 'Fecha de Expiración',
 
     // models/forms
     'Email not found' => 'Correo no encontrado',
@@ -88,7 +87,7 @@ return [
     'Go to my account' => 'Ir a mi cuenta',
     'Go home' => 'Inicio',
     'Log in here' => 'Iniciar sesión',
-    'Invalid key' => 'Key inválida',
+    'Invalid Token' => 'Token inválida',
     'Forgot password' => 'Contraseña olvidada',
     'Submit' => 'Enviar',
     'Yii 2 User' => 'Usuario de Yii 2',

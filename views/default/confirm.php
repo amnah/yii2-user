@@ -33,7 +33,7 @@ $this->title = Yii::t('user', $success ? 'Confirmed' : 'Error');
 
     <?php else: ?>
 
-        <div class="alert alert-danger"><?= Yii::t("user", "Invalid key") ?></div>
+        <div class="alert alert-danger"><?= Yii::t("user", "Invalid token") ?></div>
 
     <?php endif; ?>
 

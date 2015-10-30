@@ -21,17 +21,17 @@ use yii\db\ActiveRecord;
 class UserToken extends ActiveRecord
 {
     /**
-     * @var int Key for email activations (for registrations)
+     * @var int Token for email activations (for registrations)
      */
     const TYPE_EMAIL_ACTIVATE = 1;
 
     /**
-     * @var int Key for email changes (=updating account page)
+     * @var int Token for email changes (on /user/account page)
      */
     const TYPE_EMAIL_CHANGE = 2;
 
     /**
-     * @var int Key for password resets
+     * @var int Token for password resets
      */
     const TYPE_PASSWORD_RESET = 3;
 

@@ -19,8 +19,8 @@ return [
     'New Email' => 'Új e-mail',
     'Username' => 'Felhasználónév',
     'Password' => 'Jelszó',
-    'Auth Key' => '',
-//    'Access Token' => 'Api kulcs',
+//    'Auth Key' => '',
+//    'Access Token' => '',
     'Login Ip' => 'Bejelentkezési Ip',
     'Login Time' => 'Bejelentkezés ideje',
     'Create Ip' => 'Regisztrációs Ip',
@@ -36,9 +36,8 @@ return [
     'Provider Attributes' => '',
 
     'Type' => 'Típus',
-    'Key' => 'Kulcs',
-    'Consume Time' => '',
-    'Expire Time' => '',
+//    'Token' => '',
+//    'Expired At' => '',
 
     // models/forms
     'Email not found' => 'E-mail nem található',
@@ -88,7 +87,7 @@ return [
     'Go to my account' => 'Vissza a fiókomhoz',
     'Go home' => 'Vissza a főoldalra',
     'Log in here' => 'Bejelentkezés',
-    'Invalid key' => 'Helytelen kulcs',
+//    'Invalid Token' => '',
     'Forgot password' => 'Elfelejtett jelszó',
     'Submit' => 'Küldés',
     'Yii 2 User' => 'Yii 2 Felhasználó',

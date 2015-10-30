@@ -20,7 +20,7 @@ return [
     'Username' => 'Логин пользователя',
     'Password' => 'Пароль',
     'Auth Key' => 'Ключ авторизации',
-//    'Access Token' => 'Ключ API',
+//    'Access Token' => '',
     'Login Ip' => 'IP авторизации',
     'Login Time' => 'Дата авторизации',
     'Create Ip' => 'IP создания',
@@ -36,9 +36,8 @@ return [
     'Provider Attributes' => 'Атрибуты приглашения',
 
     'Type' => 'Тип',
-    'Key' => 'Ключ',
-    'Consume Time' => 'Дата получения',
-    'Expire Time' => 'Срок действия',
+//    'Token' => '',
+    'Expired At' => 'Срок действия',
 
     // models/forms
     'Email not found' => 'E-mail не найдено',
@@ -88,7 +87,7 @@ return [
     'Go to my account' => 'К моему аккаунту',
     'Go home' => 'На главную',
     'Log in here' => 'Войти сейчас',
-    'Invalid key' => 'Неверный ключ',
+//    'Invalid Token' => '',
     'Forgot password' => 'Забыли пароль',
     'Submit' => 'Отправить',
     'Yii 2 User' => 'Yii 2 пользователь',

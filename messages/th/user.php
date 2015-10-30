@@ -20,7 +20,7 @@ return [
     'Username' => 'ชื่อผู้ใช้',
     'Password' => 'รหัสผ่าน',
     'Auth Key' => 'รหัส Auth',
-//    'Access Token' => 'รหัส API',
+//    'Access Token' => '',
     'Login Ip' => 'IP เข้าระบบ',
     'Login Time' => 'เวลาเข้าระบบ',
     'Create Ip' => 'IP ที่สร้าง',
@@ -36,9 +36,8 @@ return [
     'Provider Attributes' => 'รายการผู้ให้บริการ',
 
     'Type' => 'ประเภท',
-    'Key' => 'คีย์',
-    'Consume Time' => 'ใช้เวลา',
-    'Expire Time' => 'เวลาหมดอายุ',
+//    'Token' => '',
+    'Expired At' => 'เวลาหมดอายุ',
 
     // models/forms
     'Email not found' => 'ไม่พบอีเมลล์',
@@ -88,7 +87,7 @@ return [
     'Go to my account' => 'ไปที่บัญชีของฉัน',
     'Go home' => 'ไปหน้าหลัก',
     'Log in here' => 'เข้าสู่ระบบที่นี่',
-    'Invalid key' => 'คีย์ไม่ถูกต้อง',
+//    'Invalid Token' => '',
     'Forgot password' => 'ลืมรหัสผ่าน',
     'Submit' => 'ส่งข้อมูล',
     'Yii 2 User' => 'Yii 2 User',

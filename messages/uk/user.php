@@ -20,7 +20,7 @@ return [
     'Username' => 'Логін користувача',
     'Password' => 'Пароль',
     'Auth Key' => 'Ключ авторизації',
-//    'Access Token' => 'Ключ API',
+//    'Access Token' => '',
     'Login Ip' => 'IP адреса авторизації',
     'Login Time' => 'Дата авторизації',
     'Create Ip' => 'IP адреса створення',
@@ -36,9 +36,8 @@ return [
     'Provider Attributes' => 'Атрибути запрошення',
 
     'Type' => 'Тип',
-    'Key' => 'Ключ',
-    'Consume Time' => 'Дата видачі',
-    'Expire Time' => 'Термін дії',
+//    'Token' => '',
+    'Expired At' => 'Термін дії',
 
     // models/forms
     'Email not found' => 'E-mail не знайдено',
@@ -88,7 +87,7 @@ return [
     'Go to my account' => 'До мого аккаунту',
     'Go home' => 'До головної',
     'Log in here' => 'Увійти зараз',
-    'Invalid key' => 'Невірний ключ',
+//    'Invalid Token' => '',
     'Forgot password' => 'Забули пароль',
     'Submit' => 'Відправити',
     'Yii 2 User' => 'Yii 2 користувач',

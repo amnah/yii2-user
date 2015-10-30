@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
  * @var yii\widgets\ActiveForm $form
  * @var amnah\yii2\user\models\User $user
  * @var bool $success
- * @var bool $invalidKey
+ * @var bool $invalidToken
  */
 
 $this->title = Yii::t('user', 'Reset');
@@ -27,10 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
         </div>
 
-    <?php elseif (!empty($invalidKey)): ?>
+    <?php elseif (!empty($invalidToken)): ?>
 
         <div class="alert alert-danger">
-            <p><?= Yii::t("user", "Invalid key") ?></p>
+            <p><?= Yii::t("user", "Invalid token") ?></p>
         </div>
 
     <?php else: ?>

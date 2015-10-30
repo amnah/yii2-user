@@ -268,11 +268,11 @@ class Module extends \yii\base\Module
             "/{$this->id}/account" => "User account page (email, username, password)",
             "/{$this->id}/profile" => "Profile page",
             "/{$this->id}/forgot" => "Forgot password page",
-            "/{$this->id}/reset?key=zzzzz" => "Reset password page. Automatically generated from forgot password page",
+            "/{$this->id}/reset?token=zzzzz" => "Reset password page. Automatically generated from forgot password page",
             "/{$this->id}/resend" => "Resend email confirmation (for both activation and change of email)",
             "/{$this->id}/resend-change" => "Resend email change confirmation (quick link on the 'Account' page)",
             "/{$this->id}/cancel" => "Cancel email change confirmation (quick link on the 'Account' page)",
-            "/{$this->id}/confirm?key=zzzzz" => "Confirm email address. Automatically generated upon registration/email change",
+            "/{$this->id}/confirm?token=zzzzz" => "Confirm email address. Automatically generated upon registration/email change",
         ];
     }
 }
