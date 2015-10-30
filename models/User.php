@@ -389,14 +389,20 @@ class User extends ActiveRecord implements IdentityInterface
         // update status
         $this->status = static::STATUS_ACTIVE;
 
-        // update new_email if set
+        // check new_email if set and check if another user already has it
+        $success = true;
         if ($this->new_email) {
-            $this->email = $this->new_email;
+            $checkUser = static::findOne(["email" => $this->new_email]);
+            if ($checkUser) {
+                $success = false;
+            } else {
+                $this->email = $this->new_email;
+            }
             $this->new_email = null;
         }
 
-        // save and return
-        return $this->save(false, ["email", "new_email", "status"]);
+        $this->save(false, ["email", "new_email", "status"]);
+        return $success;
     }
 
     /**
@@ -471,7 +477,7 @@ class User extends ActiveRecord implements IdentityInterface
         // send email
         $user = $this;
         $profile = $user->profile;
-        $email = $user->new_email !== null ? $user->new_email : $user->email;
+        $email = $user->new_email ?: $user->email;
         $subject = Yii::$app->id . " - " . Yii::t("user", "Email Confirmation");
         $message = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userToken"))
             ->setTo($email)

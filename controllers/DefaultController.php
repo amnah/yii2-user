@@ -204,25 +204,26 @@ class DefaultController extends Controller
 
         // search for userToken
         $success = false;
+        $email = "";
         $userToken = Yii::$app->getModule("user")->model("UserToken");
         $userToken = $userToken::findByToken($token, [$userToken::TYPE_EMAIL_ACTIVATE, $userToken::TYPE_EMAIL_CHANGE]);
         if ($userToken) {
 
-            // confirm user
+            // find user and ensure that another user doesn't have that email
+            //   for example, user registered another account before confirming change of email
             $user = Yii::$app->getModule("user")->model("User");
             $user = $user::findOne($userToken->user_id);
-            $user->confirm();
+            $email = $user->new_email ?: $user->email;;
+            if ($user->confirm()) {
+                $success = true;
+            }
 
-            // delete userToken and set success
+            // delete token either way
             $userToken->delete();
-            $success = $user->email;
         }
 
         // render
-        return $this->render("confirm", [
-            "userToken" => $userToken,
-            "success" => $success
-        ]);
+        return $this->render("confirm", compact("userToken", "success", "email"));
     }
 
     /**

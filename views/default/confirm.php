@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /**
  * @var yii\web\View $this
  * @var bool $success
+ * @var string $email
  */
 
 $this->title = Yii::t('user', $success ? 'Confirmed' : 'Error');
@@ -15,7 +16,7 @@ $this->title = Yii::t('user', $success ? 'Confirmed' : 'Error');
 
         <div class="alert alert-success">
 
-            <p><?= Yii::t("user", "Your email [ {email} ] has been confirmed", ["email" => $success]) ?></p>
+            <p><?= Yii::t("user", "Your email [ {email} ] has been confirmed", ["email" => $email]) ?></p>
 
             <?php if (Yii::$app->user->isLoggedIn): ?>
 
@@ -30,6 +31,9 @@ $this->title = Yii::t('user', $success ? 'Confirmed' : 'Error');
 
         </div>
 
+    <?php elseif ($email): ?>
+
+        <div class="alert alert-danger">[ <?= $email ?> ] <?= Yii::t("user", "Email is already active") ?></div>
 
     <?php else: ?>
 
