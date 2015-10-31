@@ -74,8 +74,9 @@ class CopyController extends Controller
             $fromPath = Yii::getAlias($this->from);
             $toPath = Yii::getAlias($this->to);
             $this->copyFiles($fromPath, $toPath, $this->namespace);
-        } // display cancellation + usage
-        else {
+        } else {
+
+            // display cancellation + usage
             echo "\r\n";
             echo "--- Copy cancelled! --- \r\n";
             echo "\r\n";
@@ -88,7 +89,6 @@ class CopyController extends Controller
 
     /**
      * Copy files from $fromPath to $toPath
-     *
      * @param string $fromPath
      * @param string $toPath
      * @param string $namespace
@@ -134,12 +134,10 @@ class CopyController extends Controller
     /**
      * Recursive glob
      * Does not support flag GLOB_BRACE
-     *
-     * @link http://php.net/glob#106595
-     *
      * @param string $pattern
      * @param int $flags
      * @return array
+     * @link http://php.net/glob#106595
      */
     protected function glob_recursive($pattern, $flags = 0)
     {
@@ -155,7 +153,6 @@ class CopyController extends Controller
     /**
      * Saves the code into the file specified by [[path]].
      * Taken/modified from yii\gii\CodeFile
-     *
      * @param string $path
      * @param string $content
      * @return string|boolean the error occurred while saving the code file, or true if no error.

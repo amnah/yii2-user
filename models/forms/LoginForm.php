@@ -108,7 +108,6 @@ class LoginForm extends Model
 
     /**
      * Get user based on email and/or username
-     *
      * @return \amnah\yii2\user\models\User|null
      */
     public function getUser()
@@ -125,12 +124,8 @@ class LoginForm extends Model
             if (Yii::$app->getModule("user")->loginUsername) {
                 $user->orWhere(["username" => $this->username]);
             }
-
-            // get and store user
             $this->_user = $user->one();
         }
-
-        // return stored user
         return $this->_user;
     }
 
@@ -155,7 +150,6 @@ class LoginForm extends Model
 
     /**
      * Validate and log user in
-     *
      * @param int $loginDuration
      * @return bool
      */

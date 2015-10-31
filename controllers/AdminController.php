@@ -47,7 +47,6 @@ class AdminController extends Controller
 
     /**
      * List all User models
-     *
      * @return mixed
      */
     public function actionIndex()
@@ -56,15 +55,11 @@ class AdminController extends Controller
         $searchModel = Yii::$app->getModule("user")->model("UserSearch");
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
+        return $this->render('index', compact('searchModel', 'dataProvider'));
     }
 
     /**
      * Display a single User model
-     *
      * @param string $id
      * @return mixed
      */
@@ -78,7 +73,6 @@ class AdminController extends Controller
     /**
      * Create a new User model. If creation is successful, the browser will
      * be redirected to the 'view' page.
-     *
      * @return mixed
      */
     public function actionCreate()
@@ -98,16 +92,12 @@ class AdminController extends Controller
         }
 
         // render
-        return $this->render('create', [
-            'user' => $user,
-            'profile' => $profile,
-        ]);
+        return $this->render('create', compact('user', 'profile'));
     }
 
     /**
      * Update an existing User model. If update is successful, the browser
      * will be redirected to the 'view' page.
-     *
      * @param string $id
      * @return mixed
      */
@@ -127,16 +117,12 @@ class AdminController extends Controller
         }
 
         // render
-        return $this->render('update', [
-            'user' => $user,
-            'profile' => $profile,
-        ]);
+        return $this->render('update', compact('user', 'profile'));
     }
 
     /**
      * Delete an existing User model. If deletion is successful, the browser
      * will be redirected to the 'index' page.
-     *
      * @param string $id
      * @return mixed
      */
@@ -156,7 +142,6 @@ class AdminController extends Controller
     /**
      * Find the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     *
      * @param string $id
      * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
@@ -165,10 +150,11 @@ class AdminController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         $user = Yii::$app->getModule("user")->model("User");
-        if (($user = $user::findOne($id)) !== null) {
+        $user = $user::findOne($id);
+        if ($user) {
             return $user;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

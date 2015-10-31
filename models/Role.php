@@ -90,34 +90,29 @@ class Role extends ActiveRecord
 
     /**
      * Check permission
-     *
      * @param string $permission
      * @return bool
      */
     public function checkPermission($permission)
     {
         $roleAttribute = "can_{$permission}";
-        return $this->$roleAttribute ? true : false;
+        return (bool)$this->$roleAttribute;
     }
 
     /**
      * Get list of roles for creating dropdowns
-     *
      * @return array
      */
     public static function dropdown()
     {
-        // get and cache data
+        // get all records from database and generate
         static $dropdown;
         if ($dropdown === null) {
-
-            // get all records from database and generate
             $models = static::find()->all();
             foreach ($models as $model) {
                 $dropdown[$model->id] = $model->name;
             }
         }
-
         return $dropdown;
     }
 }

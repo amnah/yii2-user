@@ -61,7 +61,6 @@ class UserAuth extends ActiveRecord
 
     /**
      * Set user id
-     *
      * @param int $userId
      * @return static
      */
@@ -73,7 +72,6 @@ class UserAuth extends ActiveRecord
 
     /**
      * Set provider attributes
-     *
      * @param array $attributes
      * @return static
      */
@@ -85,7 +83,6 @@ class UserAuth extends ActiveRecord
 
     /**
      * Get provider attributes
-     *
      * @return array
      */
     public function getProviderAttributes()

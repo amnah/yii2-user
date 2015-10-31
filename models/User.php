@@ -173,7 +173,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Stick with 1 user:1 profile
-     *
      * @return \yii\db\ActiveQuery
      */
     /*
@@ -259,8 +258,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Verify password
-     *
+     * Validate password
      * @param string $password
      * @return bool
      */
@@ -302,7 +300,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Set attributes for registration
-     *
      * @param int $roleId
      * @param string $userIp
      * @param string $status
@@ -338,7 +335,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Check and prepare for email change
-     *
      * @return bool True if user set a `new_email`
      */
     public function checkAndPrepEmailChange()
@@ -366,22 +362,31 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Update login info (ip and time)
-     *
      * @return bool
      */
     public function updateLoginMeta()
     {
-        // set data
         $this->logged_in_ip = Yii::$app->getRequest()->getUserIP();
         $this->logged_in_at = date("Y-m-d H:i:s");
-
-        // save and return
         return $this->save(false, ["logged_in_ip", "logged_in_at"]);
     }
 
     /**
+     * Clear new_email field
+     * @param bool $save
+     * @return static
+     */
+    public function clearNewEmail($save = true)
+    {
+        $this->new_email = null;
+        if ($save) {
+            $this->save(false, ["new_email"]);
+        }
+        return $this;
+    }
+
+    /**
      * Confirm user email
-     *
      * @return bool
      */
     public function confirm()
@@ -407,7 +412,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Check if user can do specified $permission
-     *
      * @param string $permissionName
      * @param array $params
      * @param bool $allowCaching
@@ -435,7 +439,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Get display name for the user
-     *
      * @var string $default
      * @return string|int
      */
@@ -460,7 +463,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Send email confirmation to user
-     *
      * @param UserToken $userToken
      * @return int
      */
@@ -496,13 +498,13 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Get list of statuses for creating dropdowns
-     *
      * @return array
      */
     public static function statusDropdown()
     {
         // get data if needed
         static $dropdown;
+        $constPrefix = "STATUS_";
         if ($dropdown === null) {
 
             // create a reflection class to get constants
@@ -513,8 +515,8 @@ class User extends ActiveRecord implements IdentityInterface
             foreach ($constants as $constantName => $constantValue) {
 
                 // add prettified name to dropdown
-                if (strpos($constantName, "STATUS_") === 0) {
-                    $prettyName = str_replace("STATUS_", "", $constantName);
+                if (strpos($constantName, $constPrefix) === 0) {
+                    $prettyName = str_replace($constPrefix, "", $constantName);
                     $prettyName = Inflector::humanize(strtolower($prettyName));
                     $dropdown[$constantValue] = $prettyName;
                 }

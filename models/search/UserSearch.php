@@ -43,7 +43,6 @@ class UserSearch extends User
 
     /**
      * Search
-     *
      * @param array $params
      * @return ActiveDataProvider
      */

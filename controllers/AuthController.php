@@ -31,7 +31,6 @@ class AuthController extends Controller
 
     /**
      * Connect social auth to the logged-in user
-     *
      * @param \yii\authclient\BaseClient $client
      * @return \yii\web\Response
      * @throws \yii\web\ForbiddenHttpException
@@ -53,7 +52,6 @@ class AuthController extends Controller
 
     /**
      * Login/register via social auth
-     *
      * @param \yii\authclient\BaseClient $client
      * @return \yii\web\Response
      * @throws \yii\web\ForbiddenHttpException
@@ -82,7 +80,6 @@ class AuthController extends Controller
      * Initialize a userAuth model based on $client data. Note that we don't set
      * `user_id` yet because that can either be the currently logged in user OR a user
      * matched by email address
-     *
      * @param \yii\authclient\BaseClient $client
      * @return \amnah\yii2\user\models\UserAuth
      */
@@ -109,7 +106,6 @@ class AuthController extends Controller
     /**
      * Attempt to log user in by checking if $userAuth already exists in the db,
      * or if a user already has the email address
-     *
      * @param \yii\authclient\BaseClient $client
      * @return bool
      */
@@ -168,7 +164,6 @@ class AuthController extends Controller
      * Check to see if any user has changed their email but not yet confirmed it. It will
      * thus be in `user.new_email`, so we need to clear it in case they try to actually
      * confirm the change (which would result in an unique constraint error for email)
-     *
      * @param string $email
      */
     protected function clearNewEmail($email)
@@ -178,14 +173,10 @@ class AuthController extends Controller
         $user = Yii::$app->getModule("user")->model("User");
         $userToken = Yii::$app->getModule("user")->model("UserToken");
 
-        // attempt to find user with new_email and remove it
+        // attempt to find user with new_email. remove it and the associated userToken
         $user = $user::findOne(["new_email" => $email]);
         if ($user) {
-
-            $user->new_email = null;
-            $user->save(false);
-
-            // find userToken and delete it
+            $user->clearNewEmail();
             $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
             if ($userToken) {
                 $userToken->delete();
@@ -195,7 +186,6 @@ class AuthController extends Controller
 
     /**
      * Register a new user using client attributes and then associate userAuth
-     *
      * @param \yii\authclient\BaseClient $client
      * @param \amnah\yii2\user\models\UserAuth $userAuth
      */
@@ -227,7 +217,6 @@ class AuthController extends Controller
     /**
      * Double checks username to ensure that it isn't already taken. If so,
      * revert to fallback
-     *
      * @param \amnah\yii2\user\models\User $user
      * @param string $fallbackUsername
      * @return mixed
@@ -247,7 +236,6 @@ class AuthController extends Controller
 
     /**
      * Set info for facebook registration
-     *
      * @param array $attributes
      * @return array [$user, $profile]
      */
@@ -279,7 +267,6 @@ class AuthController extends Controller
 
     /**
      * Set info for twitter registration
-     *
      * @param array $attributes
      * @return array [$user, $profile]
      */
@@ -298,7 +285,6 @@ class AuthController extends Controller
 
     /**
      * Set info for google registration
-     *
      * @param array $attributes
      * @return array [$user, $profile]
      */
@@ -317,7 +303,6 @@ class AuthController extends Controller
 
     /**
      * Set info for reddit registration
-     *
      * @param array $attributes
      * @return array [$user, $profile]
      */
@@ -335,7 +320,6 @@ class AuthController extends Controller
 
     /**
      * Set info for LinkedIn registration
-     *
      * @param array $attributes
      * @return array [$user, $profile]
      */
@@ -367,8 +351,9 @@ class AuthController extends Controller
         $profile = Yii::$app->getModule("user")->model("Profile");
 
         foreach ($_SESSION as $k => $v) {
-            if (is_object($v) && get_class($v) == 'yii\authclient\OAuthToken')
+            if (is_object($v) && get_class($v) == "yii\\authclient\\OAuthToken") {
                 $user->email = $v->getParam('email');
+            }
         }
 
         // set email/username if they are set
@@ -377,17 +362,16 @@ class AuthController extends Controller
             $user->email = $attributes["email"];
         }
         if (!empty($attributes["first_name"]) && !empty($attributes["last_name"])) {
-            $user->username = $attributes["first_name"] . ' ' . $attributes["last_name"];
+            $user->username = "{$attributes["first_name"]} {$attributes["last_name"]}";
         }
 
         // use vkontakte_id name as username as fallback
         if (empty($attributes["email"]) && empty($attributes["username"])) {
-            $user->username = 'vkontakte_' . $attributes["id"];
+            $user->username = "vkontakte_{$attributes["id"]}";
         }
 
-        $profile->full_name = $attributes["first_name"] . ' ' . $attributes["last_name"];
+        $profile->full_name = "{$attributes["first_name"]} {$attributes["last_name"]}";
 
         return [$user, $profile];
     }
-
 }

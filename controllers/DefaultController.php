@@ -70,9 +70,9 @@ class DefaultController extends Controller
     public function actionLogin()
     {
         /** @var \amnah\yii2\user\models\forms\LoginForm $model */
+        $model = Yii::$app->getModule("user")->model("LoginForm");
 
         // load post data and login
-        $model = Yii::$app->getModule("user")->model("LoginForm");
         if ($model->load(Yii::$app->request->post()) && $model->login(Yii::$app->getModule("user")->loginDuration)) {
 
             // check for a valid returnUrl (to prevent a weird login bug)
@@ -85,10 +85,7 @@ class DefaultController extends Controller
             return $this->redirect($returnUrl);
         }
 
-        // render
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->render('login', compact("model"));
     }
 
     /**
@@ -98,13 +95,12 @@ class DefaultController extends Controller
     {
         Yii::$app->user->logout();
 
-        // redirect
+        // handle redirect
         $logoutRedirect = Yii::$app->getModule("user")->logoutRedirect;
-        if ($logoutRedirect === null) {
-            return $this->goHome();
-        } else {
+        if ($logoutRedirect) {
             return $this->redirect($logoutRedirect);
         }
+        return $this->goHome();
     }
 
     /**
@@ -153,30 +149,24 @@ class DefaultController extends Controller
             }
         }
 
-        // render
-        return $this->render("register", [
-            'user' => $user,
-            'profile' => $profile,
-        ]);
+        return $this->render("register", compact("user", "profile"));
     }
 
     /**
      * Process data after registration
-     *
      * @param \amnah\yii2\user\models\User $user
      */
     protected function afterRegister($user)
     {
         /** @var \amnah\yii2\user\models\UserToken $userToken */
+        $userToken = Yii::$app->getModule("user")->model("UserToken");
 
         // determine userToken type to see if we need to send email
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userTokenType = null;
         if ($user->status == $user::STATUS_INACTIVE) {
             $userTokenType = $userToken::TYPE_EMAIL_ACTIVATE;
         } elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {
             $userTokenType = $userToken::TYPE_EMAIL_CHANGE;
-        } else {
-            $userTokenType = null;
         }
 
         // check if we have a userToken type to process, or just log user in directly
@@ -222,7 +212,6 @@ class DefaultController extends Controller
             $userToken->delete();
         }
 
-        // render
         return $this->render("confirm", compact("userToken", "success", "email"));
     }
 
@@ -266,10 +255,7 @@ class DefaultController extends Controller
             return $this->refresh();
         }
 
-        // render
-        return $this->render("account", [
-            'user' => $user,
-        ]);
+        return $this->render("account", compact("user"));
     }
 
     /**
@@ -296,10 +282,7 @@ class DefaultController extends Controller
             return $this->refresh();
         }
 
-        // render
-        return $this->render("profile", [
-            'profile' => $profile,
-        ]);
+        return $this->render("profile", compact("profile"));
     }
 
     /**
@@ -317,10 +300,7 @@ class DefaultController extends Controller
             Yii::$app->session->setFlash("Resend-success", Yii::t("user", "Confirmation email resent"));
         }
 
-        // render
-        return $this->render("resend", [
-            "model" => $model,
-        ]);
+        return $this->render("resend", compact("model"));
     }
 
     /**
@@ -342,7 +322,6 @@ class DefaultController extends Controller
             Yii::$app->session->setFlash("Resend-success", Yii::t("user", "Confirmation email resent"));
         }
 
-        // redirect to account page
         return $this->redirect(["/user/account"]);
     }
 
@@ -360,16 +339,12 @@ class DefaultController extends Controller
         $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
         if ($userToken) {
 
-            // remove `user.new_email`
-            $user->new_email = null;
-            $user->save(false);
-
-            // delete userToken and set flash message
+            // clear new_email, delete userToken, and set flash message
+            $user->clearNewEmail();
             $userToken->delete();
             Yii::$app->session->setFlash("Cancel-success", Yii::t("user", "Email change cancelled"));
         }
 
-        // go to account page
         return $this->redirect(["/user/account"]);
     }
 
@@ -388,10 +363,7 @@ class DefaultController extends Controller
             Yii::$app->session->setFlash("Forgot-success", Yii::t("user", "Instructions to reset your password have been sent"));
         }
 
-        // render
-        return $this->render("forgot", [
-            "model" => $model,
-        ]);
+        return $this->render("forgot", compact("model"));
     }
 
     /**
@@ -423,7 +395,6 @@ class DefaultController extends Controller
             $success = true;
         }
 
-        // render
         return $this->render('reset', compact("user", "success"));
     }
 }

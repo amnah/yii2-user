@@ -77,7 +77,6 @@ class UserToken extends ActiveRecord
 
     /**
      * Generate/reuse a userToken
-     *
      * @param int $userId
      * @param int $type
      * @param string $expireTime
@@ -105,7 +104,6 @@ class UserToken extends ActiveRecord
 
     /**
      * Find an active userToken by userId
-     *
      * @param int $userId
      * @param array|int $type
      * @param bool $checkExpiration
@@ -113,23 +111,16 @@ class UserToken extends ActiveRecord
      */
     public static function findByUser($userId, $type, $checkExpiration = true)
     {
-        $query = static::find()
-            ->where([
-                "user_id" => $userId,
-                "type" => $type,
-            ]);
-
+        $query = static::find()->where(["user_id" => $userId, "type" => $type ]);
         if ($checkExpiration) {
             $now = date("Y-m-d H:i:s");
             $query->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)");
         }
-
         return $query->one();
     }
 
     /**
      * Find an active userToken by token
-     *
      * @param string $token
      * @param array|int $type
      * @param bool $checkExpiration
@@ -137,17 +128,11 @@ class UserToken extends ActiveRecord
      */
     public static function findByToken($token, $type, $checkExpiration = true)
     {
-        $query = static::find()
-            ->where([
-                "token" => $token,
-                "type" => $type,
-            ]);
-
+        $query = static::find()->where(["token" => $token, "type" => $type ]);
         if ($checkExpiration) {
             $now = date("Y-m-d H:i:s");
             $query->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)");
         }
-
         return $query->one();
     }
 }

@@ -49,7 +49,6 @@ class ForgotForm extends Model
 
     /**
      * Get user based on email
-     *
      * @return \amnah\yii2\user\models\User|null
      */
     public function getUser()
@@ -74,7 +73,6 @@ class ForgotForm extends Model
 
     /**
      * Send forgot email
-     *
      * @return bool
      */
     public function sendForgotEmail()
@@ -83,7 +81,6 @@ class ForgotForm extends Model
         /** @var Message $message */
         /** @var \amnah\yii2\user\models\UserToken $userToken */
 
-        // validate
         if ($this->validate()) {
 
             // get user
@@ -91,7 +88,7 @@ class ForgotForm extends Model
 
             // calculate expireTime (converting via strtotime)
             $expireTime = Yii::$app->getModule("user")->resetExpireTime;
-            $expireTime = $expireTime ? date("Y-m-d H:i:s", strtotime("+" . $expireTime)) : null;
+            $expireTime = $expireTime ? date("Y-m-d H:i:s", strtotime($expireTime)) : null;
 
             // create userToken
             $userToken = Yii::$app->getModule("user")->model("UserToken");

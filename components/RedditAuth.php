@@ -84,7 +84,6 @@ class RedditAuth extends OAuth2
 
     /**
      * Add state and duration to $defaultParams
-     *
      * @inheritdoc
      */
     public function buildAuthUrl(array $params = [])
@@ -106,7 +105,6 @@ class RedditAuth extends OAuth2
 
     /**
      * Add curl headers
-     *
      * @inheritdoc
      */
     protected function composeRequestCurlOptions($method, $url, array $params)
@@ -126,7 +124,6 @@ class RedditAuth extends OAuth2
     /**
      * Check matching "state" and remove from params so that return uri will match
      * the one set in the Reddit app
-     *
      * @inheritdoc
      */
     protected function defaultReturnUrl()

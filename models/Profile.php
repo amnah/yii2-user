@@ -24,7 +24,7 @@ class Profile extends ActiveRecord
     public function rules()
     {
         return [
-            [['full_name'], 'string', 'max' => 255]
+            [['full_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -68,7 +68,6 @@ class Profile extends ActiveRecord
 
     /**
      * Set user id
-     *
      * @param int $userId
      * @return static
      */

@@ -43,7 +43,6 @@ class User extends \yii\web\User
 
     /**
      * Check if user is logged in
-     *
      * @return bool
      */
     public function getIsLoggedIn()
@@ -63,7 +62,6 @@ class User extends \yii\web\User
 
     /**
      * Get user's display name
-     *
      * @param string $default
      * @return string
      */
@@ -78,7 +76,6 @@ class User extends \yii\web\User
      * Check if user can do $permissionName.
      * If "authManager" component is set, this will simply use the default functionality.
      * Otherwise, it will use our custom permission system
-     *
      * @param string $permissionName
      * @param array $params
      * @param bool $allowCaching

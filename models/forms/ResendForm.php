@@ -51,7 +51,6 @@ class ResendForm extends Model
 
     /**
      * Get user based on email
-     *
      * @return \amnah\yii2\user\models\User|null
      */
     public function getUser()
@@ -81,34 +80,28 @@ class ResendForm extends Model
 
     /**
      * Send forgot email
-     *
      * @return bool
      */
     public function sendEmail()
     {
-        // validate
-        if ($this->validate()) {
-
-            // get user
-            /** @var \amnah\yii2\user\models\UserToken $userToken */
-            $user = $this->getUser();
-            $userToken = Yii::$app->getModule("user")->model("UserToken");
-
-            // calculate type
-            if ($user->status == $user::STATUS_INACTIVE) {
-                $type = $userToken::TYPE_EMAIL_ACTIVATE;
-            } //elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {
-            else {
-                $type = $userToken::TYPE_EMAIL_CHANGE;
-            }
-
-            // generate userToken
-            $userToken = $userToken::generate($user->id, $type);
-
-            // send email confirmation
-            return $user->sendEmailConfirmation($userToken);
+        if (!$this->validate()) {
+            return false;
         }
 
-        return false;
+        /** @var \amnah\yii2\user\models\UserToken $userToken */
+        $user = $this->getUser();
+        $userToken = Yii::$app->getModule("user")->model("UserToken");
+
+        // calculate type based on user status
+        if ($user->status == $user::STATUS_INACTIVE) {
+            $type = $userToken::TYPE_EMAIL_ACTIVATE;
+        } //elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {
+        else {
+            $type = $userToken::TYPE_EMAIL_CHANGE;
+        }
+
+        // generate userToken and send email confirmation
+        $userToken = $userToken::generate($user->id, $type);
+        return $user->sendEmailConfirmation($userToken);
     }
 }
