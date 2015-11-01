@@ -37,6 +37,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="row">
             <div class="col-lg-5">
+
+                <div class="alert alert-warning">
+                    <p><?= Yii::t("user", "Email") ?> [ <?= $user->email ?> ]</p>
+                </div>
+
                 <?php $form = ActiveForm::begin(['id' => 'reset-form']); ?>
 
                     <?= $form->field($user, 'newPassword')->passwordInput() ?>
