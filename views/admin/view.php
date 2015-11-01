@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'access_token',
             'logged_in_ip',
             'logged_in_at',
-            'create_ip',
+            'created_ip',
             'created_at',
             'updated_at',
             'banned_at',

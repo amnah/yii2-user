@@ -37,7 +37,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'logged_in_at') ?>
 
-    <?php // echo $form->field($model, 'create_ip') ?>
+    <?php // echo $form->field($model, 'created_ip') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 

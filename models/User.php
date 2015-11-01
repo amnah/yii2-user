@@ -23,7 +23,7 @@ use ReflectionClass;
  * @property string $access_token
  * @property string $logged_in_ip
  * @property string $logged_in_at
- * @property string $create_ip
+ * @property string $created_ip
  * @property string $created_at
  * @property string $updated_at
  * @property string $banned_at
@@ -139,17 +139,17 @@ class User extends ActiveRecord implements IdentityInterface
             'password' => Yii::t('user', 'Password'),
             'auth_key' => Yii::t('user', 'Auth Key'),
             'access_token' => Yii::t('user', 'Access Token'),
-            'logged_in_ip' => Yii::t('user', 'Login Ip'),
-            'logged_in_at' => Yii::t('user', 'Login Time'),
-            'create_ip' => Yii::t('user', 'Create Ip'),
+            'logged_in_ip' => Yii::t('user', 'Logged In Ip'),
+            'logged_in_at' => Yii::t('user', 'Logged In At'),
+            'created_ip' => Yii::t('user', 'Created Ip'),
             'created_at' => Yii::t('user', 'Created At'),
             'updated_at' => Yii::t('user', 'Updated At'),
-            'banned_at' => Yii::t('user', 'Ban Time'),
-            'banned_reason' => Yii::t('user', 'Ban Reason'),
+            'banned_at' => Yii::t('user', 'Banned At'),
+            'banned_reason' => Yii::t('user', 'Banned Reason'),
 
             // virtual attributes set above
             'currentPassword' => Yii::t('user', 'Current Password'),
-            'newPassword' => Yii::t('user', 'New Password'),
+            'newPassword' => $this->isNewRecord ? Yii::t('user', 'Password') : Yii::t('user', 'New Password'),
             'newPasswordConfirm' => Yii::t('user', 'New Password Confirm'),
         ];
     }
@@ -308,7 +308,7 @@ class User extends ActiveRecord implements IdentityInterface
         // set default attributes
         $attributes = [
             "role_id" => $roleId,
-            "create_ip" => $userIp,
+            "created_ip" => $userIp,
             "auth_key" => Yii::$app->security->generateRandomString(),
             "access_token" => Yii::$app->security->generateRandomString(),
             "status" => static::STATUS_ACTIVE,
