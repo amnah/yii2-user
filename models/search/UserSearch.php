@@ -15,6 +15,14 @@ class UserSearch extends User
     /**
      * @inheritdoc
      */
+    public static function tableName()
+    {
+        return "{{%user}}";
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
