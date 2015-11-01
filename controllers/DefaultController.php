@@ -171,8 +171,6 @@ class DefaultController extends Controller
 
         // check if we have a userToken type to process, or just log user in directly
         if ($userTokenType) {
-
-            // generate userToken and send email
             $userToken = $userToken::generate($user->id, $userTokenType);
             if (!$numSent = $user->sendEmailConfirmation($userToken)) {
 
@@ -203,12 +201,13 @@ class DefaultController extends Controller
             //   for example, user registered another account before confirming change of email
             $user = Yii::$app->getModule("user")->model("User");
             $user = $user::findOne($userToken->user_id);
-            $email = $user->new_email ?: $user->email;;
-            if ($user->confirm()) {
+            $newEmail = $userToken->data;
+            if ($user->confirm($newEmail)) {
                 $success = true;
             }
 
-            // delete token either way
+            // set email and delete token
+            $email = $newEmail ?: $user->email;
             $userToken->delete();
         }
 
@@ -235,13 +234,13 @@ class DefaultController extends Controller
         }
 
         // validate for normal request
+        $userToken = Yii::$app->getModule("user")->model("UserToken");
         if ($loadedPost && $user->validate()) {
 
-            // generate userToken and send email if user changed his email
-            if (Yii::$app->getModule("user")->emailChangeConfirmation && $user->checkAndPrepEmailChange()) {
-
-                $userToken = Yii::$app->getModule("user")->model("UserToken");
-                $userToken = $userToken::generate($user->id, $userToken::TYPE_EMAIL_CHANGE);
+            // check if user changed his email
+            $newEmail = $user->checkEmailChange();
+            if ($newEmail) {
+                $userToken = $userToken::generate($user->id, $userToken::TYPE_EMAIL_CHANGE, $newEmail);
                 if (!$numSent = $user->sendEmailConfirmation($userToken)) {
 
                     // handle email error
@@ -253,9 +252,11 @@ class DefaultController extends Controller
             $user->save(false);
             Yii::$app->session->setFlash("Account-success", Yii::t("user", "Account updated"));
             return $this->refresh();
+        } else {
+            $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
         }
 
-        return $this->render("account", compact("user"));
+        return $this->render("account", compact("user", "userToken"));
     }
 
     /**
@@ -338,9 +339,6 @@ class DefaultController extends Controller
         $userToken = Yii::$app->getModule("user")->model("UserToken");
         $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
         if ($userToken) {
-
-            // clear new_email, delete userToken, and set flash message
-            $user->clearNewEmail();
             $userToken->delete();
             Yii::$app->session->setFlash("Cancel-success", Yii::t("user", "Email change cancelled"));
         }

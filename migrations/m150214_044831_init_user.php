@@ -25,7 +25,6 @@ class m150214_044831_init_user extends Migration
             'role_id' => Schema::TYPE_INTEGER . ' not null',
             'status' => Schema::TYPE_SMALLINT . ' not null',
             'email' => Schema::TYPE_STRING . ' null default null',
-            'new_email' => Schema::TYPE_STRING . ' null default null',
             'username' => Schema::TYPE_STRING . ' null default null',
             'password' => Schema::TYPE_STRING . ' null default null',
             'auth_key' => Schema::TYPE_STRING . ' null default null',
@@ -43,6 +42,7 @@ class m150214_044831_init_user extends Migration
             'user_id' => Schema::TYPE_INTEGER . ' not null',
             'type' => Schema::TYPE_SMALLINT . ' not null',
             'token' => Schema::TYPE_STRING . ' not null',
+            'data' => Schema::TYPE_STRING . ' null default null',
             'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'expired_at' => Schema::TYPE_TIMESTAMP . ' null default null',
         ], $tableOptions);

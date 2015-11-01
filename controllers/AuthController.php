@@ -113,8 +113,10 @@ class AuthController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\UserAuth $userAuth */
+        /** @var \amnah\yii2\user\models\UserToken $userToken */
         $user = Yii::$app->getModule("user")->model("User");
         $userAuth = Yii::$app->getModule("user")->model("UserAuth");
+        $userToken = Yii::$app->getModule("user")->model("UserToken");
 
         // attempt to find userAuth in database by id and name
         $attributes = $client->getUserAttributes();
@@ -123,9 +125,9 @@ class AuthController extends Controller
             "provider_id" => (string)$attributes["id"],
         ]);
         if ($userAuth) {
-            $user = $user::findOne($userAuth->user_id);
 
-            // check if user is banned
+            // check if user is banned, otherwise log in
+            $user = $user::findOne($userAuth->user_id);
             if ($user && $user->banned_at) {
                 return false;
             }
@@ -143,9 +145,13 @@ class AuthController extends Controller
         // attempt to find user by email
         if (!empty($user["email"])) {
 
-            // check if any user has `new_email` set and clear it
+            // check if any user has has tried to change their email
+            // if so, delete it
             $email = trim($user["email"]);
-            $this->clearNewEmail($email);
+            $userToken = $userToken::findByData($email, $userToken::TYPE_EMAIL_CHANGE);
+            if ($userToken) {
+                $userToken->delete();
+            }
 
             // find user and create user provider for match
             $user = $user::findOne(["email" => $email]);
@@ -158,30 +164,6 @@ class AuthController extends Controller
         }
 
         return false;
-    }
-
-    /**
-     * Check to see if any user has changed their email but not yet confirmed it. It will
-     * thus be in `user.new_email`, so we need to clear it in case they try to actually
-     * confirm the change (which would result in an unique constraint error for email)
-     * @param string $email
-     */
-    protected function clearNewEmail($email)
-    {
-        /** @var \amnah\yii2\user\models\User $user */
-        /** @var \amnah\yii2\user\models\UserToken $userToken */
-        $user = Yii::$app->getModule("user")->model("User");
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
-
-        // attempt to find user with new_email. remove it and the associated userToken
-        $user = $user::findOne(["new_email" => $email]);
-        if ($user) {
-            $user->clearNewEmail();
-            $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
-            if ($userToken) {
-                $userToken->delete();
-            }
-        }
     }
 
     /**

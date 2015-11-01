@@ -17,7 +17,6 @@ use ReflectionClass;
  * @property string $role_id
  * @property integer $status
  * @property string $email
- * @property string $new_email
  * @property string $username
  * @property string $password
  * @property string $auth_key
@@ -136,7 +135,6 @@ class User extends ActiveRecord implements IdentityInterface
             'role_id' => Yii::t('user', 'Role ID'),
             'status' => Yii::t('user', 'Status'),
             'email' => Yii::t('user', 'Email'),
-            'new_email' => Yii::t('user', 'New Email'),
             'username' => Yii::t('user', 'Username'),
             'password' => Yii::t('user', 'Password'),
             'auth_key' => Yii::t('user', 'Auth Key'),
@@ -334,30 +332,31 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Check and prepare for email change
-     * @return bool True if user set a `new_email`
+     * Check for email change
+     * @return string|bool
      */
-    public function checkAndPrepEmailChange()
+    public function checkEmailChange()
     {
-        // check if user is removing email address (only if Module::$requireEmail = false)
-        if (trim($this->email) === "") {
+        // check if user didn't change email
+        if ($this->email == $this->getOldAttribute("email")) {
             return false;
         }
 
-        // check for change in email
-        if ($this->email != $this->getOldAttribute("email")) {
-
-            // change status
-            $this->status = static::STATUS_UNCONFIRMED_EMAIL;
-
-            // set `new_email` attribute and restore old one
-            $this->new_email = $this->email;
-            $this->email = $this->getOldAttribute("email");
-
-            return true;
+        // check if we need to confirm email change
+        if (!Yii::$app->getModule("user")->emailChangeConfirmation) {
+            return false;
         }
 
-        return false;
+        // check if user is removing email address (only valid if Module::$requireEmail = false)
+        if (!$this->email) {
+            return false;
+        }
+
+        // update status and email before returning new email
+        $newEmail = $this->email;
+        $this->status = static::STATUS_UNCONFIRMED_EMAIL;
+        $this->email = $this->getOldAttribute("email");
+        return $newEmail;
     }
 
     /**
@@ -372,41 +371,28 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Clear new_email field
-     * @param bool $save
-     * @return static
-     */
-    public function clearNewEmail($save = true)
-    {
-        $this->new_email = null;
-        if ($save) {
-            $this->save(false, ["new_email"]);
-        }
-        return $this;
-    }
-
-    /**
      * Confirm user email
+     * @param string $newEmail
      * @return bool
      */
-    public function confirm()
+    public function confirm($newEmail)
     {
         // update status
         $this->status = static::STATUS_ACTIVE;
 
-        // check new_email if set and check if another user already has it
+        // process $newEmail from a userToken
+        //   check if another user already has that email
         $success = true;
-        if ($this->new_email) {
-            $checkUser = static::findOne(["email" => $this->new_email]);
+        if ($newEmail) {
+            $checkUser = static::findOne(["email" => $newEmail]);
             if ($checkUser) {
                 $success = false;
             } else {
-                $this->email = $this->new_email;
+                $this->email = $newEmail;
             }
-            $this->new_email = null;
         }
 
-        $this->save(false, ["email", "new_email", "status"]);
+        $this->save(false, ["email", "status"]);
         return $success;
     }
 
@@ -479,7 +465,7 @@ class User extends ActiveRecord implements IdentityInterface
         // send email
         $user = $this;
         $profile = $user->profile;
-        $email = $user->new_email ?: $user->email;
+        $email = $userToken->data ?: $user->email;
         $subject = Yii::$app->id . " - " . Yii::t("user", "Email Confirmation");
         $message = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userToken"))
             ->setTo($email)

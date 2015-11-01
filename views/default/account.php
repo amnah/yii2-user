@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
  * @var amnah\yii2\user\models\User $user
+ * @var amnah\yii2\user\models\UserToken $userToken
  */
 
 $this->title = Yii::t('user', 'Account');
@@ -57,9 +58,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
 
-            <?php if ($user->new_email !== null): ?>
+            <?php if (!empty($userToken->data)): ?>
 
-                <p class="small"><?= Yii::t('user', "Pending email confirmation: [ {newEmail} ]", ["newEmail" => $user->new_email]) ?></p>
+                <p class="small"><?= Yii::t('user', "Pending email confirmation: [ {newEmail} ]", ["newEmail" => $userToken->data]) ?></p>
                 <p class="small">
                     <?= Html::a(Yii::t("user", "Resend"), ["/user/resend-change"]) ?> / <?= Html::a(Yii::t("user", "Cancel"), ["/user/cancel"]) ?>
                 </p>

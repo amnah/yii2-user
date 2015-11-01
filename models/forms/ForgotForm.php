@@ -92,7 +92,7 @@ class ForgotForm extends Model
 
             // create userToken
             $userToken = Yii::$app->getModule("user")->model("UserToken");
-            $userToken = $userToken::generate($user->id, $userToken::TYPE_PASSWORD_RESET, $expireTime);
+            $userToken = $userToken::generate($user->id, $userToken::TYPE_PASSWORD_RESET, null, $expireTime);
 
             // modify view path to module views
             $mailer = Yii::$app->mailer;

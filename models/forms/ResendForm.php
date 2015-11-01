@@ -57,12 +57,19 @@ class ResendForm extends Model
     {
         // get and store user
         if ($this->_user === false) {
-            $user = Yii::$app->getModule("user")->model("User");
 
-            // check email first, then new_email (former is indexed, latter is not)
+            /** @var \amnah\yii2\user\models\User $user */
+            /** @var \amnah\yii2\user\models\UserToken $userToken */
+            $user = Yii::$app->getModule("user")->model("User");
+            $userToken = Yii::$app->getModule("user")->model("UserToken");
+
+            // check email first and then userToken
             $this->_user = $user::findOne(["email" => $this->email]);
             if (!$this->_user) {
-                $this->_user = $user::findOne(["new_email" => $this->email]);
+                $userToken = $userToken->findByData($this->email, $userToken::TYPE_EMAIL_CHANGE);
+                if ($userToken) {
+                    $this->_user = $user::findOne($userToken->user_id);
+                }
             }
         }
         return $this->_user;
