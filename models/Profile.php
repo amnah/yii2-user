@@ -61,7 +61,7 @@ class Profile extends ActiveRecord
         return [
             'timestamp' => [
                 'class'      => 'yii\behaviors\TimestampBehavior',
-                'value'      => function () { return date("Y-m-d H:i:s"); },
+                'value'      => function () { return gmdate("Y-m-d H:i:s"); },
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
