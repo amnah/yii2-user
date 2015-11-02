@@ -85,7 +85,7 @@ class UserKey extends ActiveRecord
         return [
             'timestamp' => [
                 'class'      => 'yii\behaviors\TimestampBehavior',
-                'value'      => function () { return date("Y-m-d H:i:s"); },
+                'value'      => function () { return gmdate("Y-m-d H:i:s"); },
                 'attributes' => [
                     // set only create_time because there is no update_time
                     ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
@@ -123,7 +123,7 @@ class UserKey extends ActiveRecord
         // set/update data
         $model->user_id     = $userId;
         $model->type        = $type;
-        $model->create_time = date("Y-m-d H:i:s");
+        $model->create_time = gmdate("Y-m-d H:i:s");
         $model->expire_time = $expireTime;
         $model->key_value   = Yii::$app->security->generateRandomString();
         $model->save(false);
@@ -139,7 +139,7 @@ class UserKey extends ActiveRecord
      */
     public static function findActiveByUser($userId, $type)
     {
-        $now = date("Y-m-d H:i:s");
+        $now = gmdate("Y-m-d H:i:s");
         return static::find()
             ->where([
                 "user_id"      => $userId,
@@ -159,7 +159,7 @@ class UserKey extends ActiveRecord
      */
     public static function findActiveByKey($key, $type)
     {
-        $now = date("Y-m-d H:i:s");
+        $now = gmdate("Y-m-d H:i:s");
         return static::find()
             ->where([
                 "key_value"    => $key,
@@ -177,7 +177,7 @@ class UserKey extends ActiveRecord
      */
     public function consume()
     {
-        $this->consume_time = date("Y-m-d H:i:s");
+        $this->consume_time = gmdate("Y-m-d H:i:s");
         $this->save(false);
         return $this;
     }
@@ -189,7 +189,7 @@ class UserKey extends ActiveRecord
      */
     public function expire()
     {
-        $this->expire_time = date("Y-m-d H:i:s");
+        $this->expire_time = gmdate("Y-m-d H:i:s");
         $this->save(false);
         return $this;
     }

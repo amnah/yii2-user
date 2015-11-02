@@ -172,7 +172,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             'timestamp' => [
                 'class'      => 'yii\behaviors\TimestampBehavior',
-                'value'      => function () { return date("Y-m-d H:i:s"); },
+                'value'      => function () { return gmdate("Y-m-d H:i:s"); },
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
@@ -298,7 +298,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         // convert ban_time checkbox to date
         if ($this->ban_time) {
-            $this->ban_time = date("Y-m-d H:i:s");
+            $this->ban_time = gmdate("Y-m-d H:i:s");
         }
 
         // ensure fields are null so they won't get set as empty string
@@ -385,7 +385,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         // set data
         $this->login_ip   = Yii::$app->getRequest()->getUserIP();
-        $this->login_time = date("Y-m-d H:i:s");
+        $this->login_time = gmdate("Y-m-d H:i:s");
 
         // save and return
         return $this->save(false, ["login_ip", "login_time"]);
