@@ -60,8 +60,8 @@ class UserToken extends ActiveRecord
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
                 'updatedAtAttribute' => false,
-                'value' => function () {
-                    return date("Y-m-d H:i:s");
+                'value' => function ($event) {
+                    return gmdate("Y-m-d H:i:s");
                 },
             ],
         ];

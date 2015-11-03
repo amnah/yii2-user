@@ -44,8 +44,8 @@ class UserAuth extends ActiveRecord
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function () {
-                    return date("Y-m-d H:i:s");
+                'value' => function ($event) {
+                    return gmdate("Y-m-d H:i:s");
                 },
             ],
         ];
