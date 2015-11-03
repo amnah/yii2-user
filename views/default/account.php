@@ -47,7 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'enableAjaxValidation' => true,
     ]); ?>
 
-    <?= $form->field($user, 'currentPassword')->passwordInput() ?>
+    <?php if ($user->password): ?>
+        <?= $form->field($user, 'currentPassword')->passwordInput() ?>
+    <?php endif ?>
 
     <hr/>
 

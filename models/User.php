@@ -93,7 +93,6 @@ class User extends ActiveRecord implements IdentityInterface
             [['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user', 'Passwords do not match')],
 
             // account page
-            [['currentPassword'], 'required', 'on' => ['account']],
             [['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
 
             // admin crud rules
@@ -102,6 +101,12 @@ class User extends ActiveRecord implements IdentityInterface
             [['banned_at'], 'integer', 'on' => ['admin']],
             [['banned_reason'], 'string', 'max' => 255, 'on' => 'admin'],
         ];
+
+        // add required for currentPassword on account page
+        // only if $this->password is set (might be null from a social login)
+        if ($this->password) {
+            $rules[] = [['currentPassword'], 'required', 'on' => ['account']];
+        }
 
         // add required rules for email/username depending on module properties
         $requireFields = ["requireEmail", "requireUsername"];
