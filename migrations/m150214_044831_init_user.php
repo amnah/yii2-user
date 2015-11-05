@@ -39,7 +39,7 @@ class m150214_044831_init_user extends Migration
         ], $tableOptions);
         $this->createTable('{{%user_token}}', [
             'id' => Schema::TYPE_PK,
-            'user_id' => Schema::TYPE_INTEGER . ' not null',
+            'user_id' => Schema::TYPE_INTEGER . ' null',
             'type' => Schema::TYPE_SMALLINT . ' not null',
             'token' => Schema::TYPE_STRING . ' not null',
             'data' => Schema::TYPE_STRING . ' null',

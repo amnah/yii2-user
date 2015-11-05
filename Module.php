@@ -188,15 +188,16 @@ class Module extends \yii\base\Module
     protected function getDefaultModelClasses()
     {
         return [
-            'User'       => 'amnah\yii2\user\models\User',
-            'Profile'    => 'amnah\yii2\user\models\Profile',
-            'Role'       => 'amnah\yii2\user\models\Role',
-            'UserToken'  => 'amnah\yii2\user\models\UserToken',
-            'UserAuth'   => 'amnah\yii2\user\models\UserAuth',
+            'User' => 'amnah\yii2\user\models\User',
+            'Profile' => 'amnah\yii2\user\models\Profile',
+            'Role' => 'amnah\yii2\user\models\Role',
+            'UserToken' => 'amnah\yii2\user\models\UserToken',
+            'UserAuth' => 'amnah\yii2\user\models\UserAuth',
             'ForgotForm' => 'amnah\yii2\user\models\forms\ForgotForm',
-            'LoginForm'  => 'amnah\yii2\user\models\forms\LoginForm',
+            'LoginForm' => 'amnah\yii2\user\models\forms\LoginForm',
             'ResendForm' => 'amnah\yii2\user\models\forms\ResendForm',
             'UserSearch' => 'amnah\yii2\user\models\search\UserSearch',
+            'LoginEmailForm' => 'amnah\yii2\user\models\forms\LoginEmailForm',
         ];
     }
 
@@ -263,6 +264,8 @@ class Module extends \yii\base\Module
             "/{$this->id}/login" => "Login page",
             "/{$this->id}/logout" => "Logout page",
             "/{$this->id}/register" => "Register page",
+            "/{$this->id}/login2" => "Login page v2 - login/register via email link",
+            "/{$this->id}/login2-callback" => "Login page v2 - login/register via email link",
             "/{$this->id}/auth/login?authclient=facebook" => "Register/login via social account",
             "/{$this->id}/auth/connect?authclient=facebook" => "Connect social account to currently logged in user",
             "/{$this->id}/account" => "User account page (email, username, password)",

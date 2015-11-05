@@ -36,6 +36,11 @@ class UserToken extends ActiveRecord
     const TYPE_PASSWORD_RESET = 3;
 
     /**
+     * @var int Token for logging in via email
+     */
+    const TYPE_EMAIL_LOGIN = 4;
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -89,7 +94,11 @@ class UserToken extends ActiveRecord
         // attempt to find existing record
         // otherwise create new
         $checkExpiration = false;
-        $model = static::findByUser($userId, $type, $checkExpiration);
+        if ($userId) {
+            $model = static::findByUser($userId, $type, $checkExpiration);
+        } else {
+            $model = static::findByData($data, $type, $checkExpiration);
+        }
         if (!$model) {
             $model = new static();
         }

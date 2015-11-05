@@ -34,7 +34,7 @@ class DefaultController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['login', 'register', 'forgot', 'reset'],
+                        'actions' => ['login', 'register', 'forgot', 'reset', 'login-email', 'login-callback'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -73,7 +73,9 @@ class DefaultController extends Controller
         $model = Yii::$app->getModule("user")->model("LoginForm");
 
         // load post data and login
-        if ($model->load(Yii::$app->request->post()) && $model->login(Yii::$app->getModule("user")->loginDuration)) {
+        $post = Yii::$app->request->post();
+        $loginDuration = Yii::$app->getModule("user")->loginDuration;
+        if ($model->load($post) && $model->login($loginDuration)) {
 
             // check for a valid returnUrl (to prevent a weird login bug)
             //   https://github.com/amnah/yii2-user/issues/115
@@ -394,5 +396,70 @@ class DefaultController extends Controller
         }
 
         return $this->render('reset', compact("user", "success"));
+    }
+
+    /**
+     * Login/register via email
+     */
+    public function actionLoginEmail()
+    {
+        /** @var \amnah\yii2\user\models\forms\LoginEmailForm $loginEmailForm */
+        $loginEmailForm = Yii::$app->getModule("user")->model("LoginEmailForm");
+
+        // load post data and validate
+        $post = Yii::$app->request->post();
+        if ($loginEmailForm->load($post) && $loginEmailForm->sendEmail()) {
+            $user = $loginEmailForm->getUser();
+            $message = $user ? "Login link sent" : "Registration link sent";
+            $message .= " - Please check your email";
+            Yii::$app->session->setFlash("Login-success", Yii::t("user", $message));
+        }
+
+        return $this->render("loginEmail", compact("loginEmailForm"));
+    }
+
+    /**
+     * Login/register callback via email
+     */
+    public function actionLoginCallback($token)
+    {
+        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \amnah\yii2\user\models\Profile $profile */
+        /** @var \amnah\yii2\user\models\Role $role */
+        /** @var \amnah\yii2\user\models\UserToken $userToken */
+
+        $user = Yii::$app->getModule("user")->model("User");
+        $profile = Yii::$app->getModule("user")->model("Profile");
+        $userToken = Yii::$app->getModule("user")->model("UserToken");
+
+        // check token and log user in directly
+        $userToken = $userToken::findByToken($token, $userToken::TYPE_EMAIL_LOGIN);
+        if ($userToken && $userToken->user) {
+            $loginDuration = Yii::$app->getModule("user")->loginDuration;
+            Yii::$app->user->login($userToken->user, $loginDuration);
+            $userToken->delete();
+            return $this->goHome();
+        }
+
+        // register user
+        $user->email = $userToken->data;
+        $post = Yii::$app->request->post();
+        if ($user->load($post)) {
+            $profile->load($post);
+            if ($user->validate() && $profile->validate()) {
+                // perform registration
+                $role = Yii::$app->getModule("user")->model("Role");
+                $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save();
+                $profile->setUser($user->id)->save();
+
+                // log user in and delete token
+                $loginDuration = Yii::$app->getModule("user")->loginDuration;
+                Yii::$app->user->login($user, $loginDuration);
+                $userToken->delete();
+                return $this->goHome();
+            }
+        }
+
+        return $this->render("loginCallback", compact("user", "profile", "userToken"));
     }
 }
