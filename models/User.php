@@ -472,15 +472,10 @@ class User extends ActiveRecord implements IdentityInterface
         $profile = $user->profile;
         $email = $userToken->data ?: $user->email;
         $subject = Yii::$app->id . " - " . Yii::t("user", "Email Confirmation");
-        $message = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userToken"))
+        $result = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userToken"))
             ->setTo($email)
-            ->setSubject($subject);
-
-        // check for messageConfig before sending (for backwards-compatible purposes)
-        if (empty($mailer->messageConfig["from"])) {
-            $message->setFrom(Yii::$app->params["adminEmail"]);
-        }
-        $result = $message->send();
+            ->setSubject($subject)
+            ->send();
 
         // restore view path and return result
         $mailer->viewPath = $oldViewPath;

@@ -93,15 +93,10 @@ class LoginEmailForm extends Model
         // send email
         $subject = $user ? "Login" : "Register";
         $subject = Yii::$app->id . " - " . Yii::t("user", $subject);
-        $message = $mailer->compose('loginToken', compact("subject", "user", "userToken"))
+        $result = $mailer->compose('loginToken', compact("subject", "user", "userToken"))
             ->setTo($this->email)
-            ->setSubject($subject);
-
-        // check for messageConfig before sending (for backwards-compatible purposes)
-        if (empty($mailer->messageConfig["from"])) {
-            $message->setFrom(Yii::$app->params["adminEmail"]);
-        }
-        $result = $message->send();
+            ->setSubject($subject)
+            ->send();
 
         // restore view path and return result
         $mailer->viewPath = $oldViewPath;
