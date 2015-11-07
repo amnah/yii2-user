@@ -6,9 +6,12 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
+ * @var amnah\yii2\user\Module $module
  * @var amnah\yii2\user\models\User $user
  * @var amnah\yii2\user\models\UserToken $userToken
  */
+
+$module = $this->context->module;
 
 $this->title = Yii::t('user', 'Account');
 $this->params['breadcrumbs'][] = $this->title;
@@ -53,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <hr/>
 
-    <?php if (Yii::$app->getModule("user")->useEmail): ?>
+    <?php if ($module->useEmail): ?>
         <?= $form->field($user, 'email') ?>
     <?php endif; ?>
 
@@ -67,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a(Yii::t("user", "Resend"), ["/user/resend-change"]) ?> / <?= Html::a(Yii::t("user", "Cancel"), ["/user/cancel"]) ?>
                 </p>
 
-            <?php elseif (Yii::$app->getModule("user")->emailConfirmation): ?>
+            <?php elseif ($module->emailConfirmation): ?>
 
                 <p class="small"><?= Yii::t('user', 'Changing your email requires email confirmation') ?></p>
 
@@ -76,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <?php if (Yii::$app->getModule("user")->useUsername): ?>
+    <?php if ($module->useUsername): ?>
         <?= $form->field($user, 'username') ?>
     <?php endif; ?>
 

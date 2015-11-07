@@ -17,6 +17,12 @@ use yii\filters\VerbFilter;
 class AdminController extends Controller
 {
     /**
+     * @var \amnah\yii2\user\Module
+     * @inheritdoc
+     */
+    public $module;
+    
+    /**
      * @inheritdoc
      */
     public function init()
@@ -52,7 +58,7 @@ class AdminController extends Controller
     public function actionIndex()
     {
         /** @var \amnah\yii2\user\models\search\UserSearch $searchModel */
-        $searchModel = Yii::$app->getModule("user")->model("UserSearch");
+        $searchModel = $this->module->model("UserSearch");
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', compact('searchModel', 'dataProvider'));
@@ -80,9 +86,9 @@ class AdminController extends Controller
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
 
-        $user = Yii::$app->getModule("user")->model("User");
+        $user = $this->module->model("User");
         $user->setScenario("admin");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $profile = $this->module->model("Profile");
 
         $post = Yii::$app->request->post();
         if ($user->load($post) && $user->validate() && $profile->load($post) && $profile->validate()) {
@@ -149,7 +155,7 @@ class AdminController extends Controller
     protected function findModel($id)
     {
         /** @var \amnah\yii2\user\models\User $user */
-        $user = Yii::$app->getModule("user")->model("User");
+        $user = $this->module->model("User");
         $user = $user::findOne($id);
         if ($user) {
             return $user;

@@ -16,7 +16,7 @@ class Module extends \yii\base\Module
     /**
      * @var string Module version
      */
-    protected $_version = "3.0.0";
+    protected $version = "3.0.0";
 
     /**
      * @var string Alias for module
@@ -103,7 +103,7 @@ class Module extends \yii\base\Module
     /**
      * @var array Storage for models based on $modelClasses
      */
-    protected $_models;
+    protected $models;
 
     /**
      * Get module version
@@ -112,7 +112,7 @@ class Module extends \yii\base\Module
      */
     public function getVersion()
     {
-        return $this->_version;
+        return $this->version;
     }
 
     /**
@@ -211,14 +211,14 @@ class Module extends \yii\base\Module
     public function model($name, $config = [])
     {
         // return object if already created
-        if (!empty($this->_models[$name])) {
-            return $this->_models[$name];
+        if (!empty($this->models[$name])) {
+            return $this->models[$name];
         }
 
         // create model and return it
         $className = $this->modelClasses[ucfirst($name)];
-        $this->_models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
-        return $this->_models[$name];
+        $this->models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
+        return $this->models[$name];
     }
 
     /**

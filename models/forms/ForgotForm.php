@@ -20,7 +20,22 @@ class ForgotForm extends Model
     /**
      * @var \amnah\yii2\user\models\User
      */
-    protected $_user = false;
+    protected $user = false;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    public $module;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if (!$this->module) {
+            $this->module = Yii::$app->getModule("user");
+        }
+    }
 
     /**
      * @return array the validation rules.
@@ -41,8 +56,8 @@ class ForgotForm extends Model
     public function validateEmail()
     {
         // check for valid user
-        $this->_user = $this->getUser();
-        if (!$this->_user) {
+        $this->user = $this->getUser();
+        if (!$this->user) {
             $this->addError("email", Yii::t("user", "Email not found"));
         }
     }
@@ -54,11 +69,11 @@ class ForgotForm extends Model
     public function getUser()
     {
         // get and store user
-        if ($this->_user === false) {
-            $user = Yii::$app->getModule("user")->model("User");
-            $this->_user = $user::findOne(["email" => $this->email]);
+        if ($this->user === false) {
+            $user = $this->module->model("User");
+            $this->user = $user::findOne(["email" => $this->email]);
         }
-        return $this->_user;
+        return $this->user;
     }
 
     /**
@@ -87,17 +102,17 @@ class ForgotForm extends Model
             $user = $this->getUser();
 
             // calculate expireTime (converting via strtotime)
-            $expireTime = Yii::$app->getModule("user")->resetExpireTime;
+            $expireTime = $this->module->resetExpireTime;
             $expireTime = $expireTime ? date("Y-m-d H:i:s", strtotime($expireTime)) : null;
 
             // create userToken
-            $userToken = Yii::$app->getModule("user")->model("UserToken");
+            $userToken = $this->module->model("UserToken");
             $userToken = $userToken::generate($user->id, $userToken::TYPE_PASSWORD_RESET, null, $expireTime);
 
             // modify view path to module views
             $mailer = Yii::$app->mailer;
             $oldViewPath = $mailer->viewPath;
-            $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
+            $mailer->viewPath = $this->module->emailViewPath;
 
             // send email
             $subject = Yii::$app->id . " - " . Yii::t("user", "Forgot password");

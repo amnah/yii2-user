@@ -18,7 +18,22 @@ class ResendForm extends Model
     /**
      * @var \amnah\yii2\user\models\User
      */
-    protected $_user = false;
+    protected $user = false;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    public $module;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if (!$this->module) {
+            $this->module = Yii::$app->getModule("user");
+        }
+    }
 
     /**
      * @return array the validation rules.
@@ -45,7 +60,7 @@ class ResendForm extends Model
         } elseif ($user->status == $user::STATUS_ACTIVE) {
             $this->addError("email", Yii::t("user", "Email is already active"));
         } else {
-            $this->_user = $user;
+            $this->user = $user;
         }
     }
 
@@ -56,23 +71,23 @@ class ResendForm extends Model
     public function getUser()
     {
         // get and store user
-        if ($this->_user === false) {
+        if ($this->user === false) {
 
             /** @var \amnah\yii2\user\models\User $user */
             /** @var \amnah\yii2\user\models\UserToken $userToken */
-            $user = Yii::$app->getModule("user")->model("User");
-            $userToken = Yii::$app->getModule("user")->model("UserToken");
+            $user = $this->module->model("User");
+            $userToken = $this->module->model("UserToken");
 
             // check email first and then userToken
-            $this->_user = $user::findOne(["email" => $this->email]);
-            if (!$this->_user) {
+            $this->user = $user::findOne(["email" => $this->email]);
+            if (!$this->user) {
                 $userToken = $userToken->findByData($this->email, $userToken::TYPE_EMAIL_CHANGE);
                 if ($userToken) {
-                    $this->_user = $user::findOne($userToken->user_id);
+                    $this->user = $user::findOne($userToken->user_id);
                 }
             }
         }
-        return $this->_user;
+        return $this->user;
     }
 
     /**
@@ -97,7 +112,7 @@ class ResendForm extends Model
 
         /** @var \amnah\yii2\user\models\UserToken $userToken */
         $user = $this->getUser();
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
 
         // calculate type based on user status
         if ($user->status == $user::STATUS_INACTIVE) {

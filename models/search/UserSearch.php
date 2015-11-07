@@ -60,8 +60,8 @@ class UserSearch extends User
         /** @var \amnah\yii2\user\models\Profile $profile */
 
         // get models
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
         $userTable = $user::tableName();
         $profileTable = $profile::tableName();
 

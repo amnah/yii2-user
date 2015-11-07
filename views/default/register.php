@@ -6,10 +6,13 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
+ * @var amnah\yii2\user\Module $module
  * @var amnah\yii2\user\models\User $user
  * @var amnah\yii2\user\models\User $profile
  * @var string $userDisplayName
  */
+
+$module = $this->context->module;
 
 $this->title = Yii::t('user', 'Register');
 $this->params['breadcrumbs'][] = $this->title;
@@ -38,11 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'enableAjaxValidation' => true,
         ]); ?>
 
-        <?php if (Yii::$app->getModule("user")->requireEmail): ?>
+        <?php if ($module->requireEmail): ?>
             <?= $form->field($user, 'email') ?>
         <?php endif; ?>
 
-        <?php if (Yii::$app->getModule("user")->requireUsername): ?>
+        <?php if ($module->requireUsername): ?>
             <?= $form->field($user, 'username') ?>
         <?php endif; ?>
 

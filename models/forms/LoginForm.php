@@ -28,7 +28,22 @@ class LoginForm extends Model
     /**
      * @var \amnah\yii2\user\models\User
      */
-    protected $_user = false;
+    protected $user = false;
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    public $module;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if (!$this->module) {
+            $this->module = Yii::$app->getModule("user");
+        }
+    }
 
     /**
      * @return array the validation rules.
@@ -52,10 +67,10 @@ class LoginForm extends Model
         // check for valid user or if user registered using social auth
         $user = $this->getUser();
         if (!$user || !$user->password) {
-            if (Yii::$app->getModule("user")->loginEmail && Yii::$app->getModule("user")->loginUsername) {
+            if ($this->module->loginEmail && $this->module->loginUsername) {
                 $attribute = "Email / Username";
             } else {
-                $attribute = Yii::$app->getModule("user")->loginEmail ? "Email" : "Username";
+                $attribute = $this->module->loginEmail ? "Email" : "Username";
             }
             $this->addError("username", Yii::t("user", "$attribute not found"));
 
@@ -80,7 +95,7 @@ class LoginForm extends Model
         if ($user->status == $user::STATUS_INACTIVE) {
 
             /** @var \amnah\yii2\user\models\UserToken $userToken */
-            $userToken = Yii::$app->getModule("user")->model("UserToken");
+            $userToken = $this->module->model("UserToken");
             $userToken = $userToken::generate($user->id, $userToken::TYPE_EMAIL_ACTIVATE);
             $user->sendEmailConfirmation($userToken);
             $this->addError("username", Yii::t("user", "Confirmation email resent"));
@@ -113,20 +128,20 @@ class LoginForm extends Model
     public function getUser()
     {
         // check if we need to get user
-        if ($this->_user === false) {
+        if ($this->user === false) {
 
             // build query based on email and/or username login properties
-            $user = Yii::$app->getModule("user")->model("User");
+            $user = $this->module->model("User");
             $user = $user::find();
-            if (Yii::$app->getModule("user")->loginEmail) {
+            if ($this->module->loginEmail) {
                 $user->orWhere(["email" => $this->username]);
             }
-            if (Yii::$app->getModule("user")->loginUsername) {
+            if ($this->module->loginUsername) {
                 $user->orWhere(["username" => $this->username]);
             }
-            $this->_user = $user->one();
+            $this->user = $user->one();
         }
-        return $this->_user;
+        return $this->user;
     }
 
     /**
@@ -135,10 +150,10 @@ class LoginForm extends Model
     public function attributeLabels()
     {
         // calculate attribute label for "username"
-        if (Yii::$app->getModule("user")->loginEmail && Yii::$app->getModule("user")->loginUsername) {
+        if ($this->module->loginEmail && $this->module->loginUsername) {
             $attribute = "Email / Username";
         } else {
-            $attribute = Yii::$app->getModule("user")->loginEmail ? "Email" : "Username";
+            $attribute = $this->module->loginEmail ? "Email" : "Username";
         }
 
         return [
@@ -146,19 +161,5 @@ class LoginForm extends Model
             "password" => Yii::t("user", "Password"),
             "rememberMe" => Yii::t("user", "Remember Me"),
         ];
-    }
-
-    /**
-     * Validate and log user in
-     * @param int $loginDuration
-     * @return bool
-     */
-    public function login($loginDuration)
-    {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? $loginDuration : 0);
-        }
-
-        return false;
     }
 }

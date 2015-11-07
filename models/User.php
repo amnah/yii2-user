@@ -69,7 +69,22 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @var array Permission cache array
      */
-    protected $_access = [];
+    protected $permissionCache = [];
+
+    /**
+     * @var \amnah\yii2\user\Module
+     */
+    public $module;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if (!$this->module) {
+            $this->module = Yii::$app->getModule("user");
+        }
+    }
 
     /**
      * @inheritdoc
@@ -111,7 +126,7 @@ class User extends ActiveRecord implements IdentityInterface
         // add required rules for email/username depending on module properties
         $requireFields = ["requireEmail", "requireUsername"];
         foreach ($requireFields as $requireField) {
-            if (Yii::$app->getModule("user")->$requireField) {
+            if ($this->module->$requireField) {
                 $attribute = strtolower(substr($requireField, 7)); // "email" or "username"
                 $rules[] = [$attribute, "required"];
             }
@@ -190,7 +205,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getProfile()
     {
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $profile = $this->module->model("Profile");
         return $this->hasOne($profile::className(), ['user_id' => 'id']);
     }
 
@@ -199,7 +214,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getRole()
     {
-        $role = Yii::$app->getModule("user")->model("Role");
+        $role = $this->module->model("Role");
         return $this->hasOne($role::className(), ['id' => 'role_id']);
     }
 
@@ -208,7 +223,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getUserTokens()
     {
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
         return $this->hasMany($userToken::className(), ['user_id' => 'id']);
     }
 
@@ -320,9 +335,9 @@ class User extends ActiveRecord implements IdentityInterface
         ];
 
         // determine if we need to change status based on module properties
-        $emailConfirmation = Yii::$app->getModule("user")->emailConfirmation;
-        $requireEmail = Yii::$app->getModule("user")->requireEmail;
-        $useEmail = Yii::$app->getModule("user")->useEmail;
+        $emailConfirmation = $this->module->emailConfirmation;
+        $requireEmail = $this->module->requireEmail;
+        $useEmail = $this->module->useEmail;
         if ($status) {
             $attributes["status"] = $status;
         } elseif ($emailConfirmation && $requireEmail) {
@@ -348,7 +363,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         // check if we need to confirm email change
-        if (!Yii::$app->getModule("user")->emailChangeConfirmation) {
+        if (!$this->module->emailChangeConfirmation) {
             return false;
         }
 
@@ -411,16 +426,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function can($permissionName, $params = [], $allowCaching = true)
     {
         // check for auth manager rbac
+        // copied from \yii\web\User
         $auth = Yii::$app->getAuthManager();
         if ($auth) {
-            if ($allowCaching && empty($params) && isset($this->_access[$permissionName])) {
-                return $this->_access[$permissionName];
+            if ($allowCaching && empty($params) && isset($this->permissionCache[$permissionName])) {
+                return $this->permissionCache[$permissionName];
             }
             $access = $auth->checkAccess($this->getId(), $permissionName, $params);
             if ($allowCaching && empty($params)) {
-                $this->_access[$permissionName] = $access;
+                $this->permissionCache[$permissionName] = $access;
             }
-
             return $access;
         }
 
@@ -465,7 +480,7 @@ class User extends ActiveRecord implements IdentityInterface
         // modify view path to module views
         $mailer = Yii::$app->mailer;
         $oldViewPath = $mailer->viewPath;
-        $mailer->viewPath = Yii::$app->getModule("user")->emailViewPath;
+        $mailer->viewPath = $this->module->emailViewPath;
 
         // send email
         $user = $this;

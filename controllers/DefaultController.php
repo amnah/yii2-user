@@ -15,6 +15,12 @@ use yii\widgets\ActiveForm;
 class DefaultController extends Controller
 {
     /**
+     * @var \amnah\yii2\user\Module
+     * @inheritdoc
+     */
+    public $module;
+
+    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -55,7 +61,7 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         if (defined('YII_DEBUG') && YII_DEBUG) {
-            $actions = Yii::$app->getModule("user")->getActions();
+            $actions = $this->module->getActions();
             return $this->render('index', ["actions" => $actions]);
         } elseif (Yii::$app->user->isGuest) {
             return $this->redirect(["/user/login"]);
@@ -70,24 +76,99 @@ class DefaultController extends Controller
     public function actionLogin()
     {
         /** @var \amnah\yii2\user\models\forms\LoginForm $model */
-        $model = Yii::$app->getModule("user")->model("LoginForm");
+        $model = $this->module->model("LoginForm");
 
         // load post data and login
         $post = Yii::$app->request->post();
-        $loginDuration = Yii::$app->getModule("user")->loginDuration;
-        if ($model->load($post) && $model->login($loginDuration)) {
-
-            // check for a valid returnUrl (to prevent a weird login bug)
-            //   https://github.com/amnah/yii2-user/issues/115
-            $loginRedirect = Yii::$app->getModule("user")->loginRedirect;
-            $returnUrl = Yii::$app->user->getReturnUrl($loginRedirect);
-            if (strpos($returnUrl, "user/login") !== false) {
-                $returnUrl = null;
-            }
+        if ($model->load($post) && $model->validate()) {
+            $returnUrl = $this->performLogin($model->getUser(), $model->rememberMe);
             return $this->redirect($returnUrl);
         }
 
         return $this->render('login', compact("model"));
+    }
+
+    /**
+     * Login/register via email
+     */
+    public function actionLoginEmail()
+    {
+        /** @var \amnah\yii2\user\models\forms\LoginEmailForm $loginEmailForm */
+        $loginEmailForm = $this->module->model("LoginEmailForm");
+
+        // load post data and validate
+        $post = Yii::$app->request->post();
+        if ($loginEmailForm->load($post) && $loginEmailForm->sendEmail()) {
+            $user = $loginEmailForm->getUser();
+            $message = $user ? "Login link sent" : "Registration link sent";
+            $message .= " - Please check your email";
+            Yii::$app->session->setFlash("Login-success", Yii::t("user", $message));
+        }
+
+        return $this->render("loginEmail", compact("loginEmailForm"));
+    }
+
+    /**
+     * Login/register callback via email
+     */
+    public function actionLoginCallback($token)
+    {
+        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \amnah\yii2\user\models\Profile $profile */
+        /** @var \amnah\yii2\user\models\Role $role */
+        /** @var \amnah\yii2\user\models\UserToken $userToken */
+
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
+        $userToken = $this->module->model("UserToken");
+
+        // check token and log user in directly
+        $userToken = $userToken::findByToken($token, $userToken::TYPE_EMAIL_LOGIN);
+        if ($userToken && $userToken->user) {
+            $returnUrl = $this->performLogin($userToken->user);
+            $userToken->delete();
+            return $this->redirect($returnUrl);
+        }
+
+        // register user
+        $user->email = $userToken->data;
+        $post = Yii::$app->request->post();
+        if ($user->load($post)) {
+            $profile->load($post);
+            if ($user->validate() && $profile->validate()) {
+                // perform registration
+                $role = $this->module->model("Role");
+                $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save();
+                $profile->setUser($user->id)->save();
+
+                // log user in and delete token
+                $returnUrl = $this->performLogin($user);
+                $userToken->delete();
+                return $this->redirect($returnUrl);
+            }
+        }
+
+        return $this->render("loginCallback", compact("user", "profile", "userToken"));
+    }
+
+    /**
+     * Perform the login
+     */
+    protected function performLogin($user, $rememberMe = true)
+    {
+        // log user in
+        $loginDuration = $rememberMe ? $this->module->loginDuration : 0;
+        Yii::$app->user->login($user, $loginDuration);
+
+        // check for a valid returnUrl (to prevent a weird login bug)
+        //   https://github.com/amnah/yii2-user/issues/115
+        $loginRedirect = $this->module->loginRedirect;
+        $returnUrl = Yii::$app->user->getReturnUrl($loginRedirect);
+        if (strpos($returnUrl, "user/login") !== false || strpos($returnUrl, "user/logout") !== false) {
+            $returnUrl = null;
+        }
+
+        return $returnUrl;
     }
 
     /**
@@ -98,7 +179,7 @@ class DefaultController extends Controller
         Yii::$app->user->logout();
 
         // handle redirect
-        $logoutRedirect = Yii::$app->getModule("user")->logoutRedirect;
+        $logoutRedirect = $this->module->logoutRedirect;
         if ($logoutRedirect) {
             return $this->redirect($logoutRedirect);
         }
@@ -115,8 +196,8 @@ class DefaultController extends Controller
         /** @var \amnah\yii2\user\models\Role $role */
 
         // set up new user/profile objects
-        $user = Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User", ["scenario" => "register"]);
+        $profile = $this->module->model("Profile");
 
         // load post data
         $post = Yii::$app->request->post();
@@ -135,7 +216,7 @@ class DefaultController extends Controller
             if ($user->validate() && $profile->validate()) {
 
                 // perform registration
-                $role = Yii::$app->getModule("user")->model("Role");
+                $role = $this->module->model("Role");
                 $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP)->save(false);
                 $profile->setUser($user->id)->save(false);
                 $this->afterRegister($user);
@@ -161,7 +242,7 @@ class DefaultController extends Controller
     protected function afterRegister($user)
     {
         /** @var \amnah\yii2\user\models\UserToken $userToken */
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
 
         // determine userToken type to see if we need to send email
         $userTokenType = null;
@@ -180,7 +261,7 @@ class DefaultController extends Controller
                 //Yii::$app->session->setFlash("Email-error", "Failed to send email");
             }
         } else {
-            Yii::$app->user->login($user, Yii::$app->getModule("user")->loginDuration);
+            Yii::$app->user->login($user, $this->module->loginDuration);
         }
     }
 
@@ -195,13 +276,13 @@ class DefaultController extends Controller
         // search for userToken
         $success = false;
         $email = "";
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
         $userToken = $userToken::findByToken($token, [$userToken::TYPE_EMAIL_ACTIVATE, $userToken::TYPE_EMAIL_CHANGE]);
         if ($userToken) {
 
             // find user and ensure that another user doesn't have that email
             //   for example, user registered another account before confirming change of email
-            $user = Yii::$app->getModule("user")->model("User");
+            $user = $this->module->model("User");
             $user = $user::findOne($userToken->user_id);
             $newEmail = $userToken->data;
             if ($user->confirm($newEmail)) {
@@ -236,7 +317,7 @@ class DefaultController extends Controller
         }
 
         // validate for normal request
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
         if ($loadedPost && $user->validate()) {
 
             // check if user changed his email
@@ -296,7 +377,7 @@ class DefaultController extends Controller
         /** @var \amnah\yii2\user\models\forms\ResendForm $model */
 
         // load post data and send email
-        $model = Yii::$app->getModule("user")->model("ResendForm");
+        $model = $this->module->model("ResendForm");
         if ($model->load(Yii::$app->request->post()) && $model->sendEmail()) {
 
             // set flash (which will show on the current page)
@@ -316,7 +397,7 @@ class DefaultController extends Controller
 
         // find userToken of type email change
         $user = Yii::$app->user->identity;
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
         $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
         if ($userToken) {
 
@@ -338,7 +419,7 @@ class DefaultController extends Controller
 
         // find userToken of type email change
         $user = Yii::$app->user->identity;
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
         $userToken = $userToken::findByUser($user->id, $userToken::TYPE_EMAIL_CHANGE);
         if ($userToken) {
             $userToken->delete();
@@ -356,7 +437,7 @@ class DefaultController extends Controller
         /** @var \amnah\yii2\user\models\forms\ForgotForm $model */
 
         // load post data and send email
-        $model = Yii::$app->getModule("user")->model("ForgotForm");
+        $model = $this->module->model("ForgotForm");
         if ($model->load(Yii::$app->request->post()) && $model->sendForgotEmail()) {
 
             // set flash (which will show on the current page)
@@ -375,7 +456,7 @@ class DefaultController extends Controller
         /** @var \amnah\yii2\user\models\UserToken $userToken */
 
         // get user token and check expiration
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $userToken = $this->module->model("UserToken");
         $userToken = $userToken::findByToken($token, $userToken::TYPE_PASSWORD_RESET);
         if (!$userToken) {
             return $this->render('reset', ["invalidToken" => true]);
@@ -383,7 +464,7 @@ class DefaultController extends Controller
 
         // get user and set "reset" scenario
         $success = false;
-        $user = Yii::$app->getModule("user")->model("User");
+        $user = $this->module->model("User");
         $user = $user::findOne($userToken->user_id);
         $user->setScenario("reset");
 
@@ -396,70 +477,5 @@ class DefaultController extends Controller
         }
 
         return $this->render('reset', compact("user", "success"));
-    }
-
-    /**
-     * Login/register via email
-     */
-    public function actionLoginEmail()
-    {
-        /** @var \amnah\yii2\user\models\forms\LoginEmailForm $loginEmailForm */
-        $loginEmailForm = Yii::$app->getModule("user")->model("LoginEmailForm");
-
-        // load post data and validate
-        $post = Yii::$app->request->post();
-        if ($loginEmailForm->load($post) && $loginEmailForm->sendEmail()) {
-            $user = $loginEmailForm->getUser();
-            $message = $user ? "Login link sent" : "Registration link sent";
-            $message .= " - Please check your email";
-            Yii::$app->session->setFlash("Login-success", Yii::t("user", $message));
-        }
-
-        return $this->render("loginEmail", compact("loginEmailForm"));
-    }
-
-    /**
-     * Login/register callback via email
-     */
-    public function actionLoginCallback($token)
-    {
-        /** @var \amnah\yii2\user\models\User $user */
-        /** @var \amnah\yii2\user\models\Profile $profile */
-        /** @var \amnah\yii2\user\models\Role $role */
-        /** @var \amnah\yii2\user\models\UserToken $userToken */
-
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
-
-        // check token and log user in directly
-        $userToken = $userToken::findByToken($token, $userToken::TYPE_EMAIL_LOGIN);
-        if ($userToken && $userToken->user) {
-            $loginDuration = Yii::$app->getModule("user")->loginDuration;
-            Yii::$app->user->login($userToken->user, $loginDuration);
-            $userToken->delete();
-            return $this->goHome();
-        }
-
-        // register user
-        $user->email = $userToken->data;
-        $post = Yii::$app->request->post();
-        if ($user->load($post)) {
-            $profile->load($post);
-            if ($user->validate() && $profile->validate()) {
-                // perform registration
-                $role = Yii::$app->getModule("user")->model("Role");
-                $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save();
-                $profile->setUser($user->id)->save();
-
-                // log user in and delete token
-                $loginDuration = Yii::$app->getModule("user")->loginDuration;
-                Yii::$app->user->login($user, $loginDuration);
-                $userToken->delete();
-                return $this->goHome();
-            }
-        }
-
-        return $this->render("loginCallback", compact("user", "profile", "userToken"));
     }
 }

@@ -29,6 +29,21 @@ class Role extends ActiveRecord
     const ROLE_USER = 2;
 
     /**
+     * @var \amnah\yii2\user\Module
+     */
+    public $module;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if (!$this->module) {
+            $this->module = Yii::$app->getModule("user");
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function rules()
@@ -84,7 +99,7 @@ class Role extends ActiveRecord
      */
     public function getUsers()
     {
-        $user = Yii::$app->getModule("user")->model("User");
+        $user = $this->module->model("User");
         return $this->hasMany($user::className(), ['role_id' => 'id']);
     }
 

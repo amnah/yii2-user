@@ -3,14 +3,18 @@
 use yii\helpers\Html;
 
 /**
+ * @var yii\web\View $this
+ * @var amnah\yii2\user\Module $module
  * @var array $actions
  */
+
+$module = $this->context->module;
 
 $this->title = Yii::t('user', 'Yii 2 User');
 ?>
 <div class="user-default-index">
 
-    <h1>Yii 2 User Module - <?= Yii::$app->getModule("user")->getVersion(); ?></h1>
+    <h1>Yii 2 User Module - <?= $module->getVersion(); ?></h1>
     <h3>Actions in this module</h3>
 
     <p>

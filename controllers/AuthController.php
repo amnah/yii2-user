@@ -11,6 +11,12 @@ use yii\web\Controller;
 class AuthController extends Controller
 {
     /**
+     * @var \amnah\yii2\user\Module
+     * @inheritdoc
+     */
+    public $module;
+
+    /**
      * @inheritdoc
      */
     public function actions()
@@ -89,7 +95,7 @@ class AuthController extends Controller
 
         // build data. note that we don't set `user_id` yet
         $attributes = $client->getUserAttributes();
-        $userAuth = Yii::$app->getModule("user")->model("UserAuth");
+        $userAuth = $this->module->model("UserAuth");
         $userAuth->provider = $client->name;
         $userAuth->provider_id = (string)$attributes["id"];
 
@@ -114,9 +120,9 @@ class AuthController extends Controller
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\UserAuth $userAuth */
         /** @var \amnah\yii2\user\models\UserToken $userToken */
-        $user = Yii::$app->getModule("user")->model("User");
-        $userAuth = Yii::$app->getModule("user")->model("UserAuth");
-        $userToken = Yii::$app->getModule("user")->model("UserToken");
+        $user = $this->module->model("User");
+        $userAuth = $this->module->model("UserAuth");
+        $userToken = $this->module->model("UserToken");
 
         // attempt to find userAuth in database by id and name
         $attributes = $client->getUserAttributes();
@@ -132,7 +138,7 @@ class AuthController extends Controller
                 return false;
             }
 
-            Yii::$app->user->login($user, Yii::$app->getModule("user")->loginDuration);
+            Yii::$app->user->login($user, $this->module->loginDuration);
             return true;
         }
 
@@ -158,7 +164,7 @@ class AuthController extends Controller
             if ($user) {
                 $userAuth = $this->initUserAuth($client);
                 $userAuth->setUser($user->id)->save();
-                Yii::$app->user->login($user, Yii::$app->getModule("user")->loginDuration);
+                Yii::$app->user->login($user, $this->module->loginDuration);
                 return true;
             }
         }
@@ -176,7 +182,7 @@ class AuthController extends Controller
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
         /** @var \amnah\yii2\user\models\Role $role */
-        $role = Yii::$app->getModule("user")->model("Role");
+        $role = $this->module->model("Role");
 
         // set user and profile info
         $attributes = $client->getUserAttributes();
@@ -193,7 +199,7 @@ class AuthController extends Controller
         $userAuth->setUser($user->id)->save(false);
 
         // log user in
-        Yii::$app->user->login($user, Yii::$app->getModule("user")->loginDuration);
+        Yii::$app->user->login($user, $this->module->loginDuration);
     }
 
     /**
@@ -225,8 +231,8 @@ class AuthController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
 
         // set email/username if they are set
         // note: email may be missing if user signed up using a phone number
@@ -256,8 +262,8 @@ class AuthController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
 
         $user->username = $attributes["screen_name"];
         $profile->full_name = $attributes["name"];
@@ -274,8 +280,8 @@ class AuthController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
 
         $user->email = $attributes["emails"][0]["value"];
         $profile->full_name = "{$attributes["name"]["givenName"]} {$attributes["name"]["familyName"]}";
@@ -292,8 +298,8 @@ class AuthController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
 
         $user->username = $attributes["name"];
 
@@ -309,8 +315,8 @@ class AuthController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
 
         $user->email = $attributes["email"];
         $profile->full_name = "{$attributes["first_name"]} {$attributes["last_name"]}";
@@ -329,11 +335,12 @@ class AuthController extends Controller
     {
         /** @var \amnah\yii2\user\models\User $user */
         /** @var \amnah\yii2\user\models\Profile $profile */
-        $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $user = $this->module->model("User");
+        $profile = $this->module->model("Profile");
 
         foreach ($_SESSION as $k => $v) {
             if (is_object($v) && get_class($v) == "yii\\authclient\\OAuthToken") {
+                /** @var \yii\authclient\OAuthToken $v */
                 $user->email = $v->getParam('email');
             }
         }

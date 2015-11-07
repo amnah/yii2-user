@@ -2,14 +2,18 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-$role = Yii::$app->getModule("user")->model("Role");
 
 /**
  * @var yii\web\View $this
+ * @var amnah\yii2\user\Module $module
  * @var amnah\yii2\user\models\User $user
  * @var amnah\yii2\user\models\Profile $profile
+ * @var amnah\yii2\user\models\Role $role
  * @var yii\widgets\ActiveForm $form
  */
+
+$module = $this->context->module;
+$role = $module->model("Role");
 ?>
 
 <div class="user-form">

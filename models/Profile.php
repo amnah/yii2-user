@@ -29,6 +29,21 @@ class Profile extends ActiveRecord
     }
 
     /**
+     * @var \amnah\yii2\user\Module
+     */
+    public $module;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if (!$this->module) {
+            $this->module = Yii::$app->getModule("user");
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -62,7 +77,7 @@ class Profile extends ActiveRecord
      */
     public function getUser()
     {
-        $user = Yii::$app->getModule("user")->model("User");
+        $user = $this->module->model("User");
         return $this->hasOne($user::className(), ['id' => 'user_id']);
     }
 
