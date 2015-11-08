@@ -85,6 +85,11 @@ class Module extends \yii\base\Module
     public $resetExpireTime = "+2 days";
 
     /**
+     * @var string Time before userTokens expire (for login via email)
+     */
+    public $loginExpireTime = "+15 minutes";
+
+    /**
      * @var string Email view path
      */
     public $emailViewPath = "@user/mail";

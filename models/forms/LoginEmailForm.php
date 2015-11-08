@@ -93,7 +93,7 @@ class LoginEmailForm extends Model
         $email = $user ? null : $this->email;
 
         // calculate expireTime (converting via strtotime)
-        $expireTime = $this->module->resetExpireTime;
+        $expireTime = $this->module->loginExpireTime;
         $expireTime = $expireTime ? date("Y-m-d H:i:s", strtotime($expireTime)) : null;
 
         // create userToken
