@@ -5,8 +5,11 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
+ * @var amnah\yii2\user\Module $module
  * @var amnah\yii2\user\models\forms\LoginEmailForm $loginEmailForm
  */
+
+$module = $this->context->module;
 
 $this->title = Yii::t('user', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
@@ -24,6 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php else: ?>
 
         <p>This will send a link to the email address to log in or register</p>
+
+        <p>These links expire in <?= $module->loginExpireTime ?></p>
 
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',

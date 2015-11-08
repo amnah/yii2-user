@@ -80,14 +80,14 @@ class Module extends \yii\base\Module
     public $emailChangeConfirmation = true;
 
     /**
-     * @var string Time before userTokens expire (for reset password)
+     * @var string Reset password token expiration (passed to strtotime())
      */
-    public $resetExpireTime = "+2 days";
+    public $resetExpireTime = "2 days";
 
     /**
-     * @var string Time before userTokens expire (for login via email)
+     * @var string Login via email token expiration (passed to strtotime())
      */
-    public $loginExpireTime = "+15 minutes";
+    public $loginExpireTime = "15 minutes";
 
     /**
      * @var string Email view path

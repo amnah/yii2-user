@@ -3,39 +3,18 @@
 namespace amnah\yii2\user\models\forms;
 
 use Yii;
-use yii\base\Model;
 use yii\swiftmailer\Mailer;
 use yii\swiftmailer\Message;
 
 /**
  * Login Email Form
  */
-class LoginEmailForm extends Model
+class LoginEmailForm extends LoginForm
 {
     /**
-     * @var string Username and/or email
+     * @var string Email
      */
     public $email;
-
-    /**
-     * @var \amnah\yii2\user\models\User
-     */
-    protected $user = false;
-
-    /**
-     * @var \amnah\yii2\user\Module
-     */
-    public $module;
-
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        if (!$this->module) {
-            $this->module = Yii::$app->getModule("user");
-        }
-    }
 
     /**
      * @return array the validation rules.
@@ -45,22 +24,25 @@ class LoginEmailForm extends Model
         return [
             ["email", "required"],
             ["email", "email"],
-            ["email", "filter", "filter" => "trim"],
+            ["email", "validateUser"],
+            ["rememberMe", "boolean"],
         ];
     }
 
     /**
-     * Get user based on email
-     * @return \amnah\yii2\user\models\User|null
+     * Validate user
      */
-    public function getUser()
+    public function validateUser()
     {
-        // get and store user
-        if ($this->user === false) {
-            $user = $this->module->model("User");
-            $this->user = $user::findOne(["email" => $this->email]);
+        // set username so we can find the user
+        // if found, check for ban status
+        $this->username = $this->email;
+        $user = $this->getUser();
+        if ($user && $user->banned_at) {
+            $this->addError("email", Yii::t("user", "User is banned - {banReason}", [
+                "banReason" => $user->banned_reason,
+            ]));
         }
-        return $this->user;
     }
 
     /**
@@ -68,9 +50,9 @@ class LoginEmailForm extends Model
      */
     public function attributeLabels()
     {
-        return [
-            "email" => Yii::t("user", "Email"),
-        ];
+        $labels = parent::attributeLabels();
+        $labels["email"] = Yii::t("user", "Email");
+        return $labels;
     }
 
     /**
@@ -90,15 +72,15 @@ class LoginEmailForm extends Model
         // get user and calculate userToken info
         $user = $this->getUser();
         $userId = $user ? $user->id : null;
-        $email = $user ? null : $this->email;
+        $data = $user ? null : $this->email;
 
-        // calculate expireTime (converting via strtotime)
+        // calculate expireTime
         $expireTime = $this->module->loginExpireTime;
         $expireTime = $expireTime ? date("Y-m-d H:i:s", strtotime($expireTime)) : null;
 
         // create userToken
         $userToken = $this->module->model("UserToken");
-        $userToken = $userToken::generate($userId, $userToken::TYPE_EMAIL_LOGIN, $email, $expireTime);
+        $userToken = $userToken::generate($userId, $userToken::TYPE_EMAIL_LOGIN, $data, $expireTime);
 
         // modify view path to module views
         $mailer = Yii::$app->mailer;

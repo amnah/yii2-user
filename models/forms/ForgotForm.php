@@ -101,7 +101,7 @@ class ForgotForm extends Model
             // get user
             $user = $this->getUser();
 
-            // calculate expireTime (converting via strtotime)
+            // calculate expireTime
             $expireTime = $this->module->resetExpireTime;
             $expireTime = $expireTime ? date("Y-m-d H:i:s", strtotime($expireTime)) : null;
 

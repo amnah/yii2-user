@@ -53,7 +53,6 @@ class LoginForm extends Model
         return [
             [["username", "password"], "required"],
             ["username", "validateUser"],
-            ["username", "validateUserStatus"],
             ["password", "validatePassword"],
             ["rememberMe", "boolean"],
         ];
@@ -76,24 +75,16 @@ class LoginForm extends Model
 
             // do we need to check $user->userAuths ???
         }
-    }
 
-    /**
-     * Validate user status
-     */
-    public function validateUserStatus()
-    {
-        // check for ban status
-        $user = $this->getUser();
-        if ($user->banned_at) {
+        // check if user is banned
+        if ($user && $user->banned_at) {
             $this->addError("username", Yii::t("user", "User is banned - {banReason}", [
                 "banReason" => $user->banned_reason,
             ]));
         }
 
         // check status and resend email if inactive
-        if ($user->status == $user::STATUS_INACTIVE) {
-
+        if ($user && $user->status == $user::STATUS_INACTIVE) {
             /** @var \amnah\yii2\user\models\UserToken $userToken */
             $userToken = $this->module->model("UserToken");
             $userToken = $userToken::generate($user->id, $userToken::TYPE_EMAIL_ACTIVATE);
