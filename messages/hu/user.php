@@ -96,8 +96,8 @@ return [
     'Logout' => 'Kijelentkezés',
     'Resend confirmation email' => 'Megerősítő e-mail újraküldése',
     'Profile' => 'Profil',
-    'Please fill out the following fields to login:' => 'A bejelentkezéshez kérem töltse ki az alábbi mezőket:',
-    'Please fill out the following fields to register:' => 'A regisztrációhoz kérem töltse ki az alábbi mezőket:',
     'Resend' => 'Újraküldés',
     'Password has been reset' => 'A jelszó vissza lett állítva',
+//    'Login link sent - Please check your email' => '',
+//    'Registration link sent - Please check your email' => '',
 ];

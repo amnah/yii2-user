@@ -29,8 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php else: ?>
 
-        <p><?= Yii::t("user", "Please fill out the following fields to register:") ?></p>
-
         <?php $form = ActiveForm::begin([
             'id' => 'register-form',
             'options' => ['class' => 'form-horizontal'],

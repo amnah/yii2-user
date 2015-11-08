@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::t('user', 'Register');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-email-register">
+<div class="user-default-login-callback">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -24,8 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
     <?php else: ?>
-
-        <p><?= Yii::t("user", "Please fill out the following fields to register:") ?></p>
 
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',

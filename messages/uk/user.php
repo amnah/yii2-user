@@ -96,8 +96,8 @@ return [
     'Logout' => 'Вийти',
     'Resend confirmation email' => 'Повторно надіслати підтвердження на електронну пошту',
     'Profile' => 'Профіль',
-    'Please fill out the following fields to login:' => 'Будь ласка, заповніть наступні поля для входу:',
-    'Please fill out the following fields to register:' => 'Будь ласка, заповніть наступні поля для реєстрації:',
     'Resend' => 'Повторити',
     'Password has been reset' => 'Пароль відновлено',
+//    'Login link sent - Please check your email' => '',
+//    'Registration link sent - Please check your email' => '',
 ];

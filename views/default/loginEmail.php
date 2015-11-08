@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::t('user', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-email-login">
+<div class="user-default-login-email">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php else: ?>
 
-        <p><?= Yii::t("user", "Please fill out the following fields to login:") ?></p>
+        <p>This will send a link to the email address to log in or register</p>
 
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',

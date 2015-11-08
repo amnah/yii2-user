@@ -96,8 +96,8 @@ return [
     'Logout' => '退出',
     'Resend confirmation email' => '重新发送验证邮件',
     'Profile' => '个人资料',
-    'Please fill out the following fields to login:' => '请输入下面信息登陆',
-    'Please fill out the following fields to register:' => '请输入下面信息注册',
     'Resend' => '重新发送验证邮件',
     'Password has been reset' => '已重置密码',
+//    'Login link sent - Please check your email' => '',
+//    'Registration link sent - Please check your email' => '',
 ];

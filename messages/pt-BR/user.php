@@ -96,8 +96,8 @@ return [
     'Logout' => 'Sair',
     'Resend confirmation email' => 'Reenviar e-mail de confirmação',
     'Profile' => 'Perfil',
-    'Please fill out the following fields to login:' => 'Por favor preencha os campos seguintes para acessar:',
-    'Please fill out the following fields to register:' => 'Por favor preencha os campos seguintes para se registrar:',
     'Resend' => 'Re-enviar',
     'Password has been reset' => 'A senha foi reiniciada',
+//    'Login link sent - Please check your email' => '',
+//    'Registration link sent - Please check your email' => '',
 ];

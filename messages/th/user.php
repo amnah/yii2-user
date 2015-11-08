@@ -96,8 +96,8 @@ return [
     'Logout' => 'ออกจากระบบ',
     'Resend confirmation email' => 'ส่งอีเมลล์ยืนยันอีกครั้ง',
     'Profile' => 'ข้อมูลผู้ใช้',
-    'Please fill out the following fields to login:' => 'กรุณากรอกข้อมูลการเข้าสู่ระบบ:',
-    'Please fill out the following fields to register:' => 'กรุณากรอกข้อมูลการลงทะเบียน:',
     'Resend' => 'ส่งอีกครั้ง',
     'Password has been reset' => 'รหัสผ่านถูกรีเซ็ต',
+//    'Login link sent - Please check your email' => '',
+//    'Registration link sent - Please check your email' => '',
 ];
