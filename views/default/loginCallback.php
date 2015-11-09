@@ -5,10 +5,13 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
+ * @var amnah\yii2\user\Module $module
  * @var amnah\yii2\user\models\User $user
  * @var amnah\yii2\user\models\Profile $profile
  * @var amnah\yii2\user\models\UserToken $userToken
  */
+
+$module = $this->context->module;
 
 $this->title = Yii::t('user', 'Register');
 $this->params['breadcrumbs'][] = $this->title;
@@ -35,7 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
 
         <?= $form->field($user, 'email')->textInput(['disabled' => true]) ?>
-        <?= $form->field($user, 'username') ?>
+        <?php if ($module->useUsername): ?>
+            <?= $form->field($user, 'username') ?>
+        <?php endif; ?>
         <?= $form->field($profile, 'full_name') ?>
 
         <div class="form-group">

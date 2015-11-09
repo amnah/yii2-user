@@ -30,12 +30,12 @@ class DefaultController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'confirm', 'resend'],
+                        'actions' => ['index', 'confirm', 'resend', 'logout'],
                         'allow' => true,
                         'roles' => ['?', '@'],
                     ],
                     [
-                        'actions' => ['account', 'profile', 'resend-change', 'cancel', 'logout'],
+                        'actions' => ['account', 'profile', 'resend-change', 'cancel'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -130,13 +130,16 @@ class DefaultController extends Controller
             return $this->redirect($returnUrl);
         }
 
-        // register user
-        $user->email = $userToken ? $userToken->data : null;
+        // load post data
         $post = Yii::$app->request->post();
-        if ($user->load($post)) {
+        if ($userToken && $user->load($post)) {
+
+            // ensure that email is taken from the $userToken (and not from user input)
+            $user->email = $userToken->data;
+
+            // validate and register
             $profile->load($post);
             if ($user->validate() && $profile->validate()) {
-                // perform registration
                 $role = $this->module->model("Role");
                 $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save();
                 $profile->setUser($user->id)->save();
@@ -148,6 +151,7 @@ class DefaultController extends Controller
             }
         }
 
+        $user->email = $userToken ? $userToken->data : null;
         return $this->render("loginCallback", compact("user", "profile", "userToken"));
     }
 
