@@ -141,7 +141,7 @@ class DefaultController extends Controller
             $profile->load($post);
             if ($user->validate() && $profile->validate()) {
                 $role = $this->module->model("Role");
-                $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save();
+                $user->setRegisterAttributes($role::ROLE_USER, $user::STATUS_ACTIVE)->save();
                 $profile->setUser($user->id)->save();
 
                 // log user in and delete token
@@ -221,8 +221,8 @@ class DefaultController extends Controller
 
                 // perform registration
                 $role = $this->module->model("Role");
-                $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP)->save(false);
-                $profile->setUser($user->id)->save(false);
+                $user->setRegisterAttributes($role::ROLE_USER)->save();
+                $profile->setUser($user->id)->save();
                 $this->afterRegister($user);
 
                 // set flash

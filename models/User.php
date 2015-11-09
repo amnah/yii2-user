@@ -319,16 +319,15 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Set attributes for registration
      * @param int $roleId
-     * @param string $userIp
      * @param string $status
      * @return static
      */
-    public function setRegisterAttributes($roleId, $userIp, $status = null)
+    public function setRegisterAttributes($roleId, $status = null)
     {
         // set default attributes
         $attributes = [
             "role_id" => $roleId,
-            "created_ip" => $userIp,
+            "created_ip" => Yii::$app->request->userIP,
             "auth_key" => Yii::$app->security->generateRandomString(),
             "access_token" => Yii::$app->security->generateRandomString(),
             "status" => static::STATUS_ACTIVE,
@@ -385,7 +384,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function updateLoginMeta()
     {
-        $this->logged_in_ip = Yii::$app->getRequest()->getUserIP();
+        $this->logged_in_ip = Yii::$app->request->userIP;
         $this->logged_in_at = date("Y-m-d H:i:s");
         return $this->save(false, ["logged_in_ip", "logged_in_at"]);
     }

@@ -194,9 +194,9 @@ class AuthController extends Controller
         $user = $this->doubleCheckUsername($user, $fallbackUsername);
 
         // save new models
-        $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save(false);
-        $profile->setUser($user->id)->save(false);
-        $userAuth->setUser($user->id)->save(false);
+        $user->setRegisterAttributes($role::ROLE_USER, $user::STATUS_ACTIVE)->save();
+        $profile->setUser($user->id)->save();
+        $userAuth->setUser($user->id)->save();
 
         // log user in
         Yii::$app->user->login($user, $this->module->loginDuration);
