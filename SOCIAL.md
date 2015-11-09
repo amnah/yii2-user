@@ -97,12 +97,12 @@ This is the tricky part because there are several cases that we need to consider
     account to that user via ```UserAuth```. If not, then we create a new user
     * If the social account's username already exists in the database, then we CANNOT make the
     same assumption - we must create a new user. But because the username is already taken, we
-    use a ```$fallbackUsername```, which by default is client name + id (eg, "facebook_12142124124")
+    use a ```$fallbackUsername```, which by default is client name + id
+    (eg, "facebook_12142124124")
 
 **NOTE: Some social accounts do not provide the user's email address, eg, twitter and reddit**
 
-Of course, the attributes map from social account to user account depends on the project's
-requirements. Let's take a look at the basic implementation for facebook:
+Let's take a look at the basic implementation for facebook:
 
 ```php
 /**
@@ -126,8 +126,8 @@ protected function setInfoFacebook($attributes)
 }
 ```
 
-Note the function name - it should follow the convention ```function setInfo[clientName]```. To
-customize, extend and override.
+Note the function name - it should follow the convention ```function setInfo[clientName]```. 
+To customize, extend and override.
 
 And similarly to connecting, we can add a widget to the desired view file:
 

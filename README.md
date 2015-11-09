@@ -3,12 +3,21 @@ Yii 2 User
 
 Yii 2 User - User authentication module
 
-## New version released 7/10/2015
+## New version released 11/09/2015
 
-This release has some minor updates, but unfortunately contains backwards-compatibility
-breaking changes. Thus I've had to [bump up the version](http://semver.org/).
+This release is a major code overhaul. Lots of refactoring, cleaning up, updating comments,
+etc. Thus, there's no easy to upgrade ... I highly recommend either sticking with
+```"amnah/yii2-user": "^3.0"``` or starting over from scratch.
 
-[Upgrade Notes](https://github.com/amnah/yii2-user/blob/master/UPGRADE.md).
+Notably, there is one new feature: users can login/register via email. That is, the user enters
+his email address, gets a link in his inbox, and clicks that link to login/register. **No password
+needed.**
+
+Shamelessly stolen from [Medium](https://medium.com/m/signin). Demo of it
+[here](http://yii2.amnahdev.com/user/login-email)
+
+If there are any issues, [let me know](https://github.com/amnah/yii2-user/issues) and I'll get
+to it asap.
 
 ## Demo
 
@@ -20,6 +29,7 @@ breaking changes. Thus I've had to [bump up the version](http://semver.org/).
 * Easily [extendable](#how-do-i-extend-this-package)
 * Registration using email and/or username
 * Login using email and/or username
+* Login/register via email (enter email > get link in inbox > click link to login/register)
 * Email confirmation (+ resend functionality)
 * [Social authentication](SOCIAL.md) (facebook, twitter, google, linkedin, reddit, vkontakte)
 * Account page
@@ -33,7 +43,7 @@ breaking changes. Thus I've had to [bump up the version](http://semver.org/).
 ## Installation
 
 * Install [Yii 2](http://www.yiiframework.com/download) using your preferred method
-* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "~3.0"```
+* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "^4.0"```
 * Update config file *config/web.php* and *config/db.php*
 
 ```php
@@ -74,7 +84,7 @@ return [
 * Go to your application in your browser
     * ```http://localhost/pathtoapp/web/user```
 * Log in as admin using ```neo/neo``` (change it!)
-* Set up [module properties](PROPERTIES.md) as desired
+* Set up [module properties](Module.php#L14) as desired
 * *Optional* - Update the nav links in your main layout *app/views/layouts/main.php*
 
 ```php
@@ -86,7 +96,7 @@ return [
     ['label' => 'Contact', 'url' => ['/site/contact']],
     ['label' => 'User', 'url' => ['/user']],
     Yii::$app->user->isGuest ?
-        ['label' => 'Login', 'url' => ['/user/login']] :
+        ['label' => 'Login', 'url' => ['/user/login']] : // or ['/user/login-email']
         ['label' => 'Logout (' . Yii::$app->user->displayName . ')',
             'url' => ['/user/logout'],
             'linkOptions' => ['data-method' => 'post']],
@@ -97,11 +107,12 @@ return [
 
 ### How do I check user permissions?
 
-This package contains a custom permissions system. Every user has a role, and that role has permissions
-in the form of database columns. It should follow the format: ```can_{permission name}```.
+This package contains a custom permissions system. Every user has a role, and that role has
+permissions in the form of database columns. It should follow the format:
+```can_{permission name}```.
 
-For example, the ```role``` table has a column named ```can_admin``` by default. To check if the user can
-perform admin actions:
+For example, the ```role``` table has a column named ```can_admin``` by default. To check if
+the user can perform admin actions:
 
 ```php
 if (!Yii::$app->user->can("admin")) {
@@ -114,17 +125,19 @@ if ($user->can("admin")) {
 };
 ```
 
-Add more database columns for permissions as needed. If you need something more powerful, look into setting
-up [RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/security-authorization.md#role-based-access-control-rbac).
+Add more database columns for permissions as needed. If you need something more powerful, look
+into setting up
+[RBAC] (https://github.com/yiisoft/yii2/blob/master/docs/guide/security-authorization.md#role-based-access-control-rbac).
 
-**Note:** If you set up an ```authManager``` component for RBAC, then ```Yii::$app->user->can()``` will use
-that instead of this module's custom ```role``` table.
+**Note:** If you set up an ```authManager``` component for RBAC, then ```Yii::$app->user->can()```
+will use that instead of this module's custom ```role``` table.
 
 ### How do I add captcha to the forms?
 
-Check out this great 3-step [guide](http://yii2-user.readthedocs.org/en/latest/howto/adding-captcha.html)
-by [dektrium](https://github.com/dektrium). (Please note that the scenarios
-for the validation rules will depend on your project requirements.)
+Check out this great 3-step
+[guide](https://github.com/dektrium/yii2-user/blob/master/docs/adding-captcha.md) by
+[dektrium](https://github.com/dektrium). (Please note that the scenarios for the validation 
+rules will depend on your project requirements.)
 
 ### How do I add i18n?
 
@@ -164,7 +177,7 @@ property:
             'default' => 'app\controllers\MyDefaultController',
         ],
         'modelClasses'  => [
-            'User' => 'app\models\MyUser', // note: don't forget user::identityClass above
+            'User' => 'app\models\MyUser', // note: don't forget component user::identityClass above
             'Profile' => 'app\models\MyProfile',
         ],
         'emailViewPath' => '@app/mail/user', // example: @app/mail/user/confirmEmail.php
@@ -191,13 +204,14 @@ For view files, you can use the ```theme``` component.
 
 You can always fork the package and modify it as needed.
 
-Or, if you want, you can integrate the package directly into your app by copying the files. This would
-make it more difficult to get updates, but it also guarantees that your app won't break after running
-```composer update```.
+Or, if you want, you can integrate the package directly into your app by copying the files. 
+This would make it more difficult to get updates, but it also guarantees that your app won't 
+break after running ```composer update```.
 
 To do so, you can use the helper command ```CopyController```.
 
-* Add the module to your *config/console.php* to gain access to the command (**Note: this is CONSOLE config**)
+* Add the module to your *config/console.php* to gain access to the command 
+(**Note: this is CONSOLE config**)
 
 ```php
 // app/config/console.php

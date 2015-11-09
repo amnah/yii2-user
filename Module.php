@@ -16,7 +16,7 @@ class Module extends \yii\base\Module
     /**
      * @var string Module version
      */
-    protected $version = "3.0.0";
+    protected $version = "4.0.0";
 
     /**
      * @var string Alias for module
@@ -269,8 +269,8 @@ class Module extends \yii\base\Module
             "/{$this->id}/login" => "Login page",
             "/{$this->id}/logout" => "Logout page",
             "/{$this->id}/register" => "Register page",
-            "/{$this->id}/login-email" => "Login page v2 - login/register via email link",
-            "/{$this->id}/login-callback?token=zzzzz" => "Login page v2 - login/register via email link",
+            "/{$this->id}/login-email" => "Login page v2 (login/register via email link)",
+            "/{$this->id}/login-callback?token=zzzzz" => "Login page v2 callback (after user clicks link in email)",
             "/{$this->id}/auth/login?authclient=facebook" => "Register/login via social account",
             "/{$this->id}/auth/connect?authclient=facebook" => "Connect social account to currently logged in user",
             "/{$this->id}/account" => "User account page (email, username, password)",
