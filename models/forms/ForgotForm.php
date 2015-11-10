@@ -103,7 +103,7 @@ class ForgotForm extends Model
 
             // calculate expireTime
             $expireTime = $this->module->resetExpireTime;
-            $expireTime = $expireTime ? date("Y-m-d H:i:s", strtotime($expireTime)) : null;
+            $expireTime = $expireTime ? gmdate("Y-m-d H:i:s", strtotime($expireTime)) : null;
 
             // create userToken
             $userToken = $this->module->model("UserToken");

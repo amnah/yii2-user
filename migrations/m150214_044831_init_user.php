@@ -78,8 +78,8 @@ class m150214_044831_init_user extends Migration
         // insert role data
         $columns = ['name', 'can_admin', 'created_at'];
         $this->batchInsert('{{%role}}', $columns, [
-            ['Admin', 1, date('Y-m-d H:i:s')],
-            ['User', 0, date('Y-m-d H:i:s')],
+            ['Admin', 1, gmdate('Y-m-d H:i:s')],
+            ['User', 0, gmdate('Y-m-d H:i:s')],
         ]);
 
         // insert admin user: neo/neo
@@ -92,7 +92,7 @@ class m150214_044831_init_user extends Migration
                 'neo',
                 '$2y$13$dyVw4WkZGkABf2UrGWrhHO4ZmVBv.K4puhOL59Y9jQhIdj63TlV.O', // neo
                 1, // User::STATUS_ACTIVE
-                date('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s'),
                 $security->generateRandomString(),
                 $security->generateRandomString(),
             ],
@@ -101,7 +101,7 @@ class m150214_044831_init_user extends Migration
         // insert profile data
         $columns = ['user_id', 'full_name', 'created_at'];
         $this->batchInsert('{{%profile}}', $columns, [
-            [1, 'the one', date('Y-m-d H:i:s')],
+            [1, 'the one', gmdate('Y-m-d H:i:s')],
         ]);
     }
 

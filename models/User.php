@@ -304,7 +304,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         // convert banned_at checkbox to date
         if ($this->banned_at) {
-            $this->banned_at = date("Y-m-d H:i:s");
+            $this->banned_at = gmdate("Y-m-d H:i:s");
         }
 
         // ensure fields are null so they won't get set as empty string
@@ -385,7 +385,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function updateLoginMeta()
     {
         $this->logged_in_ip = Yii::$app->request->userIP;
-        $this->logged_in_at = date("Y-m-d H:i:s");
+        $this->logged_in_at = gmdate("Y-m-d H:i:s");
         return $this->save(false, ["logged_in_ip", "logged_in_at"]);
     }
 

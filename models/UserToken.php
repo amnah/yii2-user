@@ -122,7 +122,7 @@ class UserToken extends ActiveRecord
         $model->user_id = $userId;
         $model->type = $type;
         $model->data = $data;
-        $model->created_at = date("Y-m-d H:i:s");
+        $model->created_at = gmdate("Y-m-d H:i:s");
         $model->expired_at = $expireTime;
         $model->token = Yii::$app->security->generateRandomString();
         $model->save();
@@ -141,7 +141,7 @@ class UserToken extends ActiveRecord
     {
         $query = static::find()->where([$field => $value, "type" => $type ]);
         if ($checkExpiration) {
-            $now = date("Y-m-d H:i:s");
+            $now = gmdate("Y-m-d H:i:s");
             $query->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)");
         }
         return $query->one();
