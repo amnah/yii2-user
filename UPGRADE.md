@@ -1,6 +1,36 @@
 Yii 2 User - Upgrade notes
 =========
 
+## Upgrading from 3.0.0 to 4.0.0
+
+This release is a major code overhaul. Lots of refactoring, cleaning up, updating comments,
+etc. Aside from the migration, the other changes apply to any code that you've extended 
+from the module.
+
+(Note: This list may not be entirely comprehensive ... If I forgot something, please 
+[let me know](https://github.com/amnah/yii2-user/issues))
+
+* **Back up your database**
+
+* Download migration and run it
+
+```php
+cd /path/to/app/migrations
+wget https://gist.githubusercontent.com/amnah/81d834e46514da0b1aa7/raw/5882e38bf258c7106a75a3f90eb4d7860273e078/m151111_122541_upgrade_user_300_to_400.php
+cd /path/to/app
+php yii migrate
+```
+
+* Change table references ```UserKey``` to ```UserToken```
+
+* Change field references ```UserToken.key_value``` to ```UserToken.token```
+ 
+* Change ```$key``` parameters to ```$token``` in DefaultController functions **AND views**
+(eg, ```actionConfirm($key)``` to ```actionConfirm($token)``` and ```actionReset($key)```
+to ```actionReset($token)```)
+
+* Change references ```User.new_email``` to ```UserToken.data```
+
 ## Upgrading from ~2.0 to 3.0.0
 
 This release just has some minor updates, but unfortunately contains backwards-compatibility

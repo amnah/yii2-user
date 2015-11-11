@@ -6,12 +6,13 @@ Yii 2 User - User authentication module
 ## New version released 11/09/2015
 
 This release is a major code overhaul. Lots of refactoring, cleaning up, updating comments,
-etc. Thus, there's no easy to upgrade ... I highly recommend either sticking with
-```"amnah/yii2-user": "^3.0"``` or starting over from scratch.
+etc. If you're upgrading from an earlier version, check out the [upgrade guide](UPGRADE.md).
+(Depending on how far you are into your project, it might be easier to stick with 
+```"amnah/yii2-user": "^3.0"```)
 
 Notably, there is one new feature: users can login/register via email. That is, the user enters
-his email address, gets a link in his inbox, and clicks that link to login/register. **No password
-needed.**
+his email address, gets a link in his inbox, and clicks that link to login/register. *No password
+needed.*
 
 Shamelessly stolen from [Medium](https://medium.com/m/signin). Demo of it
 [here](http://yii2.amnahdev.com/user/login-email)
