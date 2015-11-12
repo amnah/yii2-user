@@ -12,11 +12,6 @@ use yii\swiftmailer\Message;
 class LoginEmailForm extends LoginForm
 {
     /**
-     * @var string Email
-     */
-    public $email;
-
-    /**
      * @return array the validation rules.
      */
     public function rules()
@@ -36,7 +31,6 @@ class LoginEmailForm extends LoginForm
     {
         // set username so we can find the user
         // if found, check for ban status
-        $this->username = $this->email;
         $user = $this->getUser();
         if ($user && $user->banned_at) {
             $this->addError("email", Yii::t("user", "User is banned - {banReason}", [

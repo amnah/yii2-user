@@ -11,9 +11,9 @@ use yii\base\Model;
 class LoginForm extends Model
 {
     /**
-     * @var string Username and/or email
+     * @var string Email and/or username
      */
-    public $username;
+    public $email;
 
     /**
      * @var string Password
@@ -51,8 +51,8 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [["username", "password"], "required"],
-            ["username", "validateUser"],
+            [["email", "password"], "required"],
+            ["email", "validateUser"],
             ["password", "validatePassword"],
             ["rememberMe", "boolean"],
         ];
@@ -71,14 +71,14 @@ class LoginForm extends Model
             } else {
                 $attribute = $this->module->loginEmail ? "Email" : "Username";
             }
-            $this->addError("username", Yii::t("user", "$attribute not found"));
+            $this->addError("email", Yii::t("user", "$attribute not found"));
 
             // do we need to check $user->userAuths ???
         }
 
         // check if user is banned
         if ($user && $user->banned_at) {
-            $this->addError("username", Yii::t("user", "User is banned - {banReason}", [
+            $this->addError("email", Yii::t("user", "User is banned - {banReason}", [
                 "banReason" => $user->banned_reason,
             ]));
         }
@@ -89,7 +89,7 @@ class LoginForm extends Model
             $userToken = $this->module->model("UserToken");
             $userToken = $userToken::generate($user->id, $userToken::TYPE_EMAIL_ACTIVATE);
             $user->sendEmailConfirmation($userToken);
-            $this->addError("username", Yii::t("user", "Confirmation email resent"));
+            $this->addError("email", Yii::t("user", "Confirmation email resent"));
         }
     }
 
@@ -125,10 +125,10 @@ class LoginForm extends Model
             $user = $this->module->model("User");
             $user = $user::find();
             if ($this->module->loginEmail) {
-                $user->orWhere(["email" => $this->username]);
+                $user->orWhere(["email" => $this->email]);
             }
             if ($this->module->loginUsername) {
-                $user->orWhere(["username" => $this->username]);
+                $user->orWhere(["username" => $this->email]);
             }
             $this->user = $user->one();
         }
@@ -140,7 +140,7 @@ class LoginForm extends Model
      */
     public function attributeLabels()
     {
-        // calculate attribute label for "username"
+        // calculate attribute label for "email"
         if ($this->module->loginEmail && $this->module->loginUsername) {
             $attribute = "Email / Username";
         } else {
@@ -148,7 +148,7 @@ class LoginForm extends Model
         }
 
         return [
-            "username" => Yii::t("user", $attribute),
+            "email" => Yii::t("user", $attribute),
             "password" => Yii::t("user", "Password"),
             "rememberMe" => Yii::t("user", "Remember Me"),
         ];
