@@ -64,9 +64,11 @@ class LoginEmailForm extends LoginForm
         }
 
         // get user and calculate userToken info
+        // if logging user in, store $this->rememberMe in data
+        // if registerting user, store $this->email in data
         $user = $this->getUser();
         $userId = $user ? $user->id : null;
-        $data = $user ? null : $this->email;
+        $data = $user ? $this->rememberMe : $this->email;
 
         // calculate expireTime
         $expireTime = $this->module->loginExpireTime;

@@ -125,7 +125,7 @@ class DefaultController extends Controller
         // check token and log user in directly
         $userToken = $userToken::findByToken($token, $userToken::TYPE_EMAIL_LOGIN);
         if ($userToken && $userToken->user) {
-            $returnUrl = $this->performLogin($userToken->user);
+            $returnUrl = $this->performLogin($userToken->user, $userToken->data);
             $userToken->delete();
             return $this->redirect($returnUrl);
         }
