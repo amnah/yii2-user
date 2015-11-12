@@ -16,7 +16,7 @@ from the module.
 
 ```php
 cd /path/to/app/migrations
-wget https://gist.githubusercontent.com/amnah/81d834e46514da0b1aa7/raw/5882e38bf258c7106a75a3f90eb4d7860273e078/m151111_122541_upgrade_user_300_to_400.php
+wget https://gist.githubusercontent.com/amnah/384e607f5e2d3cbfbc72/raw/f420380ea0e0ca4d73e7fc1ab2bba11377913868/m151111_122541_upgrade_user_300_to_400.php
 cd /path/to/app
 php yii migrate
 ```
