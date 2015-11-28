@@ -182,7 +182,7 @@ class Module extends \yii\base\Module
         // this typically causes problems in the yii2-advanced app
         // when people set it in "common/config" instead of "frontend/config" and/or "backend/config"
         //   -> this results in users failing to login without any feedback/error message
-        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->get("user") instanceof \amnah\yii2\user\components\User) {
+        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->user instanceof \amnah\yii2\user\components\User) {
             throw new InvalidConfigException('Yii::$app->user is not set properly. It needs to extend \amnah\yii2\user\components\User');
         }
     }
@@ -193,7 +193,7 @@ class Module extends \yii\base\Module
     protected function getDefaultModelClasses()
     {
         return [
-            'User' => 'amnah\yii2\user\models\User',
+            'User' => Yii::$app->user->identityClass,
             'Profile' => 'amnah\yii2\user\models\Profile',
             'Role' => 'amnah\yii2\user\models\Role',
             'UserToken' => 'amnah\yii2\user\models\UserToken',
