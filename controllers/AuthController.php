@@ -350,12 +350,9 @@ class AuthController extends Controller
         if (!empty($attributes["email"])) {
             $user->email = $attributes["email"];
         }
-        if (!empty($attributes["first_name"]) && !empty($attributes["last_name"])) {
-            $user->username = "{$attributes["first_name"]} {$attributes["last_name"]}";
-        }
-
-        // use vkontakte_id name as username as fallback
-        if (empty($attributes["email"]) && empty($attributes["username"])) {
+        if (!empty($attributes["username"])) {
+            $user->username = $attributes["username"];
+        }else{
             $user->username = "vkontakte_{$attributes["id"]}";
         }
 
