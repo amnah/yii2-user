@@ -10,6 +10,8 @@ use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * AdminController implements the CRUD actions for User model.
@@ -91,7 +93,16 @@ class AdminController extends Controller
         $profile = $this->module->model("Profile");
 
         $post = Yii::$app->request->post();
-        if ($user->load($post) && $user->validate() && $profile->load($post) && $profile->validate()) {
+        $userLoaded = $user->load($post);
+        $profile->load($post);
+
+        // validate for ajax request
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($user, $profile);
+        }
+
+        if ($userLoaded && $user->validate() && $profile->validate()) {
             $user->save(false);
             $profile->setUser($user->id)->save(false);
             return $this->redirect(['view', 'id' => $user->id]);
