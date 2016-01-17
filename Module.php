@@ -193,7 +193,7 @@ class Module extends \yii\base\Module
     protected function getDefaultModelClasses()
     {
         return [
-            'User' => Yii::$app->user->identityClass,
+            'User' => 'amnah\yii2\user\models\User',
             'Profile' => 'amnah\yii2\user\models\Profile',
             'Role' => 'amnah\yii2\user\models\Role',
             'UserToken' => 'amnah\yii2\user\models\UserToken',
