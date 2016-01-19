@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property string  $create_time
  * @property string  $update_time
  * @property string  $full_name
+ * @property string $timezone
  *
  * @property User    $user
  */
@@ -26,6 +27,19 @@ class Profile extends ActiveRecord
         return static::getDb()->tablePrefix . "profile";
     }
 
+    /** @var \app\modules\user\Module $module */
+    public $module;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        if (!$this->module) {
+            $this->module = Yii::$app->getModule("user");
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -35,7 +49,8 @@ class Profile extends ActiveRecord
 //            [['user_id'], 'required'],
 //            [['user_id'], 'integer'],
 //            [['create_time', 'update_time'], 'safe'],
-            [['full_name'], 'string', 'max' => 255]
+            [['full_name'], 'string', 'max' => 255],
+            [['timezone'], 'string', 'max' => 125],
         ];
     }
 
@@ -50,6 +65,7 @@ class Profile extends ActiveRecord
             'create_time' => Yii::t('user', 'Create Time'),
             'update_time' => Yii::t('user', 'Update Time'),
             'full_name'   => Yii::t('user', 'Full Name'),
+            'timezone' => Yii::t('user', 'Time zone'),
         ];
     }
 
@@ -75,7 +91,7 @@ class Profile extends ActiveRecord
      */
     public function getUser()
     {
-        $user = Yii::$app->getModule("user")->model("User");
+        $user = $this->module->model("User");
         return $this->hasOne($user::className(), ['id' => 'user_id']);
     }
 
