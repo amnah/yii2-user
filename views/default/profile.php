@@ -36,6 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($profile, 'full_name') ?>
 
+    <?= $form->field($profile, 'timezone')->dropDownList(\yii\helpers\ArrayHelper::map(\amnah\yii2\user\helpers\Timezone::getAll(), 'timezone', 'name')); ?>
+
     <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
             <?= Html::submitButton(Yii::t('user', 'Update'), ['class' => 'btn btn-primary']) ?>
