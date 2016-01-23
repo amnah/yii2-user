@@ -38,6 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($profile, 'full_name') ?>
 
+    <?php
+    // by default, this contains the entire php timezone list of 400+ entries
+    // so you may want to set up a fancy jquery select plugin for this, eg, select2 or chosen
+    // alternatively, you could use your own filtered list
+    // a good example is twitter's timezone choices, which contains ~143  entries
+    // @link https://twitter.com/settings/account
+    ?>
     <?= $form->field($profile, 'timezone')->dropDownList(ArrayHelper::map(Timezone::getAll(), 'identifier', 'name')); ?>
 
     <div class="form-group">
