@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  * @property string $updated_at
  * @property string $full_name
+ * @property string $timezone
  *
  * @property User $user
  */
@@ -25,6 +26,7 @@ class Profile extends ActiveRecord
     {
         return [
             [['full_name'], 'string', 'max' => 255],
+            [['timezone'], 'string', 'max' => 255],
         ];
     }
 
@@ -54,6 +56,7 @@ class Profile extends ActiveRecord
             'created_at' => Yii::t('user', 'Created At'),
             'updated_at' => Yii::t('user', 'Updated At'),
             'full_name' => Yii::t('user', 'Full Name'),
+            'timezone' => Yii::t('user', 'Time zone'),
         ];
     }
 

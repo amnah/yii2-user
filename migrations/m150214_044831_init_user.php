@@ -52,6 +52,7 @@ class m150214_044831_init_user extends Migration
             'created_at' => Schema::TYPE_TIMESTAMP . ' null',
             'updated_at' => Schema::TYPE_TIMESTAMP . ' null',
             'full_name' => Schema::TYPE_STRING . ' null',
+            'timezone' => Schema::TYPE_STRING . ' null',
         ], $tableOptions);
         $this->createTable('{{%user_auth}}', [
             'id' => Schema::TYPE_PK,

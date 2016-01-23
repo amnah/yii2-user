@@ -59,6 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'email:email',
             'profile.full_name',
+            'profile.timezone',
             'created_at',
             // 'username',
             // 'password',

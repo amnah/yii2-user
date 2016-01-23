@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use amnah\yii2\user\helpers\Timezone;
 
 /**
  * @var yii\web\View $this
@@ -35,6 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?= $form->field($profile, 'full_name') ?>
+
+    <?= $form->field($profile, 'timezone')->dropDownList(ArrayHelper::map(Timezone::getAll(), 'identifier', 'name')); ?>
 
     <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">
