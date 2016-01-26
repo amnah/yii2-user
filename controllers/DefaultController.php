@@ -132,10 +132,13 @@ class DefaultController extends Controller
 
         // load post data
         $post = Yii::$app->request->post();
-        if ($userToken && $user->load($post)) {
+        if ($userToken) {
 
             // ensure that email is taken from the $userToken (and not from user input)
             $user->email = $userToken->data;
+
+			// set username if $useUsername is set to true
+			$user->username = $this->module->useUsername ? $post['User']['username'] : null;
 
             // validate and register
             $profile->load($post);
