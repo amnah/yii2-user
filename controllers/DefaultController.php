@@ -132,13 +132,14 @@ class DefaultController extends Controller
 
         // load post data
         $post = Yii::$app->request->post();
-        if ($userToken && $user->load($post)) {
+        $userLoaded = $user->load($post);
+        $profileLoaded = $profile->load($post);
+        if ($userToken && ($userLoaded || $profileLoaded)) {
 
             // ensure that email is taken from the $userToken (and not from user input)
             $user->email = $userToken->data;
 
             // validate and register
-            $profile->load($post);
             if ($user->validate() && $profile->validate()) {
                 $role = $this->module->model("Role");
                 $user->setRegisterAttributes($role::ROLE_USER, $user::STATUS_ACTIVE)->save();
