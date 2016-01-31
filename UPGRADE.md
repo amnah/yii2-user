@@ -1,6 +1,23 @@
 Yii 2 User - Upgrade notes
 =========
 
+## Upgrading from 4.0.0 to 5.0.0
+
+This release contains a few small updates and bug fixes. Most notably, I've changed
+`LoginForm.username` to `LoginForm.email` and added a timezone field to `app\models\Profile`
+(thanks [mnglkhn](https://github.com/amnah/yii2-user/pull/127))
+
+To upgrade to this version:
+
+* Change all references of `LoginForm.username` to `LoginForm.email`. This would be in 
+the [model](models/forms/LoginForm.php) and [view](views/default/login.php) files that 
+you extended
+
+* *Optional* - Add a `timezone` column to profile table in the database
+
+* *Optional* - Add [validation rules / attribute label](models/Profile.php#L29-L59) 
+(lines 29 and 59) for `timezone` field in Profile model 
+
 ## Upgrading from 3.0.0 to 4.0.0
 
 This release is a major code overhaul. Lots of refactoring, cleaning up, updating comments,

@@ -3,19 +3,11 @@ Yii 2 User
 
 Yii 2 User - User authentication module
 
-## New version released 11/09/2015
+## New version released 01/31/2016
 
-This release is a major code overhaul. Lots of refactoring, cleaning up, updating comments,
-etc. If you're upgrading from an earlier version, check out the [upgrade guide](UPGRADE.md).
-(Depending on how far you are into your project, it might be easier to stick with 
-```"amnah/yii2-user": "^3.0"```)
-
-Notably, there is one new feature: users can login/register via email. That is, the user enters
-his email address, gets a link in his inbox, and clicks that link to login/register. *No password
-needed.*
-
-Shamelessly stolen from [Medium](https://medium.com/m/signin). Demo of it
-[here](http://yii2.amnahdev.com/user/login-email)
+This release contains a few small updates and bug fixes. Most notably, I've changed
+`LoginForm.username` to `LoginForm.email` and added a timezone field to `app\models\Profile`
+(thanks [mnglkhn](https://github.com/amnah/yii2-user/pull/127))
 
 If there are any issues, [let me know](https://github.com/amnah/yii2-user/issues) and I'll get
 to it asap.
@@ -44,7 +36,7 @@ to it asap.
 ## Installation
 
 * Install [Yii 2](http://www.yiiframework.com/download) using your preferred method
-* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "^4.0"```
+* Install package via [composer](http://getcomposer.org/download/) ```"amnah/yii2-user": "^5.0"```
 * Update config file *config/web.php* and *config/db.php*
 
 ```php
