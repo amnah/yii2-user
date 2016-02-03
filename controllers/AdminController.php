@@ -132,6 +132,12 @@ class AdminController extends Controller
             $profile->setUser($user->id)->save(false);
             return $this->redirect(['view', 'id' => $user->id]);
         }
+        
+        // validate for ajax request
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($user, $profile);
+        }
 
         // render
         return $this->render('update', compact('user', 'profile'));
