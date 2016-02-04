@@ -125,6 +125,12 @@ class AdminController extends Controller
         $user->setScenario("admin");
         $profile = $user->profile;
 
+        // validate for ajax request
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($user, $profile);
+        }
+
         // load post data and validate
         $post = Yii::$app->request->post();
         if ($user->load($post) && $user->validate() && $profile->load($post) && $profile->validate()) {
