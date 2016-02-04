@@ -125,6 +125,10 @@ class AdminController extends Controller
         $user->setScenario("admin");
         $profile = $user->profile;
 
+        $post = Yii::$app->request->post();
+        $userLoaded = $user->load($post);
+        $profile->load($post);
+
         // validate for ajax request
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -132,8 +136,7 @@ class AdminController extends Controller
         }
 
         // load post data and validate
-        $post = Yii::$app->request->post();
-        if ($user->load($post) && $user->validate() && $profile->load($post) && $profile->validate()) {
+        if ($userLoaded && $user->validate() && $profile->validate()) {
             $user->save(false);
             $profile->setUser($user->id)->save(false);
             return $this->redirect(['view', 'id' => $user->id]);
