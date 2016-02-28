@@ -179,10 +179,11 @@ class Module extends \yii\base\Module
         }
 
         // ensure that the "user" component is set properly
-        // this typically causes problems in the yii2-advanced app
-        // when people set it in "common/config" instead of "frontend/config" and/or "backend/config"
+        // this typically causes problems in the yii2-advanced app when people set it in
+        // "common/config" instead of "frontend/config" and/or "backend/config"
         //   -> this results in users failing to login without any feedback/error message
-        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->user instanceof \amnah\yii2\user\components\User) {
+        $userComponent = Yii::$app->get('user', false);
+        if ($userComponent && !$userComponent instanceof \amnah\yii2\user\components\User) {
             throw new InvalidConfigException('Yii::$app->user is not set properly. It needs to extend \amnah\yii2\user\components\User');
         }
     }
@@ -192,8 +193,18 @@ class Module extends \yii\base\Module
      */
     protected function getDefaultModelClasses()
     {
+        // attempt to calculate user class based on user component
+        //   (we do this because yii console does not have a user component)
+        if (Yii::$app->get('user', false)) {
+            $userClass = Yii::$app->user->identityClass;
+        } elseif (class_exists('app\models\User')) {
+            $userClass = 'app\models\User';
+        } else {
+            $userClass = 'amnah\yii2\user\models\User';
+        }
+
         return [
-            'User' => 'amnah\yii2\user\models\User',
+            'User' => $userClass,
             'Profile' => 'amnah\yii2\user\models\Profile',
             'Role' => 'amnah\yii2\user\models\Role',
             'UserToken' => 'amnah\yii2\user\models\UserToken',
