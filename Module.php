@@ -106,13 +106,7 @@ class Module extends \yii\base\Module
     public $modelClasses = [];
 
     /**
-     * @var array Storage for models based on $modelClasses
-     */
-    protected $models;
-
-    /**
      * Get module version
-     *
      * @return string
      */
     public function getVersion()
@@ -219,22 +213,14 @@ class Module extends \yii\base\Module
 
     /**
      * Get object instance of model
-     *
      * @param string $name
      * @param array  $config
      * @return ActiveRecord
      */
     public function model($name, $config = [])
     {
-        // return object if already created
-        if (!empty($this->models[$name])) {
-            return $this->models[$name];
-        }
-
-        // create model and return it
-        $className = $this->modelClasses[ucfirst($name)];
-        $this->models[$name] = Yii::createObject(array_merge(["class" => $className], $config));
-        return $this->models[$name];
+        $config["class"] = $this->modelClasses[ucfirst($name)];
+        return Yii::createObject($config);
     }
 
     /**
