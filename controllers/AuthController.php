@@ -194,6 +194,7 @@ class AuthController extends Controller
         $user = $this->doubleCheckUsername($user, $fallbackUsername);
 
         // save new models
+        $user->setScenario("social");
         $user->setRegisterAttributes($role::ROLE_USER, $user::STATUS_ACTIVE)->save();
         $profile->setUser($user->id)->save();
         $userAuth->setUser($user->id)->save();

@@ -63,14 +63,13 @@ class User extends \yii\web\User
 
     /**
      * Get user's display name
-     * @param string $default
      * @return string
      */
-    public function getDisplayName($default = "")
+    public function getDisplayName()
     {
         /** @var \amnah\yii2\user\models\User $user */
         $user = $this->getIdentity();
-        return $user ? $user->getDisplayName($default) : "";
+        return $user ? $user->getDisplayName() : "";
     }
 
     /**

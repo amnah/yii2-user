@@ -91,14 +91,13 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function rules()
     {
-        // set initial rules
         $rules = [
             // general email and username rules
             [['email', 'username'], 'string', 'max' => 255],
             [['email', 'username'], 'unique'],
             [['email', 'username'], 'filter', 'filter' => 'trim'],
             [['email'], 'email'],
-            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('user', '{attribute} can contain only letters, numbers, and "_"')],
+            [['username'], 'match', 'pattern' => '/^\w+$/u', 'except' => 'social', 'message' => Yii::t('user', '{attribute} can contain only letters, numbers, and "_"')],
 
             // password rules
             [['newPassword'], 'string', 'min' => 3],
@@ -124,12 +123,11 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         // add required rules for email/username depending on module properties
-        $requireFields = ["requireEmail", "requireUsername"];
-        foreach ($requireFields as $requireField) {
-            if ($this->module->$requireField) {
-                $attribute = strtolower(substr($requireField, 7)); // "email" or "username"
-                $rules[] = [$attribute, "required"];
-            }
+        if ($this->module->requireEmail) {
+            $rules[] = ["email", "required"];
+        }
+        if ($this->module->requireUsername) {
+            $rules[] = ["username", "required"];
         }
 
         return $rules;
@@ -444,26 +442,11 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Get display name for the user
-     * @var string $default
      * @return string|int
      */
-    public function getDisplayName($default = "")
+    public function getDisplayName()
     {
-        // define possible fields
-        $possibleNames = [
-            "username",
-            "email",
-            "id",
-        ];
-
-        // go through each and return if valid
-        foreach ($possibleNames as $possibleName) {
-            if (!empty($this->$possibleName)) {
-                return $this->$possibleName;
-            }
-        }
-
-        return $default;
+        return $this->username ?: $this->email ?: $this->id;
     }
 
     /**
