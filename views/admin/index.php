@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('user', 'Create {modelClass}', [
-          'modelClass' => 'User',
+          'modelClass' => Yii::t('user', 'User'),
         ]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
@@ -60,7 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'profile.full_name',
             'profile.timezone',
-            'created_at',
+            [
+                'attribute' => 'created_at',
+                'value' => function ($model) {
+                    if (extension_loaded('intl')) {
+                        return Yii::t('user', '{0, date, MMMM dd, YYYY HH:mm:ss}', [strtotime($model->created_at)]);
+                    }
+
+                    return $model->created_at;
+                }
+            ],
             // 'username',
             // 'password',
             // 'auth_key',
