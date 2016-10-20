@@ -9,7 +9,7 @@ use yii\helpers\Html;
  */
 
 $this->title = Yii::t('user', 'Create {modelClass}', [
-  'modelClass' => 'User',
+  'modelClass' => Yii::t('user', 'User'),
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
