@@ -5,7 +5,7 @@ use yii\db\Migration;
 
 class m150214_044831_init_user extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -106,7 +106,7 @@ class m150214_044831_init_user extends Migration
         ]);
     }
 
-    public function safeDown()
+    public function down()
     {
         // drop tables in reverse order (for foreign key constraints)
         $this->dropTable('{{%user_auth}}');
