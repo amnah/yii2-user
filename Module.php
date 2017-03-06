@@ -105,6 +105,8 @@ class Module extends \yii\base\Module
      */
     public $modelClasses = [];
 
+    public $forceTranslation = false;
+
     /**
      * Get module version
      * @return string
@@ -129,7 +131,7 @@ class Module extends \yii\base\Module
             Yii::$app->i18n->translations['user'] = [
                 'class' => 'yii\i18n\PhpMessageSource',
                 'basePath' => __DIR__ . '/messages',
-                //'forceTranslation' => true,
+                'forceTranslation' => $this->forceTranslation,
             ];
         }
 
