@@ -16,7 +16,7 @@ class Module extends \yii\base\Module
     /**
      * @var string Module version
      */
-    protected $version = "5.0.4";
+    protected $version = "5.0.5";
 
     /**
      * @var string Alias for module
@@ -95,6 +95,11 @@ class Module extends \yii\base\Module
     public $emailViewPath = "@user/mail";
 
     /**
+     * @var string Force translation
+     */
+    public $forceTranslation = false;
+
+    /**
      * @var array Model classes, e.g., ["User" => "amnah\yii2\user\models\User"]
      * Usage:
      *   $user = Yii::$app->getModule("user")->model("User", $config);
@@ -104,8 +109,6 @@ class Module extends \yii\base\Module
      * The model classes here will be merged with/override the [[getDefaultModelClasses()|default ones]]
      */
     public $modelClasses = [];
-
-    public $forceTranslation = false;
 
     /**
      * Get module version
