@@ -1,8 +1,5 @@
 <?php
 
-namespace amnah\yii2\user\migrations;
-
-use Yii;
 use yii\db\Schema;
 use yii\db\Migration;
 
