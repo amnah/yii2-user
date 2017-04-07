@@ -1,20 +1,42 @@
 {
-    "name": "amnah/yii2-user",
-    "description": "Yii 2 user authentication module",
-    "keywords": ["yii", "yii2", "user", "auth", "authentication"],
-    "type": "yii2-extension",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "amnah",
-            "email": "amnah.dev@gmail.com"
-        }
-    ],
-    "require": {
-        "yiisoft/yii2": "*",
-        "yiisoft/yii2-authclient": "*"
-    },
-    "autoload": {
-        "psr-4": { "amnah\\yii2\\user\\": "" }
-    }
+	"name": "p2made/yii2-p2y2-users",
+	"description": "Users & RBAC modules.",
+	"type": "yii2-extension",
+	"keywords": [
+		"yii2", "p2y2", "user", "users", "rbac",
+		"yii2-p2y2-users", "user management",
+		"yii2 module", "user module", "rbac module"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Pedro Plowman",
+			"email": "p2opensource@gmail.com",
+			"homepage": "https://github.com/p2made"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/p2made/yii2-p2y2-things/issues?state=open",
+		"source": "https://github.com/p2made/yii2-p2y2-things"
+	},
+
+	"version": "0.1.5",
+	"minimum-stability": "dev",
+
+	"require": {
+		"php": ">=5.4.0",
+		"yiisoft/yii2": "^2.0",
+		"yiisoft/yii2-authclient": "^2.1",
+		"p2made/yii2-p2y2-base": "^1.0",
+		"p2made/yii2-p2y2-moment-timezone": "^1.0"
+	},
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^2.1"
+	},
+
+	"autoload": {
+		"psr-4": {
+			"p2m\\users\\": ""
+		}
+	}
 }

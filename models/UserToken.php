@@ -1,12 +1,22 @@
 <?php
+/**
+ * UserToken.php
+ *
+ * @copyright Copyright &copy; Pedro Plowman, 2017
+ * @author Pedro Plowman
+ * @link https://github.com/p2made
+ * @package p2made/yii2-p2y2-users
+ * @license MIT
+ */
 
-namespace amnah\yii2\user\models;
+namespace p2m\users\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%user_token}}".
+ *
+ * class p2m\users\models\UserToken
  *
  * @property integer $id
  * @property integer $user_id
@@ -18,168 +28,193 @@ use yii\db\ActiveRecord;
  *
  * @property User $user
  */
-class UserToken extends ActiveRecord
+class UserToken extends \yii\db\ActiveRecord
 {
-    /**
-     * @var int Token for email activations (for registrations)
-     */
-    const TYPE_EMAIL_ACTIVATE = 1;
+	/**
+	 * @var int Token for email activations (for registrations)
+	 */
+	const TYPE_EMAIL_ACTIVATE = 1;
 
-    /**
-     * @var int Token for email changes (on /user/account page)
-     */
-    const TYPE_EMAIL_CHANGE = 2;
+	/**
+	 * @var int Token for email changes (on /user/account page)
+	 */
+	const TYPE_EMAIL_CHANGE = 2;
 
-    /**
-     * @var int Token for password resets
-     */
-    const TYPE_PASSWORD_RESET = 3;
+	/**
+	 * @var int Token for password resets
+	 */
+	const TYPE_PASSWORD_RESET = 3;
 
-    /**
-     * @var int Token for logging in via email
-     */
-    const TYPE_EMAIL_LOGIN = 4;
+	/**
+	 * @var int Token for logging in via email
+	 */
+	const TYPE_EMAIL_LOGIN = 4;
 
-    /**
-     * @var \amnah\yii2\user\Module
-     */
-    public $module;
+	/**
+	 * @var \p2m\users\modules\UsersModule
+	 */
+	public $module;
 
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        if (!$this->module) {
-            $this->module = Yii::$app->getModule("user");
-        }
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName()
+	{
+		return '{{%user_token}}';
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('user', 'ID'),
-            'user_id' => Yii::t('user', 'User ID'),
-            'type' => Yii::t('user', 'Type'),
-            'token' => Yii::t('user', 'Token'),
-            'data' => Yii::t('user', 'Data'),
-            'created_at' => Yii::t('user', 'Created At'),
-            'expired_at' => Yii::t('user', 'Expired At'),
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function rules()
+	{
+		return [
+			[['user_id', 'type', 'token'], 'required'],
+			[['user_id', 'type'], 'integer'],
+			[['created_at', 'expired_at'], 'safe'],
+			[['token', 'data'], 'string', 'max' => 255],
+			[['token'], 'unique'],
+			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+		];
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'updatedAtAttribute' => false,
-                'value' => function ($event) {
-                    return gmdate("Y-m-d H:i:s");
-                },
-            ],
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+			'id' => 'ID',
+			'user_id' => 'User ID',
+			'type' => 'Type',
+			'token' => 'Token',
+			'data' => 'Data',
+			'created_at' => 'Created At',
+			'expired_at' => 'Expired At',
+		];
+	}
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        $user = $this->module->model("User");
-        return $this->hasOne($user::className(), ['id' => 'user_id']);
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'timestamp' => [
+				'class' => 'yii\behaviors\TimestampBehavior',
+				'updatedAtAttribute' => false,
+				'value' => function ($event) {
+					return gmdate("Y-m-d H:i:s");
+				},
+			],
+		];
+	}
 
-    /**
-     * Generate/reuse a userToken
-     * @param int $userId
-     * @param int $type
-     * @param string $data
-     * @param string $expireTime
-     * @return static
-     */
-    public static function generate($userId, $type, $data = null, $expireTime = null)
-    {
-        // attempt to find existing record
-        // otherwise create new
-        $checkExpiration = false;
-        if ($userId) {
-            $model = static::findByUser($userId, $type, $checkExpiration);
-        } else {
-            $model = static::findByData($data, $type, $checkExpiration);
-        }
-        if (!$model) {
-            $model = new static();
-        }
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUser()
+	{
+		$user = $this->module->model("User");
+		return $this->hasOne($user::className(), ['id' => 'user_id']);
+	}
 
-        // set/update data
-        $model->user_id = $userId;
-        $model->type = $type;
-        $model->data = $data;
-        $model->created_at = gmdate("Y-m-d H:i:s");
-        $model->expired_at = $expireTime;
-        $model->token = Yii::$app->security->generateRandomString();
-        $model->save();
-        return $model;
-    }
+	/**
+	 * Generate/reuse a userToken
+	 * @param int $userId
+	 * @param int $type
+	 * @param string $data
+	 * @param string $expireTime
+	 * @return static
+	 */
+	public static function generate($userId, $type, $data = null, $expireTime = null)
+	{
+		// attempt to find existing record
+		// otherwise create new
+		$checkExpiration = false;
+		if ($userId) {
+			$model = static::findByUser($userId, $type, $checkExpiration);
+		} else {
+			$model = static::findByData($data, $type, $checkExpiration);
+		}
+		if (!$model) {
+			$model = new static();
+		}
 
-    /**
-     * Find a userToken by specified field/value
-     * @param string $field
-     * @param string $value
-     * @param array|int $type
-     * @param bool $checkExpiration
-     * @return static
-     */
-    public static function findBy($field, $value, $type, $checkExpiration)
-    {
-        $query = static::find()->where([$field => $value, "type" => $type ]);
-        if ($checkExpiration) {
-            $now = gmdate("Y-m-d H:i:s");
-            $query->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)");
-        }
-        return $query->one();
-    }
+		// set/update data
+		$model->user_id = $userId;
+		$model->type = $type;
+		$model->data = $data;
+		$model->created_at = gmdate("Y-m-d H:i:s");
+		$model->expired_at = $expireTime;
+		$model->token = Yii::$app->security->generateRandomString();
+		$model->save();
+		return $model;
+	}
 
-    /**
-     * Find a userToken by userId
-     * @param int $userId
-     * @param array|int $type
-     * @param bool $checkExpiration
-     * @return static
-     */
-    public static function findByUser($userId, $type, $checkExpiration = true)
-    {
-        return static::findBy("user_id", $userId, $type, $checkExpiration);
-    }
+	/**
+	 * Find a userToken by specified field/value
+	 * @param string $field
+	 * @param string $value
+	 * @param array|int $type
+	 * @param bool $checkExpiration
+	 * @return static
+	 */
+	public static function findBy($field, $value, $type, $checkExpiration)
+	{
+		$query = static::find()->where([$field => $value, "type" => $type ]);
+		if ($checkExpiration) {
+			$now = gmdate("Y-m-d H:i:s");
+			$query->andWhere("([[expired_at]] >= '$now' or [[expired_at]] is NULL)");
+		}
+		return $query->one();
+	}
 
-    /**
-     * Find a userToken by token
-     * @param string $token
-     * @param array|int $type
-     * @param bool $checkExpiration
-     * @return static
-     */
-    public static function findByToken($token, $type, $checkExpiration = true)
-    {
-        return static::findBy("token", $token, $type, $checkExpiration);
-    }
+	/**
+	 * Find a userToken by userId
+	 * @param int $userId
+	 * @param array|int $type
+	 * @param bool $checkExpiration
+	 * @return static
+	 */
+	public static function findByUser($userId, $type, $checkExpiration = true)
+	{
+		return static::findBy("user_id", $userId, $type, $checkExpiration);
+	}
 
-    /**
-     * Find a userToken by data
-     * @param string $data
-     * @param array|int $type
-     * @param bool $checkExpiration
-     * @return static
-     */
-    public static function findByData($data, $type, $checkExpiration = true)
-    {
-        return static::findBy("data", $data, $type, $checkExpiration);
-    }
+	/**
+	 * Find a userToken by token
+	 * @param string $token
+	 * @param array|int $type
+	 * @param bool $checkExpiration
+	 * @return static
+	 */
+	public static function findByToken($token, $type, $checkExpiration = true)
+	{
+		return static::findBy("token", $token, $type, $checkExpiration);
+	}
+
+	/**
+	 * Find a userToken by data
+	 * @param string $data
+	 * @param array|int $type
+	 * @param bool $checkExpiration
+	 * @return static
+	 */
+	public static function findByData($data, $type, $checkExpiration = true)
+	{
+		return static::findBy("data", $data, $type, $checkExpiration);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function init()
+	{
+		if (!$this->module) {
+			$this->module = Yii::$app->getModule("user");
+		}
+	}
 }
+?>
+
+

@@ -4,8 +4,8 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var amnah\yii2\user\models\User $user
- * @var amnah\yii2\user\models\Profile $profile
+ * @var p2m\users\models\User $user
+ * @var p2m\users\models\Profile $profile
  */
 
 $this->title = Yii::t('user', 'Create {modelClass}', [
@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+	<h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'user' => $user,
-        'profile' => $profile,
-    ]) ?>
+	<?= $this->render('_form', [
+		'user' => $user,
+		'profile' => $profile,
+	]) ?>
 
 </div>

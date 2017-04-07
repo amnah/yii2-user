@@ -1,15 +1,25 @@
 <?php
+/**
+ * UserAuth.php
+ *
+ * @copyright Copyright &copy; Pedro Plowman, 2017
+ * @author Pedro Plowman
+ * @link https://github.com/p2made
+ * @package p2made/yii2-p2y2-users
+ * @license MIT
+ */
 
-namespace amnah\yii2\user\models;
+namespace p2m\users\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "tbl_user_auth".
+ * This is the model class for table "{{%user_auth}}".
  *
- * @property string $id
- * @property string $user_id
+ * class p2m\users\models\UserAuth
+ *
+ * @property integer $id
+ * @property integer $user_id
  * @property string $provider
  * @property string $provider_id
  * @property string $provider_attributes
@@ -18,75 +28,101 @@ use yii\db\ActiveRecord;
  *
  * @property User $user
  */
-class UserAuth extends ActiveRecord
+class UserAuth extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('user', 'ID'),
-            'user_id' => Yii::t('user', 'User ID'),
-            'provider' => Yii::t('user', 'Provider'),
-            'provider_id' => Yii::t('user', 'Provider ID'),
-            'provider_attributes' => Yii::t('user', 'Provider Attributes'),
-            'created_at' => Yii::t('user', 'Created At'),
-            'updated_at' => Yii::t('user', 'Updated At'),
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName()
+	{
+		return '{{%user_auth}}';
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function ($event) {
-                    return gmdate("Y-m-d H:i:s");
-                },
-            ],
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function rules()
+	{
+		return [
+			[['user_id', 'provider', 'provider_id', 'provider_attributes'], 'required'],
+			[['user_id'], 'integer'],
+			[['provider_attributes'], 'string'],
+			[['created_at', 'updated_at'], 'safe'],
+			[['provider', 'provider_id'], 'string', 'max' => 255],
+			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+		];
+	}
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+			'id' => 'ID',
+			'user_id' => 'User ID',
+			'provider' => 'Provider',
+			'provider_id' => 'Provider ID',
+			'provider_attributes' => 'Provider Attributes',
+			'created_at' => 'Created At',
+			'updated_at' => 'Updated At',
+		];
+	}
 
-    /**
-     * Set user id
-     * @param int $userId
-     * @return static
-     */
-    public function setUser($userId)
-    {
-        $this->user_id = $userId;
-        return $this;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'timestamp' => [
+				'class' => 'yii\behaviors\TimestampBehavior',
+				'value' => function ($event) {
+					return gmdate("Y-m-d H:i:s");
+				},
+			],
+		];
+	}
 
-    /**
-     * Set provider attributes
-     * @param array $attributes
-     * @return static
-     */
-    public function setProviderAttributes($attributes)
-    {
-        $this->provider_attributes = json_encode($attributes);
-        return $this;
-    }
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUser()
+	{
+		$user = $this->module->model("User");
+		return $this->hasOne($user::className(), ['id' => 'user_id']);
+	}
 
-    /**
-     * Get provider attributes
-     * @return array
-     */
-    public function getProviderAttributes()
-    {
-        return json_decode($this->provider_attributes, true);
-    }
+	/**
+	 * Set user id
+	 * @param int $userId
+	 * @return static
+	 */
+	public function setUser($userId)
+	{
+		$this->user_id = $userId;
+		return $this;
+	}
+
+	/**
+	 * Set provider attributes
+	 * @param array $attributes
+	 * @return static
+	 */
+	public function setProviderAttributes($attributes)
+	{
+		$this->provider_attributes = json_encode($attributes);
+		return $this;
+	}
+
+	/**
+	 * Get provider attributes
+	 * @return array
+	 */
+	public function getProviderAttributes()
+	{
+		return json_decode($this->provider_attributes, true);
+	}
 }
+?>
+
+

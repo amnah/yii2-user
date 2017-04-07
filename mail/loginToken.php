@@ -5,8 +5,8 @@ use yii\helpers\Url;
 
 /**
  * @var string $subject
- * @var \amnah\yii2\user\models\User $user
- * @var \amnah\yii2\user\models\UserToken $userToken
+ * @var \p2m\users\models\User $user
+ * @var \p2m\users\models\UserToken $userToken
  */
 
 $url = Url::toRoute(["/user/login-callback", "token" => $userToken->token], true);
