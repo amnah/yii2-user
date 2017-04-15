@@ -1,4 +1,4 @@
-# P2Y2 Users v0.1.5
+# P2Y2 Users v0.1.6
 
 ## ¡¡¡ ===== NOT READY FOR USE ===== !!!
 
@@ -28,6 +28,8 @@ Alternatively add:
 
 to the requires section of your `composer.json` file & P2Y2 Users will be
 installed next time you run `composer update`.
+
+
 
 And then...
 -----------
@@ -102,6 +104,7 @@ to include...
 	```
 	...
 	'p2m' => [
+		...
 		'users' => [
 			'requireEmail' => true,
 			'requireUsername' => false,
@@ -116,18 +119,13 @@ to include...
 			'logoutRedirect' => null,
 			'resetExpireTime' => '2 days',
 			'loginExpireTime' => '15 minutes',
+			'usersEmailViewPath' => '@user/mail',
+			'usersForceTranslation' => false,
+			'usersModelClasses' => [],
 		],
-		...
 	],
-	...
 	```
 
 	Settings above are the defaults & only need to be set if you want to change them.
-
-
-To Do
------
-
-*	Docs
-*	RBAC
+	`p2p` is the params space for setting all of my Yii2 packages.
 

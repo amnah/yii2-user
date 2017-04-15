@@ -108,3 +108,6 @@ class LoginEmailForm extends LoginForm
 		return $result;
 	}
 }
+?>
+
+

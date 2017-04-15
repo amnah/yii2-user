@@ -112,4 +112,6 @@ class UserSearch extends User
 
 		return $dataProvider;
 	}
-}
+}?>
+
+

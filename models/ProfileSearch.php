@@ -85,3 +85,6 @@ class ProfileSearch extends \common\models\Profile
 		return $dataProvider;
 	}
 }
+?>
+
+

@@ -139,3 +139,6 @@ class ForgotForm extends \yii\base\Model
 		}
 	}
 }
+?>
+
+

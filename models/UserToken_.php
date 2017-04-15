@@ -183,3 +183,6 @@ class UserToken extends ActiveRecord
 		return static::findBy("data", $data, $type, $checkExpiration);
 	}
 }
+?>
+
+

@@ -120,3 +120,6 @@ class Profile extends \yii\db\ActiveRecord
 		}
 	}
 }
+?>
+
+

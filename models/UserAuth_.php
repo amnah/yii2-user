@@ -90,3 +90,6 @@ class UserAuth extends ActiveRecord
 		return json_decode($this->provider_attributes, true);
 	}
 }
+?>
+
+

@@ -5,8 +5,10 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-users
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-users
+ * @class \p2m\users\models\User
  */
 
 namespace p2m\users\models;
@@ -18,10 +20,11 @@ use yii\swiftmailer\Message;
 use yii\helpers\Inflector;
 use ReflectionClass;
 
+use yii\base\NotSupportedException;
+use yii\behaviors\TimestampBehavior;
+
 /**
  * This is the model class for table "{{%user}}".
- *
- * class p2m\users\models\User
  *
  * @property integer $id
  * @property integer $role_id
@@ -48,25 +51,15 @@ use ReflectionClass;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-	/**
-	 * @var int Inactive status
-	 */
 	const STATUS_INACTIVE = 0;
+	const STATUS_UNCONFIRMED_EMAIL = 5;
+	const STATUS_ACTIVE = 10;
+	const STATUS_BANNED = -1;
 
 	/**
-	 * @var int Active status
+	 * @var \amnah\yii2\user\Module
 	 */
-	const STATUS_ACTIVE = 1;
-
-	/**
-	 * @var int Unconfirmed email status
-	 */
-	const STATUS_UNCONFIRMED_EMAIL = 2;
-
-	/**
-	 * @var \p2m\users\modules\UsersModule
-	 */
-	public $module;
+	public static $module;
 
 	/**
 	 * @var string Current password - for account page updates
@@ -89,6 +82,30 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 	protected $permissionCache = [];
 
 	/**
+	public static function findByPasswordResetToken($token)
+	public static function isPasswordResetTokenValid($token)
+	public function setPassword($password)
+	public function generateAuthKey()
+	public function generatePasswordResetToken()
+	public function removePasswordResetToken()
+	 */
+
+	/**
+	 * @inheritdoc
+	 */
+	public function init()
+	{
+		if (!self::$module) {
+			self::$module = Yii::$app->getModule("user");
+		}
+		/*
+		if (!$this->module) {
+			$this->module = Yii::$app->getModule("user");
+		}
+		*/
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public static function tableName()
@@ -99,14 +116,34 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 	/**
 	 * @inheritdoc
 	 */
+	public function behaviors()
+	{
+		return [
+			TimestampBehavior::className(),
+		];
+		/*
+		return [
+			'timestamp' => [
+				'class' => 'yii\behaviors\TimestampBehavior',
+				'value' => function ($event) {
+					return date("Y-m-d H:i:s");
+				},
+			],
+		];
+		*/
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function rules()
 	{
 		$rules = [
 			// general email and username rules
-			[['email', 'username'], 'string', 'max' => 255],
 			[['email', 'username'], 'unique'],
 			[['email', 'username'], 'filter', 'filter' => 'trim'],
-			[['email'], 'email'],
+			[['username'], 'string', 'min' => 3, 'max' => 32],
+			[['email'], 'email', 'max' => 128],
 			[['username'], 'match', 'pattern' => '/^\w+$/u', 'except' => 'social', 'message' => Yii::t('user', '{attribute} can contain only letters, numbers, and "_"')],
 
 			// password rules
@@ -141,11 +178,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 		}
 
 		return $rules;
-	}
 
-	public function rules()
-	{
+		/*
 		return [
+			['status', 'default', 'value' => self::STATUS_ACTIVE],
+			['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+
+			[['role_id', 'status'], 'integer'],
+			[['status'], 'required'],
+			[['logged_in_at', 'created_at', 'updated_at', 'banned_at'], 'safe'],
+			[['email', 'username', 'password', 'auth_key', 'access_token', 'logged_in_ip', 'created_ip', 'banned_reason'], 'string', 'max' => 255],
+			[['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
+
 			[['role_id', 'email', 'username', 'password', 'auth_key'], 'required'],
 			[['role_id', 'status'], 'integer'],
 			[['logged_in_at', 'created_at', 'updated_at', 'banned_at'], 'safe'],
@@ -160,6 +204,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 			[['password_reset_token'], 'unique'],
 			[['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
 		];
+		*/
 	}
 
 	/**
@@ -168,88 +213,31 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 	public function attributeLabels()
 	{
 		return [
-			'id' => 'ID',
-			'role_id' => 'Role ID',
-			'email' => 'Email',
-			'username' => 'Username',
-			'password' => 'Password',
-			'auth_key' => 'Auth Key',
-			'access_token' => 'Access Token',
-			'password_reset_token' => 'Password Reset Token',
-			'status' => 'Status',
-			'logged_in_at' => 'Logged In At',
-			'logged_in_ip' => 'Logged In IP',
-			'created_at' => 'Created At',
-			'created_ip' => 'Created IP',
-			'updated_at' => 'Updated At',
-			'updated_ip' => 'Updated IP',
-			'banned_at' => 'Banned At',
-			'banned_reason' => 'Banned Reason',
+			'id' => Yii::t('user', 'ID'),
+			'role_id' => Yii::t('user', 'Role ID'),
+			'status' => Yii::t('user', 'Status'),
+			'email' => Yii::t('user', 'Email'),
+			'username' => Yii::t('user', 'Username'),
+			'password' => Yii::t('user', 'Password'),
+			'auth_key' => Yii::t('user', 'Auth Key'),
+			'access_token' => Yii::t('user', 'Access Token'),
+			'logged_in_ip' => Yii::t('user', 'Logged In IP'),
+			'logged_in_at' => Yii::t('user', 'Logged In At'),
+			'created_ip' => Yii::t('user', 'Created IP'),
+			'created_at' => Yii::t('user', 'Created At'),
+			'updated_at' => Yii::t('user', 'Updated At'),
+			'banned_at' => Yii::t('user', 'Banned At'),
+			'banned_reason' => Yii::t('user', 'Banned Reason'),
 
 			// virtual attributes set above
-			'currentPassword' => 'Current Password',
+			'currentPassword' => Yii::t('user', 'Current Password'),
 			'newPassword' => (
-				$this->isNewRecord ? 'Password' : 'New Password'
+				$this->isNewRecord ?
+				Yii::t('user', 'Password') :
+				Yii::t('user', 'New Password')
 			),
-			'newPasswordConfirm' => (
-				$this->isNewRecord ? 'Password Confirm' : 'New Password Confirm'
-			),
+			'newPasswordConfirm' => Yii::t('user', 'New Password Confirm'),
 		];
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function behaviors()
-	{
-		return [
-			'timestamp' => [
-				'class' => 'yii\behaviors\TimestampBehavior',
-				'value' => function ($event) {
-					return date("Y-m-d H:i:s");
-				},
-			],
-		];
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	/**
-	 * Stick with 1 user:1 profile
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getProfile()
-	{
-		$profile = $this->module->model("Profile");
-		return $this->hasOne($profile::className(), ['user_id' => 'id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getRole()
-	{
-		$role = $this->module->model("Role");
-		return $this->hasOne($role::className(), ['id' => 'role_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getUserAuths()
-	{
-		$userAuth = $this->module->model("UserAuth");
-		return $this->hasMany($userAuth::className(), ['user_id' => 'id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getUserTokens()
-	{
-		$userToken = $this->module->model("UserToken");
-		return $this->hasMany($userToken::className(), ['user_id' => 'id']);
 	}
 
 	/**
@@ -257,7 +245,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 	 */
 	public static function findIdentity($id)
 	{
-		return static::findOne($id);
+		return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
 	}
 
 	/**
@@ -269,11 +257,58 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 	}
 
 	/**
+	 * Finds user by username
+	 *
+	 * @param string $username
+	 * @return static|null
+	 */
+	public static function findByUsername($username)
+	{
+		return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+	}
+
+	/**
+	 * Finds user by password reset token
+	 *
+	 * @param string $token password reset token
+	 * @return static|null
+	 */ // // // // //
+	public static function findByPasswordResetToken($token)
+	{
+		if (!static::isPasswordResetTokenValid($token)) {
+			return null;
+		}
+
+		return static::findOne([
+			'password_reset_token' => $token,
+			'status' => self::STATUS_ACTIVE,
+		]);
+	}
+
+	/**
+	 * Finds out if password reset token is valid
+	 *
+	 * @param string $token password reset token
+	 * @return bool
+	 */ // // // // //
+	public static function isPasswordResetTokenValid($token)
+	{
+		if (empty($token)) {
+			return false;
+		}
+
+		$timestamp = (int) substr($token, strrpos($token, '_') + 1);
+		$expire = Yii::$app->params['user.passwordResetTokenExpire'];
+		return $timestamp + $expire >= time();
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function getId()
 	{
 		return $this->id;
+		//return $this->getPrimaryKey();
 	}
 
 	/**
@@ -293,13 +328,101 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 	}
 
 	/**
-	 * Validate password
-	 * @param string $password
-	 * @return bool
+	 * Validates password
+	 *
+	 * @param string $password password to validate
+	 * @return bool if password provided is valid for current user
 	 */
 	public function validatePassword($password)
 	{
 		return Yii::$app->security->validatePassword($password, $this->password);
+	}
+
+	/**
+	 * Generates password hash from password and sets it to the model
+	 *
+	 * @param string $password
+	 */ // // // // //
+	public function setPassword($password)
+	{
+		$this->password_hash = Yii::$app->security->generatePasswordHash($password);
+	}
+
+	/**
+	 * Generates "remember me" authentication key
+	 */ // // // // //
+	public function generateAuthKey()
+	{
+		$this->auth_key = Yii::$app->security->generateRandomString();
+	}
+
+	/**
+	 * Generates new password reset token
+	 */ // // // // //
+	public function generatePasswordResetToken()
+	{
+		$this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+	}
+
+	/**
+	 * Removes password reset token
+	 */ // // // // //
+	public function removePasswordResetToken()
+	{
+		$this->password_reset_token = null;
+	}
+
+	/**
+	 * Stick with 1 user:1 profile
+	 * @return \yii\db\ActiveQuery
+	 */
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getProfile()
+	{
+		$profile = $this->module->model("Profile");
+		return $this->hasOne($profile::className(), ['user_id' => 'id']);
+		//return $this->hasMany(Profile::className(), ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getRole()
+	{
+		$role = $this->module->model("Role");
+		return $this->hasOne($role::className(), ['id' => 'role_id']);
+		//return $this->hasOne(Role::className(), ['id' => 'role_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUserAuths()
+	{
+		$userAuth = $this->module->model("UserAuth");
+		return $this->hasMany($userAuth::className(), ['user_id' => 'id']);
+		//return $this->hasMany(UserAuth::className(), ['user_id' => 'id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUserTokens()
+	{
+		$userToken = $this->module->model("UserToken");
+		return $this->hasMany($userToken::className(), ['user_id' => 'id']);
+		//return $this->hasMany(UserToken::className(), ['user_id' => 'id']);
+	}
+
+	/**
+	 * @inheritdoc
+	 * @return UserQuery the active query used by this AR class.
+	 */ // // // // //
+	public static function find()
+	{
+		return new UserQuery(get_called_class());
 	}
 
 	/**
@@ -537,17 +660,4 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
 		return $dropdown;
 	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function init()
-	{
-		if (!$this->module) {
-			$this->module = Yii::$app->getModule("user");
-		}
-	}
 }
-?>
-
-

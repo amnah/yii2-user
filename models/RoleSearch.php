@@ -82,3 +82,6 @@ class RoleSearch extends \common\models\Role
 		return $dataProvider;
 	}
 }
+?>
+
+
