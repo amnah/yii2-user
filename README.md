@@ -11,19 +11,19 @@ The preferred way to install P2Y2 Users is through
 installation, run *one* of the following commands:
 
 ```
-	composer require p2made/yii2-p2y2-users "^0.0"
+	composer require p2made/yii2-p2y2-users "^0.1"
 ```
 
 or
 
 ```
-	php composer.phar require p2made/yii2-p2y2-users "^0.0"
+	php composer.phar require p2made/yii2-p2y2-users "^0.1"
 ```
 
 Alternatively add:
 
 ```
-	"p2made/yii2-p2y2-users": "^0.0"
+	"p2made/yii2-p2y2-users": "^0.1"
 ```
 
 to the requires section of your `composer.json` file & P2Y2 Users will be
