@@ -182,8 +182,6 @@ class UsersSettings extends \p2m\base\helpers\P2Settings
 		return self::$_version;
 	}
 
-//	protected function getSettingsItem(&$target, $source, $name = '', $default)
-
 	/**
 	 * Get users settings
 	 * @return array | false
