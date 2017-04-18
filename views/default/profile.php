@@ -13,7 +13,7 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-use p2m\users\helpers\Timezone;
+use p2m\users\helpers\UserTimezone;
 
 /**
  * @var yii\web\View $this
@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	// a good example is twitter's timezone choices, which contains ~143  entries
 	// @link https://twitter.com/settings/account
 	?>
-	<?= $form->field($profile, 'timezone')->dropDownList(ArrayHelper::map(Timezone::getAll(), 'identifier', 'name')); ?>
+	<?= $form->field($profile, 'timezone')->dropDownList(ArrayHelper::map(UserTimezone::getAll(), 'identifier', 'name')); ?>
 
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-lg-10">

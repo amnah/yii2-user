@@ -14,8 +14,8 @@
 namespace p2m\users\controllers;
 
 use Yii;
-use common\models\Profile;
-use common\models\ProfileSearch;
+use p2m\users\models\Profile;
+use p2m\users\models\ProfileSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
