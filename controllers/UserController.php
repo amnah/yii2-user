@@ -1,18 +1,29 @@
 <?php
+/**
+ * UserController.php
+ *
+ * @copyright Copyright &copy; Pedro Plowman, 2017
+ * @author Pedro Plowman
+ * @link https://github.com/p2made
+ * @license MIT
+ *
+ * @package p2made/yii2-p2y2-users
+ * @class \p2m\users\controllers\UserController
+ */
 
-namespace frontend\controllers;
+namespace p2m\users\controllers;
 
 use Yii;
-use common\models\Role;
-use common\models\RoleSearch;
+use common\models\User;
+use common\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * RoleController implements the CRUD actions for Role model.
+ * UserController implements the CRUD actions for User model.
  */
-class RoleController extends Controller
+class UserController extends Controller
 {
 	/**
 	 * @inheritdoc
@@ -30,12 +41,12 @@ class RoleController extends Controller
 	}
 
 	/**
-	 * Lists all Role models.
+	 * Lists all User models.
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new RoleSearch();
+		$searchModel = new UserSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		return $this->render('index', [
@@ -45,7 +56,7 @@ class RoleController extends Controller
 	}
 
 	/**
-	 * Displays a single Role model.
+	 * Displays a single User model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -57,13 +68,13 @@ class RoleController extends Controller
 	}
 
 	/**
-	 * Creates a new Role model.
+	 * Creates a new User model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-		$model = new Role();
+		$model = new User();
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +86,7 @@ class RoleController extends Controller
 	}
 
 	/**
-	 * Updates an existing Role model.
+	 * Updates an existing User model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id
 	 * @return mixed
@@ -94,7 +105,7 @@ class RoleController extends Controller
 	}
 
 	/**
-	 * Deletes an existing Role model.
+	 * Deletes an existing User model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -107,15 +118,15 @@ class RoleController extends Controller
 	}
 
 	/**
-	 * Finds the Role model based on its primary key value.
+	 * Finds the User model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return Role the loaded model
+	 * @return User the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if (($model = Role::findOne($id)) !== null) {
+		if (($model = User::findOne($id)) !== null) {
 			return $model;
 		} else {
 			throw new NotFoundHttpException('The requested page does not exist.');
