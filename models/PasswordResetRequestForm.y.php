@@ -1,4 +1,4 @@
-<?php
+<?php // Yii generated
 namespace frontend\models;
 
 use Yii;
