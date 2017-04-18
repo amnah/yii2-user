@@ -20,12 +20,23 @@ use Yii;
  *
  * @property integer $id
  * @property integer $user_id
- * @property string $given_name
- * @property string $family_name
- * @property string $preferred_name
+ * @property string $givenName
+ * @property string $familyName
+ * @property string $preferredName
+ * @property string $fullName
+ * @property string $phone1
+ * @property string $phone2
+ * @property string $address1
+ * @property string $address2
+ * @property string $locality
+ * @property string $state
+ * @property string $postcode
+ * @property string $country
  * @property string $timezone
  * @property string $created_at
+ * @property integer $created_by
  * @property string $updated_at
+ * @property integer $updated_by
  *
  * @property User $user
  */
@@ -124,36 +135,6 @@ class Profile extends \yii\db\ActiveRecord
 
 
 <?php // Yii generated
-
-namespace common\models;
-
-use Yii;
-
-/**
- * This is the model class for table "p2m_profile".
- *
- * @property integer $id
- * @property integer $user_id
- * @property string $givenName
- * @property string $familyName
- * @property string $preferredName
- * @property string $fullName
- * @property string $phone1
- * @property string $phone2
- * @property string $address1
- * @property string $address2
- * @property string $locality
- * @property string $state
- * @property string $postcode
- * @property string $country
- * @property string $timezone
- * @property string $created_at
- * @property integer $created_by
- * @property string $updated_at
- * @property integer $updated_by
- *
- * @property User $user
- */
 class Profile extends \yii\db\ActiveRecord
 {
 	/**

@@ -57,7 +57,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 	const STATUS_BANNED = -1;
 
 	/**
-	 * @var \amnah\yii2\user\Module
+	 * @var \p2m\users\modules\UsersModule
 	 */
 	public static $module;
 
