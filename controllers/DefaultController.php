@@ -5,8 +5,10 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-users
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-users
+ * @class \p2m\users\controllers\DefaultController
  */
 
 namespace p2m\users\controllers;
@@ -18,8 +20,6 @@ use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
 
 /**
- * class p2m\users\controllers\DefaultController
- *
  * Default controller for User module
  */
 class DefaultController extends \yii\web\Controller
@@ -494,3 +494,6 @@ class DefaultController extends \yii\web\Controller
 		return $this->render('reset', compact("user", "success"));
 	}
 }
+?>
+
+

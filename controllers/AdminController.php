@@ -5,8 +5,10 @@
  * @copyright Copyright &copy; Pedro Plowman, 2017
  * @author Pedro Plowman
  * @link https://github.com/p2made
- * @package p2made/yii2-p2y2-users
  * @license MIT
+ *
+ * @package p2made/yii2-p2y2-users
+ * @class \p2m\users\controllers\AdminController
  */
 
 namespace p2m\users\controllers;
@@ -22,8 +24,6 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 /**
- * class p2m\users\controllers\AdminController
- *
  * AdminController implements the CRUD actions for User model.
  */
 class AdminController extends \yii\web\Controller
