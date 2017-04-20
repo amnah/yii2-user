@@ -494,6 +494,3 @@ class DefaultController extends \yii\web\Controller
 		return $this->render('reset', compact("user", "success"));
 	}
 }
-?>
-
-

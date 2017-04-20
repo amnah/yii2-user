@@ -194,6 +194,3 @@ class AdminController extends \yii\web\Controller
 		throw new NotFoundHttpException('The requested page does not exist.');
 	}
 }
-?>
-
-

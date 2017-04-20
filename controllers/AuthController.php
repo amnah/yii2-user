@@ -372,6 +372,3 @@ class AuthController extends \yii\web\Controller
 		return [$user, $profile];
 	}
 }
-?>
-
-

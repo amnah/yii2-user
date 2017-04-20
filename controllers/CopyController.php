@@ -192,6 +192,3 @@ class CopyController extends \yii\console\Controller
 		return true;
 	}
 }
-?>
-
-
