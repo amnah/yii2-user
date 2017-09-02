@@ -4,8 +4,6 @@ namespace amnah\yii2\user\controllers;
 
 use Yii;
 use amnah\yii2\user\models\User;
-use amnah\yii2\user\models\UserToken;
-use amnah\yii2\user\models\UserAuth;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -157,8 +155,10 @@ class AdminController extends Controller
         // delete profile and userTokens first to handle foreign key constraint
         $user = $this->findModel($id);
         $profile = $user->profile;
-        UserToken::deleteAll(['user_id' => $user->id]);
-        UserAuth::deleteAll(['user_id' => $user->id]);
+        $userToken = $this->module->model("UserToken");
+        $userAuth = $this->module->model("UserAuth");
+        $userToken::deleteAll(['user_id' => $user->id]);
+        $userAuth::deleteAll(['user_id' => $user->id]);
         $profile->delete();
         $user->delete();
 

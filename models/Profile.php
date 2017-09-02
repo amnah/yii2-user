@@ -20,17 +20,6 @@ use yii\db\ActiveRecord;
 class Profile extends ActiveRecord
 {
     /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['full_name'], 'string', 'max' => 255],
-            [['timezone'], 'string', 'max' => 255],
-        ];
-    }
-
-    /**
      * @var \amnah\yii2\user\Module
      */
     public $module;
@@ -43,6 +32,17 @@ class Profile extends ActiveRecord
         if (!$this->module) {
             $this->module = Yii::$app->getModule("user");
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['full_name'], 'string', 'max' => 255],
+            [['timezone'], 'string', 'max' => 255],
+        ];
     }
 
     /**

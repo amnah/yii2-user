@@ -188,17 +188,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Stick with 1 user:1 profile
-     * @return \yii\db\ActiveQuery
-     */
-    /*
-    public function getProfiles()
-    {
-        return $this->hasMany(Profile::className(), ['user_id' => 'id']);
-    }
-    */
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getProfile()
@@ -230,7 +219,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getUserAuths()
     {
-        return $this->hasMany(UserAuth::className(), ['user_id' => 'id']);
+        $userAuth = $this->module->model("UserAuth");
+        return $this->hasMany($userAuth::className(), ['user_id' => 'id']);
     }
 
     /**
