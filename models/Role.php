@@ -111,7 +111,7 @@ class Role extends ActiveRecord
     public function checkPermission($permission)
     {
         $roleAttribute = "can_{$permission}";
-        return (bool)$this->$roleAttribute;
+        return isset($this->$roleAttribute) ? (bool)$this->$roleAttribute : false;
     }
 
     /**
