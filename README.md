@@ -75,7 +75,8 @@ return [
 * Run migration file
     * ```php yii migrate --migrationPath=@vendor/amnah/yii2-user/migrations```
 * Go to your application in your browser
-    * ```http://localhost/pathtoapp/web/user```
+    * ```http://localhost/pathtoapp/web/user``` 
+    * **note:** go to `user/login` instead of `site/login`
 * Log in as admin using ```neo/neo``` (change it!)
 * Set up [module properties](Module.php#L14) as desired
 * *Optional* - Update the nav links in your main layout *app/views/layouts/main.php*
@@ -215,8 +216,8 @@ To do so, you can use the helper command ```CopyController```.
 ],
 ```
 
-* Use the ```php yii user/copy``` command. For a [basic app]
-(https://github.com/yiisoft/yii2-app-basic), you can call the default command without any options
+* Use the ```php yii user/copy``` command. For a [basic app](https://github.com/yiisoft/yii2-app-basic), 
+you can call the default command without any options
 
 ```
 php yii user/copy --from=@vendor/amnah/yii2-user --to=@app/modules/user --namespace=app\\modules\\user
