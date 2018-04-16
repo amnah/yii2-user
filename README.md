@@ -1,4 +1,4 @@
-P2Y2 Users v0.2.1
+P2Y2 Users v0.2.2-beta
 ==========
 
 ## ¡¡¡ ===== NOT READY FOR USE ===== !!!

@@ -20,7 +20,7 @@
 		"source": "https://github.com/p2made/yii2-p2y2-things"
 	},
 
-	"version": "0.2.1",
+	"version": "0.2.2-beta",
 	"minimum-stability": "dev",
 	"prefer-stable" : true,
 
@@ -28,8 +28,8 @@
 		"php": ">=5.4.0",
 		"yiisoft/yii2": "^2.0",
 		"yiisoft/yii2-authclient": "^2.1",
-		"p2made/yii2-p2y2-base": "^1.1",
-		"p2made/yii2-p2y2-moment": "^2.0"
+		"p2made/yii2-p2y2-base": "dev-1.1.5-beta",
+		"p2made/yii2-p2y2-moment": "dev-2.0.1-beta"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^2.1"
