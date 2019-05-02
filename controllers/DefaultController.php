@@ -387,6 +387,7 @@ class DefaultController extends Controller
 
             // set flash (which will show on the current page)
             Yii::$app->session->setFlash("Resend-success", Yii::t("user", "Confirmation email resent"));
+            return $this->refresh();
         }
 
         return $this->render("resend", compact("model"));
@@ -447,6 +448,7 @@ class DefaultController extends Controller
 
             // set flash (which will show on the current page)
             Yii::$app->session->setFlash("Forgot-success", Yii::t("user", "Instructions to reset your password have been sent"));
+            return $this->refresh();
         }
 
         return $this->render("forgot", compact("model"));
