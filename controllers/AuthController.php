@@ -284,8 +284,8 @@ class AuthController extends Controller
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
 
-        $user->email = $attributes["emails"][0]["value"];
-        $profile->full_name = "{$attributes["name"]["givenName"]} {$attributes["name"]["familyName"]}";
+        $user->email = isset($attributes["email"]) ? $attributes["email"] : $attributes["emails"][0]["value"];
+        $profile->full_name = isset($attributes["name"]["givenName"]) ? "{$attributes["name"]["givenName"]} {$attributes["name"]["familyName"]}" : $attributes["name"];
 
         return [$user, $profile];
     }
