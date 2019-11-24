@@ -14,7 +14,7 @@ to it asap.
 
 ## Demo
 
-* [Demo](http://yii2.amnahdev.com/user)
+* [Demo](https://yii2.amnah.dev/user)
 
 ## Features
 
