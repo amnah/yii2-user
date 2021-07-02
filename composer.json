@@ -16,6 +16,6 @@
         "yiisoft/yii2-authclient": "*"
     },
     "autoload": {
-        "psr-4": { "faro\\core\\user\\": "" }
+        "psr-4": { "faro\\core\\user\\": "src" }
     }
 }
