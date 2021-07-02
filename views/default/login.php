@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var amnah\yii2\user\models\forms\LoginForm $model
+ * @var faro\core\user\models\forms\LoginForm $model
  */
 
 $this->title = Yii::t('user', 'Login');

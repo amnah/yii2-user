@@ -1,6 +1,6 @@
 <?php
 
-namespace amnah\yii2\user\models;
+namespace faro\core\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -29,7 +29,7 @@ class Role extends ActiveRecord
     const ROLE_USER = 2;
 
     /**
-     * @var \amnah\yii2\user\Module
+     * @var \faro\core\user\Module
      */
     public $module;
 

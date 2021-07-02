@@ -1,14 +1,14 @@
 <?php
 
-namespace amnah\yii2\user\models\search;
+namespace faro\core\user\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use amnah\yii2\user\models\User;
+use faro\core\user\models\User;
 
 /**
- * UserSearch represents the model behind the search form about `amnah\yii2\user\models\User`.
+ * UserSearch represents the model behind the search form about `faro\core\user\models\User`.
  */
 class UserSearch extends User
 {
@@ -56,8 +56,8 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        /** @var \amnah\yii2\user\models\User $user */
-        /** @var \amnah\yii2\user\models\Profile $profile */
+        /** @var \faro\core\user\models\User $user */
+        /** @var \faro\core\user\models\Profile $profile */
 
         // get models
         $user = $this->module->model("User");

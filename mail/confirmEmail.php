@@ -5,9 +5,9 @@ use yii\helpers\Url;
 
 /**
  * @var string $subject
- * @var \amnah\yii2\user\models\User $user
- * @var \amnah\yii2\user\models\Profile $profile
- * @var \amnah\yii2\user\models\UserToken $userToken
+ * @var \faro\core\user\models\User $user
+ * @var \faro\core\user\models\Profile $profile
+ * @var \faro\core\user\models\UserToken $userToken
  */
 
 $url = Url::toRoute(["/user/confirm", "token" => $userToken->token], true);

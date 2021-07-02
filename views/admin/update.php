@@ -4,8 +4,8 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var amnah\yii2\user\models\User $user
- * @var amnah\yii2\user\models\Profile $profile
+ * @var faro\core\user\models\User $user
+ * @var faro\core\user\models\Profile $profile
  */
 
 $this->title = Yii::t('user', 'Update {modelClass}: ', [

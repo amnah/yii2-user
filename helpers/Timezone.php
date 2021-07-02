@@ -1,6 +1,6 @@
 <?php
 
-namespace amnah\yii2\user\helpers;
+namespace faro\core\user\helpers;
 
 use DateTime;
 use DateTimeZone;

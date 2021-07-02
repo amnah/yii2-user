@@ -6,9 +6,9 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var amnah\yii2\user\Module $module
- * @var amnah\yii2\user\models\User $user
- * @var amnah\yii2\user\models\UserToken $userToken
+ * @var faro\core\user\Module $module
+ * @var faro\core\user\models\User $user
+ * @var faro\core\user\models\UserToken $userToken
  */
 
 $module = $this->context->module;

@@ -1,6 +1,6 @@
 <?php
 
-namespace amnah\yii2\user\models;
+namespace faro\core\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -21,7 +21,7 @@ use yii\db\ActiveRecord;
 class UserAuth extends ActiveRecord
 {
     /**
-     * @var \amnah\yii2\user\Module
+     * @var \faro\core\user\Module
      */
     public $module;
 

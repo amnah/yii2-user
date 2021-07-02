@@ -1,6 +1,6 @@
 <?php
 
-namespace amnah\yii2\user\models;
+namespace faro\core\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -72,7 +72,7 @@ class User extends ActiveRecord implements IdentityInterface
     protected $permissionCache = [];
 
     /**
-     * @var \amnah\yii2\user\Module
+     * @var \faro\core\user\Module
      */
     public $module;
 

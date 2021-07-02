@@ -1,6 +1,6 @@
 <?php
 
-namespace amnah\yii2\user\components;
+namespace faro\core\user\components;
 
 use Yii;
 use yii\authclient\OAuth2;

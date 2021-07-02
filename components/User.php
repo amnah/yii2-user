@@ -1,6 +1,6 @@
 <?php
 
-namespace amnah\yii2\user\components;
+namespace faro\core\user\components;
 
 use Yii;
 
@@ -12,7 +12,7 @@ class User extends \yii\web\User
     /**
      * @inheritdoc
      */
-    public $identityClass = 'amnah\yii2\user\models\User';
+    public $identityClass = 'faro\core\user\models\User';
 
     /**
      * @inheritdoc
@@ -29,7 +29,7 @@ class User extends \yii\web\User
      */
     public function getIsGuest()
     {
-        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \faro\core\user\models\User $user */
 
         // check if user is banned. if so, log user out and redirect home
         // https://github.com/amnah/yii2-user/issues/99
@@ -56,7 +56,7 @@ class User extends \yii\web\User
      */
     public function afterLogin($identity, $cookieBased, $duration)
     {
-        /** @var \amnah\yii2\user\models\User $identity */
+        /** @var \faro\core\user\models\User $identity */
         $identity->updateLoginMeta();
         parent::afterLogin($identity, $cookieBased, $duration);
     }
@@ -67,7 +67,7 @@ class User extends \yii\web\User
      */
     public function getDisplayName()
     {
-        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \faro\core\user\models\User $user */
         $user = $this->getIdentity();
         return $user ? $user->getDisplayName() : "";
     }
@@ -90,7 +90,7 @@ class User extends \yii\web\User
         }
 
         // otherwise use our own custom permission (via the role table)
-        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \faro\core\user\models\User $user */
         $user = $this->getIdentity();
         return $user ? $user->can($permissionName) : false;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace amnah\yii2\user\models\forms;
+namespace faro\core\user\models\forms;
 
 use Yii;
 use yii\base\Model;
@@ -18,12 +18,12 @@ class ForgotForm extends Model
     public $email;
 
     /**
-     * @var \amnah\yii2\user\models\User
+     * @var \faro\core\user\models\User
      */
     protected $user = false;
 
     /**
-     * @var \amnah\yii2\user\Module
+     * @var \faro\core\user\Module
      */
     public $module;
 
@@ -64,7 +64,7 @@ class ForgotForm extends Model
 
     /**
      * Get user based on email
-     * @return \amnah\yii2\user\models\User|null
+     * @return \faro\core\user\models\User|null
      */
     public function getUser()
     {
@@ -94,7 +94,7 @@ class ForgotForm extends Model
     {
         /** @var Mailer $mailer */
         /** @var Message $message */
-        /** @var \amnah\yii2\user\models\UserToken $userToken */
+        /** @var \faro\core\user\models\UserToken $userToken */
 
         if ($this->validate()) {
 

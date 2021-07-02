@@ -1,9 +1,9 @@
 <?php
 
-namespace amnah\yii2\user\controllers;
+namespace faro\core\user\controllers;
 
 use Yii;
-use amnah\yii2\user\models\User;
+use faro\core\user\models\User;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 class AdminController extends Controller
 {
     /**
-     * @var \amnah\yii2\user\Module
+     * @var \faro\core\user\Module
      * @inheritdoc
      */
     public $module;
@@ -57,7 +57,7 @@ class AdminController extends Controller
      */
     public function actionIndex()
     {
-        /** @var \amnah\yii2\user\models\search\UserSearch $searchModel */
+        /** @var \faro\core\user\models\search\UserSearch $searchModel */
         $searchModel = $this->module->model("UserSearch");
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
@@ -83,8 +83,8 @@ class AdminController extends Controller
      */
     public function actionCreate()
     {
-        /** @var \amnah\yii2\user\models\User $user */
-        /** @var \amnah\yii2\user\models\Profile $profile */
+        /** @var \faro\core\user\models\User $user */
+        /** @var \faro\core\user\models\Profile $profile */
 
         $user = $this->module->model("User");
         $user->setScenario("admin");
@@ -174,7 +174,7 @@ class AdminController extends Controller
      */
     protected function findModel($id)
     {
-        /** @var \amnah\yii2\user\models\User $user */
+        /** @var \faro\core\user\models\User $user */
         $user = $this->module->model("User");
         $user = $user::findOne($id);
         if ($user) {
