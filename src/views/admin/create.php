@@ -1,5 +1,6 @@
 <?php
 
+use faro\core\widgets\Panel;
 use yii\helpers\Html;
 
 /**
@@ -9,18 +10,21 @@ use yii\helpers\Html;
  */
 
 $this->title = Yii::t('user', 'Create {modelClass}', [
-  'modelClass' => 'User',
+  'modelClass' => 'Usuario',
 ]);
+
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php Panel::begin(['header' => 'Agregar usuario']) ?>
 
     <?= $this->render('_form', [
         'user' => $user,
         'profile' => $profile,
     ]) ?>
+    
+    <?php Panel::end() ?>
 
 </div>

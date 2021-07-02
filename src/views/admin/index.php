@@ -1,5 +1,7 @@
 <?php
 
+use faro\core\components\FaroGridView;
+use faro\core\widgets\Panel;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -19,25 +21,23 @@ $role = $module->model("Role");
 $this->title = Yii::t('user', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<p>
+    <?= Html::a(Yii::t('user', 'Create {modelClass}', [
+        'modelClass' => 'User',
+    ]), ['create'], ['class' => 'btn btn-success']) ?>
+</p>
+
 <div class="user-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    
+    <?php Panel::begin(['header' => 'Listado de usuarios']) ?>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('user', 'Create {modelClass}', [
-          'modelClass' => 'User',
-        ]), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php \yii\widgets\Pjax::begin(); ?>
-    <?= GridView::widget([
+    <?= FaroGridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             [
                 'attribute' => 'role_id',
@@ -77,4 +77,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <?php \yii\widgets\Pjax::end(); ?>
 
+    <?php Panel::end() ?>
 </div>

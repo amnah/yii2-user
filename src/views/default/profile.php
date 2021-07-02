@@ -1,5 +1,6 @@
 <?php
 
+use faro\core\widgets\Panel;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
@@ -15,16 +16,8 @@ $this->title = Yii::t('user', 'Profile');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-default-profile">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?php if ($flash = Yii::$app->session->getFlash("Profile-success")): ?>
-
-        <div class="alert alert-success">
-            <p><?= $flash ?></p>
-        </div>
-
-    <?php endif; ?>
+    
+    <?php Panel::begin(['header' => 'Actualizar perfil']) ?>
 
     <?php $form = ActiveForm::begin([
         'id' => 'profile-form',
@@ -54,5 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?php ActiveForm::end(); ?>
+    
+    <?php Panel::end() ?>
 
 </div>

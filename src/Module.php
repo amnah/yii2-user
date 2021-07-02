@@ -21,7 +21,7 @@ class Module extends \yii\base\Module
     /**
      * @var string Alias for module
      */
-    public $alias = "@user";
+    public $alias = "@faro/core/user";
 
     /**
      * @var bool If true, users are required to enter an email

@@ -84,6 +84,8 @@ class DefaultController extends Controller
             $returnUrl = $this->performLogin($model->getUser(), $model->rememberMe);
             return $this->redirect($returnUrl);
         }
+        
+        $this->layout = "@vendor/faro/core/src/themes/dmp2020/layouts/login";
 
         return $this->render('login', compact("model"));
     }
