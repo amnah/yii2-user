@@ -2,8 +2,11 @@
 
 namespace faro\core\user\models;
 
+use faro\core\models\FaroBaseActiveRecord;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Inflector;
+use yii\helpers\StringHelper;
 
 /**
  * This is the model class for table "tbl_role".
@@ -16,7 +19,7 @@ use yii\db\ActiveRecord;
  *
  * @property User[] $users
  */
-class Role extends ActiveRecord
+class Role extends FaroBaseActiveRecord
 {
     /**
      * @var int Admin user role
@@ -32,6 +35,11 @@ class Role extends ActiveRecord
      * @var \faro\core\user\Module
      */
     public $module;
+
+    public static function tableName()
+    {
+        return '{{%core_acl_rol}}';
+    }
 
     /**
      * @inheritdoc
