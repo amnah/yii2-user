@@ -25,6 +25,15 @@ class Profile extends ActiveRecord
     public $module;
 
     /**
+     * @return string
+     */
+    public static function tableName()
+    {
+        return '{{%core_acl_perfil}}';
+    }
+
+
+    /**
      * @inheritdoc
      */
     public function init()

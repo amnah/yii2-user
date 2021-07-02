@@ -13,9 +13,32 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "yiisoft/yii2-authclient": "*"
+        "yiisoft/yii2-authclient": "*",
+        "faro/core": "dev-feature-acl"
     },
     "autoload": {
         "psr-4": { "faro\\core\\user\\": "src" }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/faro-core.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/faro-media.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/faro-googleanalytics.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/yii2-user.git"
+        }
+    ]
 }

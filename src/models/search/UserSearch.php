@@ -17,7 +17,7 @@ class UserSearch extends User
      */
     public static function tableName()
     {
-        return "{{%user}}";
+        return "{{%core_acl_usuario}}";
     }
 
     /**
