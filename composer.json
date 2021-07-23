@@ -14,7 +14,7 @@
     "require": {
         "yiisoft/yii2": "*",
         "yiisoft/yii2-authclient": "*",
-        "faro/core": "dev-feature-acl"
+        "faro/core": "dev-develop"
     },
     "autoload": {
         "psr-4": { "faro\\core\\user\\": "src" }
