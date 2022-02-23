@@ -2,6 +2,7 @@
 
 namespace faro\core\user;
 
+use faro\core\FaroBaseModule;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
@@ -11,12 +12,12 @@ use yii\db\ActiveRecord;
  *
  * @author amnah <amnah.dev@gmail.com>
  */
-class Module extends \yii\base\Module
+class Module extends FaroBaseModule
 {
     /**
      * @var string Module version
      */
-    protected $version = "5.0.8";
+    protected $version = "2022.1-dev";
 
     /**
      * @var string Alias for module

@@ -1,6 +1,5 @@
 {
     "name": "faro/yii2-user",
-    "version":  "dev-2021.3-alpha",
     "description": "Yii 2 user authentication module",
     "keywords": ["yii", "yii2", "user", "auth", "authentication"],
     "type": "yii2-extension",
@@ -14,10 +13,15 @@
     "require": {
         "yiisoft/yii2": "*",
         "yiisoft/yii2-authclient": "*",
-        "faro/core": "dev-feature-acl"
+        "faro/core": "dev-develop"
     },
     "autoload": {
         "psr-4": { "faro\\core\\user\\": "src" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "2022.1-dev"
+        }
     },
     "repositories": [
         {
