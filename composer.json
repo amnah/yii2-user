@@ -1,6 +1,6 @@
 {
     "name": "faro/yii2-user",
-    "version":  "dev-2021.3-alpha",
+    "version":  "dev-develop",
     "description": "Yii 2 user authentication module",
     "keywords": ["yii", "yii2", "user", "auth", "authentication"],
     "type": "yii2-extension",
