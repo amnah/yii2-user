@@ -33,6 +33,8 @@ class AdminController extends Controller
             throw new ForbiddenHttpException('You are not allowed to perform this action.');
         }
 
+        $this->view->params["navbar_menu_selected"] = "administracion";
+        $this->view->params["ocultar_selector_fechas"] = true;
         parent::init();
     }
 
