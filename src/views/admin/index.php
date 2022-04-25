@@ -21,6 +21,7 @@ $user = $module->model("User");
 $role = $module->model("Role");
 
 $this->title = Yii::t('user', 'Users');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Administración'), 'url' => ['/faro/admin']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params["navbar_menu_selected"] = "administracion";

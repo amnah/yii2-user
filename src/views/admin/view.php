@@ -11,7 +11,8 @@ use yii\widgets\DetailView;
  * @var faro\core\user\models\User $user
  */
 
-$this->title = $user->email;
+$this->title = $user->profile->full_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Administración'), 'url' => ['/faro/admin']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
