@@ -19,9 +19,7 @@
         "psr-4": { "faro\\core\\user\\": "src" }
     },
     "extra": {
-        "branch-alias": {
-            "dev-develop": "2022.1-dev"
-        }
+        "branch-alias": {}
     },
     "repositories": [
         {
