@@ -13,15 +13,13 @@
     "require": {
         "yiisoft/yii2": "*",
         "yiisoft/yii2-authclient": "*",
-        "faro/core": "dev-develop"
+        "faro/core": "dev-feature/v20221-integracion-agro-gonza"
     },
     "autoload": {
         "psr-4": { "faro\\core\\user\\": "src" }
     },
     "extra": {
-        "branch-alias": {
-            "dev-develop": "2022.1-dev"
-        }
+        "branch-alias": {}
     },
     "repositories": [
         {

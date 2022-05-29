@@ -1,6 +1,8 @@
 <?php
 
+use faro\core\components\ControlUsuarios;
 use faro\core\components\FaroGridView;
+use faro\core\widgets\AccionesLayoutWidget;
 use faro\core\widgets\Panel;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -19,48 +21,64 @@ $user = $module->model("User");
 $role = $module->model("Role");
 
 $this->title = Yii::t('user', 'Users');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Administración'), 'url' => ['/faro/admin']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->params["navbar_menu_selected"] = "administracion";
+
+if (ControlUsuarios::esAdmin()) {
+    AccionesLayoutWidget::agregarBoton(
+        \yii\bootstrap4\Html::a("<i class='fas fa-plus-circle'></i> Nuevo usuario", ['create'],
+            ["class" => "dropdown-item"])
+    );
+}
 ?>
-<p>
-    <?= Html::a(Yii::t('user', 'Create {modelClass}', [
-        'modelClass' => 'User',
-    ]), ['create'], ['class' => 'btn btn-success']) ?>
-</p>
 
 <div class="user-index">
-    
+
     <?php Panel::begin(['header' => 'Listado de usuarios']) ?>
-    
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php \yii\widgets\Pjax::begin(); ?>
     <?= FaroGridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'filterModel' => null,
+        'headerContainer' => ['class' => ''],
+        'striped' => false,
+        "bordered" => false,
+        "layout" => "{items}\n{pager}",
         'columns' => [
-            'id',
             [
                 'attribute' => 'role_id',
                 'label' => Yii::t('user', 'Role'),
                 'filter' => $role::dropdown(),
-                'value' => function($model, $index, $dataColumn) use ($role) {
+                'value' => function ($model, $index, $dataColumn) use ($role) {
                     $roleDropdown = $role::dropdown();
                     return $roleDropdown[$model->role_id];
                 },
             ],
+            'profile.full_name' => [
+                "attribute" => "profile.full_name",
+                "format" => "raw",
+                "value" => function ($model) {
+                    return \yii\bootstrap4\Html::a($model->profile->full_name,
+                        ["view", "id" => $model->id]);
+                }
+            ],
+            'email:email',
             [
                 'attribute' => 'status',
                 'label' => Yii::t('user', 'Status'),
                 'filter' => $user::statusDropdown(),
-                'value' => function($model, $index, $dataColumn) use ($user) {
+                'value' => function ($model, $index, $dataColumn) use ($user) {
                     $statusDropdown = $user::statusDropdown();
                     return $statusDropdown[$model->status];
                 },
             ],
-            'email:email',
-            'profile.full_name',
+
             'profile.timezone',
-            'created_at',
+            'created_at:relativeTime',
             // 'username',
             // 'password',
             // 'auth_key',
@@ -71,8 +89,6 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'updated_at',
             // 'banned_at',
             // 'banned_reason',
-
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
     <?php \yii\widgets\Pjax::end(); ?>

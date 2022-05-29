@@ -1,5 +1,7 @@
 <?php
 
+use faro\core\components\ControlUsuarios;
+use faro\core\widgets\AccionesLayoutWidget;
 use faro\core\widgets\Panel;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -9,22 +11,17 @@ use yii\widgets\DetailView;
  * @var faro\core\user\models\User $user
  */
 
-$this->title = $user->email;
+$this->title = $user->profile->full_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Administración'), 'url' => ['/faro/admin']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+if (ControlUsuarios::esAdmin()) {
+    AccionesLayoutWidget::agregarBoton(
+        \yii\bootstrap4\Html::a("<i class='fas fa-edit'></i> Editar usuario", ['update', "id" => $user->id], ["class" => "dropdown-item"])
+    );
+}
 ?>
-
-<p>
-    <?= Html::a(Yii::t('user', 'Update'), ['update', 'id' => $user->id], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a(Yii::t('user', 'Delete'), ['delete', 'id' => $user->id], [
-        'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => Yii::t('user', 'Are you sure you want to delete this item?'),
-            'method' => 'post',
-        ],
-    ]) ?>
-</p>
-
 
 <div class="user-view">
 
