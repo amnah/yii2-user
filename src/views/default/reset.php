@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
 FaroCoreAsset::register($this);
 
-$this->title = Yii::t('user', 'Reset');
+$this->title = Yii::t('user', 'Resetear contraseña');
 $this->params['breadcrumbs'][] = $this->title;
 
 $directoryFaroAsset = Yii::$app->assetManager->getPublishedUrl('@faro/core/assets');
@@ -35,7 +35,7 @@ $imagen = $directoryFaroAsset . "/img/logo_vertical.jpg";
                              style="background-image: url(<?= $imagen ?>);"></div>
                         <div class="col-lg-6">
                             <div class="p-5">
-                                <div class="text-center">
+                                <div class="text-left">
                                     <h1 class="h4 text-gray-900 mb-4"><?= Html::encode($this->title) ?></h1>
                                 </div>
 

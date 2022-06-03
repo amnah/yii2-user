@@ -62,9 +62,8 @@ $imagen = $asset->baseUrl . "/img/logo_vertical.jpg";
                                     </div>
                                     
                                     <div class="col-12">
-                                        <?= Html::a(Yii::t("user", "Register"), ["/user/register"]) ?> /
-                                        <?= Html::a(Yii::t("user", "Forgot password") . "?", ["/user/forgot"]) ?> /
-                                        <?= Html::a(Yii::t("user", "Resend confirmation email"), ["/user/resend"]) ?>
+                                        <?= Html::a(Yii::t("user", "Olvidate la contraseña") . "?", ["/user/forgot"]) ?>
+                                        <?php // echo Html::a(Yii::t("user", "Resend confirmation email"), ["/user/resend"]) ?>
                                     </div>
                                 </div>
                                 
