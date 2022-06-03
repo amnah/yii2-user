@@ -1,5 +1,6 @@
 <?php
 
+use faro\core\FaroCoreAsset;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -11,48 +12,82 @@ use yii\widgets\ActiveForm;
  * @var bool $invalidToken
  */
 
-$this->title = Yii::t('user', 'Reset');
+FaroCoreAsset::register($this);
+
+$this->title = Yii::t('user', 'Resetear contraseña');
 $this->params['breadcrumbs'][] = $this->title;
+
+$directoryFaroAsset = Yii::$app->assetManager->getPublishedUrl('@faro/core/assets');
+$imagen = $directoryFaroAsset . "/img/logo_vertical.jpg";
 ?>
-<div class="user-default-reset">
+<div class="container">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
 
-    <?php if (!empty($success)): ?>
+        <div class="col-xl-10 col-lg-12 col-md-9">
 
-        <div class="alert alert-success">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image"
+                             style="background-image: url(<?= $imagen ?>);"></div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-left">
+                                    <h1 class="h4 text-gray-900 mb-4"><?= Html::encode($this->title) ?></h1>
+                                </div>
 
-            <p><?= Yii::t("user", "Password has been reset") ?></p>
-            <p><?= Html::a(Yii::t("user", "Log in here"), ["/user/login"]) ?></p>
+                                <div class="user-default-reset">
+                                    
+                                    <?php if (!empty($success)): ?>
 
-        </div>
+                                        <div class="alert alert-success">
 
-    <?php elseif (!empty($invalidToken)): ?>
+                                            <p><?= Yii::t("user", "Password has been reset") ?></p>
+                                            <p><?= Html::a(Yii::t("user", "Log in here"), ["/user/login"]) ?></p>
 
-        <div class="alert alert-danger">
-            <p><?= Yii::t("user", "Invalid token") ?></p>
-        </div>
+                                        </div>
 
-    <?php else: ?>
+                                    <?php elseif (!empty($invalidToken)): ?>
 
-        <div class="row">
-            <div class="col-lg-5">
+                                        <div class="alert alert-danger">
+                                            <p><?= Yii::t("user", "Invalid token") ?></p>
+                                        </div>
 
-                <div class="alert alert-warning">
-                    <p><?= Yii::t("user", "Email") ?> [ <?= $user->email ?> ]</p>
-                </div>
+                                    <?php else: ?>
 
-                <?php $form = ActiveForm::begin(['id' => 'reset-form']); ?>
 
-                    <?= $form->field($user, 'newPassword')->passwordInput() ?>
-                    <?= $form->field($user, 'newPasswordConfirm')->passwordInput() ?>
-                    <div class="form-group">
-                        <?= Html::submitButton(Yii::t("user", "Reset"), ['class' => 'btn btn-primary']) ?>
+                                        <div class="alert alert-warning">
+                                            <p><?= Yii::t("user", "Email") ?> [ <?= $user->email ?> ]</p>
+                                        </div>
+
+                                        <?php $form = ActiveForm::begin(['id' => 'reset-form']); ?>
+
+                                        <?= $form->field($user, 'newPassword')->passwordInput() ?>
+                                        <?= $form->field($user, 'newPasswordConfirm')->passwordInput() ?>
+                                        <div class="form-group">
+                                            <?= Html::submitButton(Yii::t("user", "Reset"),
+                                                ['class' => 'btn btn-primary']) ?>
+                                        </div>
+                                        <?php ActiveForm::end(); ?>
+                                      
+
+                                    <?php endif; ?>
+
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                <?php ActiveForm::end(); ?>
+                </div>
             </div>
+
         </div>
 
-    <?php endif; ?>
+    </div>
 
 </div>
+
+

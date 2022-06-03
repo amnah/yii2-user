@@ -4,6 +4,7 @@ namespace faro\core\user\models\forms;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\VarDumper;
 use yii\swiftmailer\Mailer;
 use yii\swiftmailer\Message;
 
@@ -117,9 +118,16 @@ class ForgotForm extends Model
             // send email
             $subject = Yii::$app->id . " - " . Yii::t("user", "Forgot password");
             $result = $mailer->compose('forgotPassword', compact("subject", "user", "userToken"))
+                ->setFrom(Yii::$app->params["senderEmail"])
                 ->setTo($user->email)
                 ->setSubject($subject)
                 ->send();
+            
+            if (!$result) {
+                VarDumper::dump("no se pudo");
+                VarDumper::dump($mailer->getErrors());
+                die();
+            }
 
             // restore view path and return result
             $mailer->viewPath = $oldViewPath;

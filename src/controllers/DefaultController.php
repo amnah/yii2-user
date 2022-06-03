@@ -445,11 +445,17 @@ class DefaultController extends Controller
         /** @var \faro\core\user\models\forms\ForgotForm $model */
 
         // load post data and send email
+        $this->layout = '@faro/core/themes/faro20221/layouts/login';
         $model = $this->module->model("ForgotForm");
-        if ($model->load(Yii::$app->request->post()) && $model->sendForgotEmail()) {
+        if ($model->load(Yii::$app->request->post())) {
 
             // set flash (which will show on the current page)
-            Yii::$app->session->setFlash("Forgot-success", Yii::t("user", "Instructions to reset your password have been sent"));
+            if ($model->sendForgotEmail()) {
+                Yii::$app->session->setFlash("success", Yii::t("user", "Instructions to reset your password have been sent"));
+            } else {
+                Yii::$app->session->setFlash("error", Yii::t("user", "No se pudo enviar el email"));
+            }
+            
             return $this->refresh();
         }
 
@@ -465,6 +471,7 @@ class DefaultController extends Controller
         /** @var \faro\core\user\models\UserToken $userToken */
 
         // get user token and check expiration
+        $this->layout = '@faro/core/themes/faro20221/layouts/login';
         $userToken = $this->module->model("UserToken");
         $userToken = $userToken::findByToken($token, $userToken::TYPE_PASSWORD_RESET);
         if (!$userToken) {

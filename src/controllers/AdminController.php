@@ -4,6 +4,7 @@ namespace faro\core\user\controllers;
 
 use Yii;
 use faro\core\user\models\User;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -27,12 +28,6 @@ class AdminController extends Controller
      */
     public function init()
     {
-        // check for admin permission (`tbl_role.can_admin`)
-        // note: check for Yii::$app->user first because it doesn't exist in console commands (throws exception)
-        if (!empty(Yii::$app->user) && !Yii::$app->user->can("admin")) {
-            throw new ForbiddenHttpException('You are not allowed to perform this action.');
-        }
-
         $this->view->params["navbar_menu_selected"] = "administracion";
         $this->view->params["ocultar_selector_fechas"] = true;
         parent::init();
@@ -44,8 +39,18 @@ class AdminController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['admin']
+                    ]
+                ],
+            ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['post'],
                 ],
