@@ -28,13 +28,13 @@ $imagen = $asset->baseUrl . "/img/logo_vertical.jpg";
         <div class="col-xl-10 col-lg-12 col-md-9">
 
             <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-0">
+                <div class="card-body p-5">
                     <!-- Nested Row within Card Body -->
                     <div class="row">
                         <div class="col-lg-6 d-none d-lg-block bg-login-image" style="background-image: url(<?= $imagen ?>);"></div>
                         <div class="col-lg-6">
-                            <div class="p-5">
-                                <div class="text-center">
+                            <div class="">
+                                <div class="text-left">
                                     <h1 class="h4 text-gray-900 mb-4">Bienvenido!</h1>
                                 </div>
                                 <?php $form = ActiveForm::begin([
@@ -53,7 +53,7 @@ $imagen = $asset->baseUrl . "/img/logo_vertical.jpg";
                                 <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password', 'class' => 'form-control form-control-user'])->label(false) ?>
 
                                 <?= $form->field($model, 'rememberMe')->checkbox([
-                                    'template' => "<div class=\"col-12\">{input} {label}</div>\n<div class=\"col-12\">{error}</div>",
+                                    'template' => "<div class=\"col-12 text-right\">{input} {label}</div>\n<div class=\"col-12\">{error}</div>",
                                 ]) ?>
 
                                 <div class="form-group">
@@ -61,8 +61,8 @@ $imagen = $asset->baseUrl . "/img/logo_vertical.jpg";
                                         <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-user btn-block', 'name' => 'login-button']) ?>
                                     </div>
                                     
-                                    <div class="col-12">
-                                        <?= Html::a(Yii::t("user", "Olvidate la contraseña") . "?", ["/user/forgot"]) ?>
+                                    <div class="col-12 text-right mt-2">
+                                        <?= Html::a(Yii::t("user", "Olvidaste la contraseña") . "?", ["/user/forgot"]) ?>
                                         <?php // echo Html::a(Yii::t("user", "Resend confirmation email"), ["/user/resend"]) ?>
                                     </div>
                                 </div>
