@@ -49,7 +49,8 @@ class Profile extends ActiveRecord
     public function rules()
     {
         return [
-            [['full_name'], 'string', 'max' => 255],
+            [['full_name'], 'string', 'min' => 3, 'max' => 255],
+            [['full_name'], 'required'],
             [['timezone'], 'string', 'max' => 255],
         ];
     }
