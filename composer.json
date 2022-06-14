@@ -1,5 +1,5 @@
 {
-    "name": "amnah/yii2-user",
+    "name": "faro/yii2-user",
     "description": "Yii 2 user authentication module",
     "keywords": ["yii", "yii2", "user", "auth", "authentication"],
     "type": "yii2-extension",
@@ -12,9 +12,35 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "yiisoft/yii2-authclient": "*"
+        "yiisoft/yii2-authclient": "*",
+        "faro/core": "2022.1.*"
     },
     "autoload": {
-        "psr-4": { "amnah\\yii2\\user\\": "" }
-    }
+        "psr-4": { "faro\\core\\user\\": "src" }
+    },
+    "extra": {
+        "branch-alias": {}
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/faro-core.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/faro-media.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/faro-googleanalytics.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:FARO-DataLab/yii2-user.git"
+        }
+    ]
 }
